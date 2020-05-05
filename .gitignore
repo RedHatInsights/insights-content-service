@@ -1,0 +1,8 @@
+insights-report-server
+*.db
+*.db.backup
+config_my.toml
+coverage.out
+aggregator
+rest-api-tests
+rules-content
