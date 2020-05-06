@@ -18,3 +18,13 @@ limitations under the License.
 // Insights content service. In current version, the following
 // REST API endpoints are available:
 package server
+
+import (
+	"net/http"
+)
+
+// HTTPServer in an implementation of Server interface
+type HTTPServer struct {
+	Config Configuration
+	Serv   *http.Server
+}
