@@ -1,4 +1,4 @@
-.PHONY: help clean build fmt lint vet run test cover style cyclo
+.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover integration_tests rest_api_tests license before_commit help
 
 SOURCES:=$(shell find . -name '*.go')
 
@@ -31,7 +31,7 @@ ineffassign: ## Run ineffassign checker
 	./ineffassign.sh
 
 shellcheck: ## Run shellcheck
-	shellcheck *.sh
+	shellcheck $(shell find . -name "*.sh")
 
 errcheck: ## Run errcheck
 	@echo "Running errcheck"
