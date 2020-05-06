@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Entry point to the insights report server
+// Entry point to the insights content service
 package main
 
 import (
@@ -66,7 +66,7 @@ func printVersionInfo() {
 }
 
 const helpMessageTemplate = `
-Reporting service for insights results
+Service to provide content for OCP rules
 
 Usage:
 
@@ -74,8 +74,8 @@ Usage:
 
 The commands are:
 
-    <EMPTY>             starts reporting service
-    start-service       starts reporting service
+    <EMPTY>             starts content service
+    start-service       starts content service
     help                prints help
     print-help          prints help
     print-config        prints current configuration set by files & env variables

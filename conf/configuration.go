@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	configFileEnvVariableName = "INSIGHTS_REPORT_SERVICE_CONFIG_FILE"
+	configFileEnvVariableName = "INSIGHTS_CONTENT_SERVICE_CONFIG_FILE"
 )
 
 // Config has exactly the same structure as *.toml file
@@ -79,7 +79,7 @@ func LoadConfiguration(defaultConfigFile string) error {
 
 	// override config from env if there's variable in env
 
-	const envPrefix = "INSIGHTS_REPORT_SERVICE_"
+	const envPrefix = "INSIGHTS_CONTENT_SERVICE_"
 
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix(envPrefix)
