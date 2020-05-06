@@ -27,7 +27,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 
-	"github.com/RedHatInsights/insights-report-server/server"
+	"github.com/RedHatInsights/insights-content-service/server"
 )
 
 const (
