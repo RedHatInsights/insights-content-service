@@ -25,7 +25,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/RedHatInsights/insights-report-server/conf"
+	"github.com/RedHatInsights/insights-content-service/conf"
 )
 
 const (

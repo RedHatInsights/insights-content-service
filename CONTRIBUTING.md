@@ -6,7 +6,7 @@ For docstrings we're following [Effective Go - Commentary](https://golang.org/do
 
 All methods meant to be used by end-user *must be* documented - **no exceptions!**
 
-Other code quality metrics are measured as well via [Go Report Card](https://goreportcard.com/report/github.com/RedHatInsights/insights-report-server)
+Other code quality metrics are measured as well via [Go Report Card](https://goreportcard.com/report/github.com/RedHatInsights/insights-content-service)
 
 Please, don't forget to call `make before_commit` to check style, run unit and integration tests and add license headers to new files
 
@@ -19,10 +19,10 @@ Please try to follow [Style guideline for Go packages](https://rakyll.org/style-
 Before you submit your pull request consider the following guidelines:
 
 * Fork the repository and clone your fork
-  * open the following URL in your browser: <https://github.com/RedHatInsights/insights-report-server>
+  * open the following URL in your browser: <https://github.com/RedHatInsights/insights-content-service>
   * click on the 'Fork' button (near the top right corner)
   * select the account for fork
-  * open your forked repository in browser: <https://github.com/YOUR_NAME/insights-report-server>
+  * open your forked repository in browser: <https://github.com/YOUR_NAME/insights-content-service>
   * click on the 'Clone or download' button to get a command that can be used to clone the repository
 
 * Make your changes in a new git branch:

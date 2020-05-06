@@ -28,7 +28,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/rs/zerolog/log"
 
-	"github.com/RedHatInsights/insights-report-server/types"
+	"github.com/RedHatInsights/insights-content-service/types"
 )
 
 type contextKey string
