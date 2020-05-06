@@ -15,6 +15,6 @@ limitations under the License.
 */
 
 // Package server contains implementation of REST API server (HTTPServer) for the
-// Insights report server. In current version, the following
+// Insights content service. In current version, the following
 // REST API endpoints are available:
 package server
