@@ -1,4 +1,4 @@
-insights-report-server
+insights-content-service
 *.db
 *.db.backup
 config_my.toml
