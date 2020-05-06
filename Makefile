@@ -1,4 +1,4 @@
-.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover integration_tests rest_api_tests license before_commit help
+.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover license before_commit help
 
 SOURCES:=$(shell find . -name '*.go')
 
@@ -59,14 +59,6 @@ test: clean build ## Run the unit tests
 
 cover: test
 	@go tool cover -html=coverage.out
-
-integration_tests: ## Run all integration tests
-	@echo "Running all integration tests"
-	@./test.sh
-
-rest_api_tests: ## Run REST API tests
-	@echo "Running REST API tests"
-	@./test.sh rest_api
 
 license:
 	GO111MODULE=off go get -u github.com/google/addlicense && \
