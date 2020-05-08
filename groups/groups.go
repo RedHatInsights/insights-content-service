@@ -18,6 +18,7 @@ package groups
 
 import (
 	"io/ioutil"
+	"path/filepath"
 
 	"github.com/go-yaml/yaml"
 )
@@ -29,9 +30,9 @@ type Group struct {
 	Tags        []string `yaml:"tags"`
 }
 
-// ParseGroupConfigFile
+// ParseGroupConfigFile parses the groups configuration file and return the read groups
 func ParseGroupConfigFile(groupConfigPath string) (map[string]Group, error) {
-	configBytes, err := ioutil.ReadFile(groupConfigPath)
+	configBytes, err := ioutil.ReadFile(filepath.Clean(groupConfigPath))
 	if err != nil {
 		return nil, err
 	}
