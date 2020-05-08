@@ -1,0 +1,20 @@
+service_availability:
+  name: Service Availability
+  description: Operator degraded, missing functionality due to misconfiguration or resource constraints.
+  tags:
+    - service_availability
+security:
+  name: Security
+  description: Issues related to certificates, user management, security groups, specific port usage, storage permissions, usage of kubeadmin account, exposed keys etc. 
+  tags:
+    - security
+fault_tolerance:
+  name: Fault Tolerance
+  description: Load balancer issues, machine api and autoscaler issues, failover issues, nodes down, cluster api/cluster provider issues.
+  tags:
+    - fault_tolerance
+performance:
+  name: Performance
+  description: High utilization, proposed tuned profiles, storage issues
+  tags:
+    - performance
