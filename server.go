@@ -26,6 +26,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/RedHatInsights/insights-content-service/conf"
+	"github.com/RedHatInsights/insights-content-service/groups"
 )
 
 const (
@@ -51,6 +52,14 @@ var (
 
 // startService starts service and returns error code
 func startService() int {
+	groupsConfigPath := conf.GetGroupsConfiguration().ConfigPath
+	groups, _ := groups.ParseGroupConfigFile(groupsConfigPath)
+
+	for key, value := range groups {
+		fmt.Println("Group id ", key)
+		fmt.Println("Group content: ", value)
+	}
+
 	return ExitStatusOK
 }
 
