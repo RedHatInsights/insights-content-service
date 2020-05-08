@@ -69,6 +69,21 @@ api_spec_file = "openapi.json"
 * `api_prefix` is the prefix for the REST API path
 * `api_spec_file` is the location of a required OpenAPI specification file
 
+## Groups configuration
+
+The groups are defined in a YAML configuration file. You can find an example in
+[groups_config.yaml](groups_config.yaml).
+
+In order to define which groups configuration file is loaded by the service, you
+should use the `[groups]` section in the configuration file:
+
+```toml
+[groups]
+path = "groups_config.yaml"
+```
+
+Where `path` is the absolute or relative path to the groups configuration file.
+
 ## Local setup
 
 TBD
