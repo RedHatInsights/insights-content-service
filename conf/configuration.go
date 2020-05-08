@@ -27,6 +27,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 
+	"github.com/RedHatInsights/insights-content-service/groups"
 	"github.com/RedHatInsights/insights-content-service/server"
 )
 
@@ -37,6 +38,7 @@ const (
 // Config has exactly the same structure as *.toml file
 var Config struct {
 	Server server.Configuration `mapstructure:"server" toml:"server"`
+	Groups groups.Configuration `mapstructure:"groups" toml:"groups"`
 }
 
 // LoadConfiguration loads configuration from defaultConfigFile, file set in configFileEnvVariableName or from env
@@ -96,6 +98,16 @@ func GetServerConfiguration() server.Configuration {
 	}
 
 	return Config.Server
+}
+
+// GetGroupsConfiguration returns groups configuration
+func GetGroupsConfiguration() groups.Configuration {
+	err := checkIfFileExists(Config.Groups.ConfigPath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("The groups configuration file is not defined")
+	}
+
+	return Config.Groups
 }
 
 // checkIfFileExists returns nil if path doesn't exist or isn't a file, otherwise it returns corresponding error

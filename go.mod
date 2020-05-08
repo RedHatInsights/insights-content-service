@@ -7,6 +7,7 @@ require (
 	github.com/RedHatInsights/insights-operator-utils v0.0.0-20200430065955-b0b675035360
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/droptheplot/abcgo v0.0.0-20171120220436-23529565504c // indirect
+	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gordonklaus/ineffassign v0.0.0-20200309095847-7953dde2c7bf // indirect
 	github.com/kisielk/errcheck v1.2.0 // indirect
 	github.com/rs/zerolog v1.18.0
