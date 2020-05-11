@@ -13,5 +13,7 @@ require (
 	github.com/rs/zerolog v1.18.0
 	github.com/securego/gosec v0.0.0-20200401082031-e946c8c39989 // indirect
 	github.com/spf13/viper v1.6.3
+	github.com/stretchr/testify v1.4.0
+	github.com/tisnik/go-capture v1.0.1
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 )

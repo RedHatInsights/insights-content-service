@@ -63,11 +63,22 @@ func startService() int {
 	return ExitStatusOK
 }
 
+func printInfo(msg string, val string) {
+	fmt.Printf("%s\t%s\n", msg, val)
+}
+
+func printVersionInfo() {
+	printInfo("Version:", BuildVersion)
+	printInfo("Build time:", BuildTime)
+	printInfo("Branch:", BuildBranch)
+	printInfo("Commit:", BuildCommit)
+}
+
 func initInfoLog(msg string) {
 	log.Info().Str("type", "init").Msg(msg)
 }
 
-func printVersionInfo() {
+func logVersionInfo() {
 	initInfoLog("Version: " + BuildVersion)
 	initInfoLog("Build time: " + BuildTime)
 	initInfoLog("Branch: " + BuildBranch)
@@ -128,7 +139,7 @@ func main() {
 func handleCommand(command string) int {
 	switch command {
 	case "start-service":
-		printVersionInfo()
+		logVersionInfo()
 
 		errCode := startService()
 		if errCode != 0 {
