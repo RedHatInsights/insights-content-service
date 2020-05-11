@@ -114,13 +114,13 @@ func GetGroupsConfiguration() groups.Configuration {
 func checkIfFileExists(path string) error {
 	fileInfo, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		return fmt.Errorf("OpenAPI spec file path does not exist. Path: '%v'", path)
+		return fmt.Errorf("The following file path does not exist. Path: '%v'", path)
 	} else if err != nil {
 		return err
 	}
 
 	if fileMode := fileInfo.Mode(); !fileMode.IsRegular() {
-		return fmt.Errorf("OpenAPI spec file path is not a file. Path: '%v'", path)
+		return fmt.Errorf("The following file path is not a regular file. Path: '%v'", path)
 	}
 
 	return nil
