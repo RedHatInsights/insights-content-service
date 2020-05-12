@@ -27,16 +27,21 @@ import (
 
 	"github.com/RedHatInsights/insights-content-service/conf"
 	"github.com/RedHatInsights/insights-content-service/groups"
+	"github.com/RedHatInsights/insights-content-service/server"
 )
 
 const (
 	// ExitStatusOK means that the tool finished with success
 	ExitStatusOK = iota
 
+	// ExitStatusServerError is returned in case of any REST API server-related error
+	ExitStatusServerError
 	defaultConfigFilename = "config"
 )
 
 var (
+	serverInstance *server.HTTPServer
+
 	// BuildVersion contains the major.minor version of the CLI client
 	BuildVersion string = "*not set*"
 
@@ -53,11 +58,19 @@ var (
 // startService starts service and returns error code
 func startService() int {
 	groupsConfigPath := conf.GetGroupsConfiguration().ConfigPath
-	groups, _ := groups.ParseGroupConfigFile(groupsConfigPath)
+	_, err := groups.ParseGroupConfigFile(groupsConfigPath)
 
-	for key, value := range groups {
-		fmt.Println("Group id ", key)
-		fmt.Println("Group content: ", value)
+	if err != nil {
+		log.Error().Err(err).Msg("Groups configuration file not valid")
+		return ExitStatusServerError
+	}
+
+	serverCfg := conf.GetServerConfiguration()
+	serverInstance = server.New(serverCfg)
+	err = serverInstance.Start()
+	if err != nil {
+		log.Error().Err(err).Msg("HTTP(s) start error")
+		return ExitStatusServerError
 	}
 
 	return ExitStatusOK
