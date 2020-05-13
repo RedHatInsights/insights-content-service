@@ -17,6 +17,7 @@ limitations under the License.
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -34,7 +35,7 @@ func (server *HTTPServer) mainEndpoint(writer http.ResponseWriter, _ *http.Reque
 }
 
 // serveAPISpecFile serves an OpenAPI specifications file specified in config file
-func (server HTTPServer) serveAPISpecFile(writer http.ResponseWriter, request *http.Request) {
+func (server *HTTPServer) serveAPISpecFile(writer http.ResponseWriter, request *http.Request) {
 	absPath, err := filepath.Abs(server.Config.APISpecFile)
 	if err != nil {
 		const message = "Error creating absolute path of OpenAPI spec file"
@@ -44,4 +45,11 @@ func (server HTTPServer) serveAPISpecFile(writer http.ResponseWriter, request *h
 	}
 
 	http.ServeFile(writer, request, absPath)
+}
+
+// listOfGroups returns the list of defined groups
+func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http.Request) {
+	fmt.Println(server.GroupsSetup.GetGroups())
+	retval := responses.BuildOkResponseWithData("groups", server.GroupsSetup)
+	_ = responses.SendOK(writer, retval)
 }

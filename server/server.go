@@ -25,18 +25,22 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
+
+	"github.com/RedHatInsights/insights-content-service/groups"
 )
 
 // HTTPServer in an implementation of Server interface
 type HTTPServer struct {
-	Config Configuration
-	Serv   *http.Server
+	Config      Configuration
+	GroupsSetup groups.GroupsSetup
+	Serv        *http.Server
 }
 
 // New constructs new implementation of Server interface
-func New(config Configuration) *HTTPServer {
+func New(config Configuration, groupsSetup groups.GroupsSetup) *HTTPServer {
 	return &HTTPServer{
-		Config: config,
+		Config:      config,
+		GroupsSetup: groupsSetup,
 	}
 }
 
@@ -77,6 +81,7 @@ func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 
 	// common REST API endpoints
 	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
+	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet)
 
 	// OpenAPI specs
 	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)

@@ -18,5 +18,6 @@ package server
 
 const (
 	// MainEndpoint returns status ok
-	MainEndpoint = ""
+	MainEndpoint   = ""
+	GroupsEndpoint = "groups"
 )

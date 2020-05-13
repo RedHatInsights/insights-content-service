@@ -57,16 +57,16 @@ var (
 
 // startService starts service and returns error code
 func startService() int {
-	groupsConfigPath := conf.GetGroupsConfiguration().ConfigPath
-	_, err := groups.ParseGroupConfigFile(groupsConfigPath)
-
+	serverCfg := conf.GetServerConfiguration()
+	groupsSetup := groups.New(conf.GetGroupsConfiguration())
+	err := groupsSetup.Init()
 	if err != nil {
-		log.Error().Err(err).Msg("Groups configuration file not valid")
+		log.Error().Err(err).Msg("Groups init error")
 		return ExitStatusServerError
 	}
 
-	serverCfg := conf.GetServerConfiguration()
-	serverInstance = server.New(serverCfg)
+	serverInstance = server.New(serverCfg, groupsSetup)
+
 	err = serverInstance.Start()
 	if err != nil {
 		log.Error().Err(err).Msg("HTTP(s) start error")
