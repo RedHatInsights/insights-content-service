@@ -23,6 +23,15 @@ Content Service consists of three main parts:
 1. HTTP or HTTPS server that exposes REST API endpoints that can be used to read a single rule
    metadata content, a list of groups and a list of tags that belongs to a group.
 
+## Content service in the external data pipeline
+
+The chosen architecture at this point is architecture #2 (docs/architectures), where the insights-content-service will now be called directly from insights-results-aggregator, which will send complete information about the rules in one call, along with the rule groups retrived from content-service.
+
+From the long term perspective, architecture #3 is desirable, where all conent-related processing will be moved from aggregator to content-service.
+The proxy/router will route requests accordingly, which is temporarily done by aggregator in architecture #2.
+
+![architecture_2](./docs/architecture_2.png)
+
 ## Documentation for developers
 
 N/A
