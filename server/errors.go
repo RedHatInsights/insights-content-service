@@ -20,6 +20,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// responseDataError is used as the error message when the responses functions return an error
+const responseDataError = "Unexpected error during response data encoding"
+
 // AuthenticationError happens during auth problems, for example malformed token
 type AuthenticationError struct {
 	errString string

@@ -21,10 +21,63 @@ package server
 
 import (
 	"net/http"
+	"path/filepath"
+
+	"github.com/gorilla/mux"
+	"github.com/rs/zerolog/log"
 )
 
 // HTTPServer in an implementation of Server interface
 type HTTPServer struct {
 	Config Configuration
 	Serv   *http.Server
+}
+
+// New constructs new implementation of Server interface
+func New(config Configuration) *HTTPServer {
+	return &HTTPServer{
+		Config: config,
+	}
+}
+
+// Start starts server
+func (server *HTTPServer) Start() error {
+	address := server.Config.Address
+	log.Info().Msgf("Starting HTTP server at '%s'", address)
+	router := server.Initialize(address)
+	server.Serv = &http.Server{Addr: address, Handler: router}
+	var err error
+
+	if server.Config.UseHTTPS {
+		err = server.Serv.ListenAndServeTLS("server.crt", "server.key")
+	} else {
+		err = server.Serv.ListenAndServe()
+	}
+	if err != nil && err != http.ErrServerClosed {
+		log.Error().Err(err).Msg("Unable to start HTTP/S server")
+		return err
+	}
+
+	return nil
+}
+
+// Initialize perform the server initialization
+func (server *HTTPServer) Initialize(address string) http.Handler {
+	log.Info().Msgf("Initializing HTTP server at '%s'", address)
+
+	router := mux.NewRouter().StrictSlash(true)
+	server.addEndpointsToRouter(router)
+
+	return router
+}
+
+func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
+	apiPrefix := server.Config.APIPrefix
+	openAPIURL := apiPrefix + filepath.Base(server.Config.APISpecFile)
+
+	// common REST API endpoints
+	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
+
+	// OpenAPI specs
+	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)
 }
