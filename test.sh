@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-COLORS_RED='\033[0;31m'
-COLORS_RESET='\033[0m'
+COLORS_RED=$(tput setab 1)
+COLORS_RESET=$(tput sgr0) # No Color
 VERBOSE=false
 
 function cleanup() {
