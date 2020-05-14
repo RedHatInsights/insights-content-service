@@ -15,14 +15,7 @@
 
 COLORS_RED='\033[0;31m'
 COLORS_RESET='\033[0m'
-LOG_LEVEL="fatal"
 VERBOSE=false
-
-if [[ $* == *verbose* ]]; then
-    # print all possible logs
-    LOG_LEVEL=""
-    VERBOSE=true
-fi
 
 function cleanup() {
     print_descendent_pids() {
