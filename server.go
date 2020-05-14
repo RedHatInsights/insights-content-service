@@ -58,14 +58,15 @@ var (
 // startService starts service and returns error code
 func startService() int {
 	serverCfg := conf.GetServerConfiguration()
-	groupsSetup := groups.New(conf.GetGroupsConfiguration())
-	err := groupsSetup.Init()
+	groupsCfg := conf.GetGroupsConfiguration()
+	groups, err := groups.ParseGroupConfigFile(groupsCfg.ConfigPath)
+
 	if err != nil {
 		log.Error().Err(err).Msg("Groups init error")
 		return ExitStatusServerError
 	}
 
-	serverInstance = server.New(serverCfg, groupsSetup)
+	serverInstance = server.New(serverCfg, groups)
 
 	err = serverInstance.Start()
 	if err != nil {

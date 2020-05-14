@@ -31,16 +31,16 @@ import (
 
 // HTTPServer in an implementation of Server interface
 type HTTPServer struct {
-	Config      Configuration
-	GroupsSetup groups.GroupsSetup
-	Serv        *http.Server
+	Config Configuration
+	Groups map[string]groups.Group
+	Serv   *http.Server
 }
 
 // New constructs new implementation of Server interface
-func New(config Configuration, groupsSetup groups.GroupsSetup) *HTTPServer {
+func New(config Configuration, groups map[string]groups.Group) *HTTPServer {
 	return &HTTPServer{
-		Config:      config,
-		GroupsSetup: groupsSetup,
+		Config: config,
+		Groups: groups,
 	}
 }
 

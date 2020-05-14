@@ -17,7 +17,6 @@ limitations under the License.
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -49,7 +48,6 @@ func (server *HTTPServer) serveAPISpecFile(writer http.ResponseWriter, request *
 
 // listOfGroups returns the list of defined groups
 func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http.Request) {
-	fmt.Println(server.GroupsSetup.GetGroups())
-	retval := responses.BuildOkResponseWithData("groups", server.GroupsSetup)
+	retval := responses.BuildOkResponseWithData("groups", server.Groups)
 	_ = responses.SendOK(writer, retval)
 }
