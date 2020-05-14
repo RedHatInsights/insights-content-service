@@ -17,6 +17,9 @@ limitations under the License.
 package server
 
 const (
-	// MainEndpoint returns status ok
+	// MainEndpoint defines suffix of the root endpoint
 	MainEndpoint = ""
+
+	// GroupsEndpoint defines suffix of the groups request endpoint
+	GroupsEndpoint = "groups"
 )

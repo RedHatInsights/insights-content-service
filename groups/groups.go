@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 
 	"github.com/go-yaml/yaml"
+	"github.com/rs/zerolog/log"
 )
 
 // Group represent the relative information about a group
@@ -42,6 +43,7 @@ func ParseGroupConfigFile(groupConfigPath string) (map[string]Group, error) {
 	err = yaml.Unmarshal(configBytes, &groups)
 
 	if err != nil {
+		log.Error().Err(err).Msg("Error parsing groups configuration file")
 		return nil, err
 	}
 
