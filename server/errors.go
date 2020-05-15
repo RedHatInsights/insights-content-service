@@ -15,8 +15,6 @@
 package server
 
 import (
-	"net/http"
-
 	"github.com/rs/zerolog/log"
 )
 
@@ -33,6 +31,6 @@ func (e *AuthenticationError) Error() string {
 }
 
 // handleServerError handles separate server errors and sends appropriate responses
-func handleServerError(writer http.ResponseWriter, err error) {
+func handleServerError(err error) {
 	log.Error().Err(err).Msg("handleServerError()")
 }
