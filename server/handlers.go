@@ -39,7 +39,7 @@ func (server *HTTPServer) serveAPISpecFile(writer http.ResponseWriter, request *
 	if err != nil {
 		const message = "Error creating absolute path of OpenAPI spec file"
 		log.Error().Err(err).Msg(message)
-		handleServerError(writer, err)
+		handleServerError(err)
 		return
 	}
 
