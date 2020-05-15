@@ -26,9 +26,9 @@ import (
 
 // Group represent the relative information about a group
 type Group struct {
-	Name        string   `yaml:"name"`
-	Description string   `yaml:"description"`
-	Tags        []string `yaml:"tags"`
+	Name        string   `yaml:"name" json:"title"`
+	Description string   `yaml:"description" json:"description"`
+	Tags        []string `yaml:"tags" json:"tags"`
 }
 
 // ParseGroupConfigFile parses the groups configuration file and return the read groups

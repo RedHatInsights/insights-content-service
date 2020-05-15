@@ -46,6 +46,50 @@
           }
         }
       }
+    },
+    "/groups": {
+      "get": {
+        "summary": "Returns a list of groups.",
+        "operationId": "getGroups",
+        "responses": {
+          "200": {
+            "description": "A JSON array of groups.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "groups": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "strings"
+                          },
+                          "description": {
+                            "type": "strings"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
