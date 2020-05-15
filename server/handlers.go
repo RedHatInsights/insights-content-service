@@ -20,9 +20,10 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/RedHatInsights/insights-operator-utils/responses"
 	"github.com/rs/zerolog/log"
 
-	"github.com/RedHatInsights/insights-operator-utils/responses"
+	"github.com/RedHatInsights/insights-content-service/groups"
 )
 
 // mainEndpoint will handle the requests for / endpoint
@@ -48,6 +49,12 @@ func (server *HTTPServer) serveAPISpecFile(writer http.ResponseWriter, request *
 
 // listOfGroups returns the list of defined groups
 func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http.Request) {
-	retval := responses.BuildOkResponseWithData("groups", server.Groups)
+	groups := make([]groups.Group, 0, len(server.Groups))
+
+	for _, group := range server.Groups {
+		groups = append(groups, group)
+	}
+
+	retval := responses.BuildOkResponseWithData("groups", groups)
 	_ = responses.SendOK(writer, retval)
 }
