@@ -20,6 +20,7 @@ limitations under the License.
 package server
 
 import (
+	"context"
 	"net/http"
 	"path/filepath"
 
@@ -63,6 +64,11 @@ func (server *HTTPServer) Start() error {
 	}
 
 	return nil
+}
+
+// Stop stops server's execution
+func (server *HTTPServer) Stop(ctx context.Context) error {
+	return server.Serv.Shutdown(ctx)
 }
 
 // Initialize perform the server initialization
