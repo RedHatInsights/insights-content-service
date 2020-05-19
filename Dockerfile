@@ -18,7 +18,7 @@ COPY . .
 
 USER 0
 
-# clone rules content repository and build the aggregator
+# clone rules content repository and build the content service
 RUN umask 0022 && \
     make build && \
     chmod a+x insights-content-service
