@@ -19,6 +19,7 @@ package server_test
 import (
 	"context"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -28,7 +29,7 @@ import (
 	"github.com/RedHatInsights/insights-content-service/tests/helpers"
 )
 
-var configHTTP = server.Configuration{
+var config = server.Configuration{
 	Address:     ":8080",
 	APIPrefix:   "/api/test/",
 	APISpecFile: "openapi.json",
@@ -46,13 +47,15 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 	}
 }
 
-func TestServerStart(t *testing.T) {
+// checkServerStart test if the HTTP/HTTPs server can be started properly
+func checkServerStart(t *testing.T, https bool) {
 	helpers.RunTestWithTimeout(t, func(t *testing.T) {
 		s := server.New(server.Configuration{
 			// will use any free port
 			Address:   ":0",
-			APIPrefix: configHTTP.APIPrefix,
+			APIPrefix: config.APIPrefix,
 			Debug:     true,
+			UseHTTPS:  https,
 		}, nil)
 
 		go func() {
@@ -65,10 +68,10 @@ func TestServerStart(t *testing.T) {
 			}
 
 			// doing some request to be sure server started successfully
-			req, err := http.NewRequest(http.MethodGet, configHTTP.APIPrefix, nil)
+			req, err := http.NewRequest(http.MethodGet, config.APIPrefix, nil)
 			helpers.FailOnError(t, err)
 
-			response := helpers.ExecuteRequest(s, req, &configHTTP).Result()
+			response := helpers.ExecuteRequest(s, req, &config).Result()
 			checkResponseCode(t, http.StatusOK, response.StatusCode)
 
 			// stopping the server
@@ -81,6 +84,18 @@ func TestServerStart(t *testing.T) {
 			t.Fatal(err)
 		}
 	}, 5*time.Second)
+}
+
+// TestServerStartHTTP checks if it's possible to start regular HTTP server
+func TestServerStartHTTP(t *testing.T) {
+	checkServerStart(t, false)
+}
+
+// TestServerStartHTTPs checks if it's possible to start HTTPs server
+func TestServerStartHTTPs(t *testing.T) {
+	// we need to be in the correct directory containing server.key and server.crt
+	os.Chdir("../")
+	checkServerStart(t, true)
 }
 
 // TestServerStartError checks how/if errors are handled in server.Start method.
