@@ -23,4 +23,5 @@ type Configuration struct {
 	APISpecFile string `mapstructure:"api_spec_file" toml:"api_spec_file"`
 	Debug       bool   `mapstructure:"debug" toml:"debug"`
 	UseHTTPS    bool   `mapstructure:"use_https" toml:"use_https"`
+	EnableCORS  bool   `mapstructure:"enable_cors" toml:"enable_cors"`
 }
