@@ -94,7 +94,10 @@ func TestServerStartHTTP(t *testing.T) {
 // TestServerStartHTTPs checks if it's possible to start HTTPs server
 func TestServerStartHTTPs(t *testing.T) {
 	// we need to be in the correct directory containing server.key and server.crt
-	os.Chdir("../")
+	err := os.Chdir("../")
+	if err != nil {
+		t.Fatal(err)
+	}
 	checkServerStart(t, true)
 }
 
