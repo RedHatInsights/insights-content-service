@@ -26,10 +26,6 @@ type AuthenticationError struct {
 	errString string
 }
 
-func (e *AuthenticationError) Error() string {
-	return e.errString
-}
-
 // handleServerError handles separate server errors and sends appropriate responses
 func handleServerError(err error) {
 	log.Error().Err(err).Msg("handleServerError()")

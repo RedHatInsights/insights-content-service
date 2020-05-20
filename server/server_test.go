@@ -18,6 +18,7 @@ package server_test
 
 import (
 	"context"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"testing"
@@ -39,6 +40,12 @@ var config = server.Configuration{
 
 func init() {
 	zerolog.SetGlobalLevel(zerolog.WarnLevel)
+
+	// we need to be in the correct directory containing server.key and server.crt
+	err := os.Chdir("../")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func checkResponseCode(t *testing.T, expected, actual int) {
@@ -93,11 +100,6 @@ func TestServerStartHTTP(t *testing.T) {
 
 // TestServerStartHTTPs checks if it's possible to start HTTPs server
 func TestServerStartHTTPs(t *testing.T) {
-	// we need to be in the correct directory containing server.key and server.crt
-	err := os.Chdir("../")
-	if err != nil {
-		t.Fatal(err)
-	}
 	checkServerStart(t, true)
 }
 
@@ -115,4 +117,61 @@ func TestServerStartError(t *testing.T) {
 	if err.Error() != "listen tcp: address 99999: invalid port" {
 		t.Fatal("Invalid error message:", err.Error())
 	}
+}
+
+// TestServeAPISpecFileOK checks whether it is possible to access openapi.json via REST API server
+func TestServeAPISpecFileOK(t *testing.T) {
+	fileData, err := ioutil.ReadFile(config.APISpecFile)
+	helpers.FailOnError(t, err)
+
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodGet,
+		Endpoint: config.APISpecFile,
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
+		Body:       string(fileData),
+	})
+}
+
+// TestServeAPISpecFileError checks the error tests in REST API server handler
+func TestServeAPISpecFileError(t *testing.T) {
+	// openapi.json is really not there
+	dirName, err := ioutil.TempDir("/tmp/", "")
+	helpers.FailOnError(t, err)
+
+	err = os.Chdir(dirName)
+	helpers.FailOnError(t, err)
+
+	err = os.Remove(dirName)
+	helpers.FailOnError(t, err)
+
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodGet,
+		Endpoint: config.APISpecFile,
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
+		Body:       ``,
+	})
+}
+
+// TestServeAPIWrongEndpoint checks the REST API server behaviour in case wrong endpoint is used in request
+func TestServeAPIWrongEndpoint(t *testing.T) {
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodGet,
+		Endpoint: "wrong_endpoint",
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusNotFound,
+		Body:       ``,
+	})
+}
+
+// TestServeListOfGroups checks the REST API server behaviour for group listing endpoint
+func TestServeListOfGroups(t *testing.T) {
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodGet,
+		Endpoint: "groups",
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
+		Body:       ``,
+	})
 }
