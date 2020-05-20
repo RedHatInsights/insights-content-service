@@ -76,6 +76,11 @@ func (server *HTTPServer) Initialize(address string) http.Handler {
 	log.Info().Msgf("Initializing HTTP server at '%s'", address)
 
 	router := mux.NewRouter().StrictSlash(true)
+
+	if server.Config.EnableCORS {
+		router.Use(server.addCORSHeaders)
+		router.Use(server.handleOptionsMethod)
+	}
 	server.addEndpointsToRouter(router)
 
 	return router
@@ -87,8 +92,32 @@ func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 
 	// common REST API endpoints
 	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
-	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet)
+	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
 
 	// OpenAPI specs
 	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)
+}
+
+// addCORSHeaders - middleware for adding headers that should be in any response
+func (server *HTTPServer) addCORSHeaders(nextHandler http.Handler) http.Handler {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
+			nextHandler.ServeHTTP(w, r)
+		})
+}
+
+// handleOptionsMethod - middleware for handling OPTIONS method
+func (server *HTTPServer) handleOptionsMethod(nextHandler http.Handler) http.Handler {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == "OPTIONS" {
+				w.WriteHeader(http.StatusOK)
+			} else {
+				nextHandler.ServeHTTP(w, r)
+			}
+		})
 }
