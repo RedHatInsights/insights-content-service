@@ -28,7 +28,7 @@ import (
 	"github.com/RedHatInsights/insights-content-service/tests/helpers"
 )
 
-var config = server.Configuration{
+var configHTTP = server.Configuration{
 	Address:     ":8080",
 	APIPrefix:   "/api/test/",
 	APISpecFile: "openapi.json",
@@ -51,7 +51,7 @@ func TestServerStart(t *testing.T) {
 		s := server.New(server.Configuration{
 			// will use any free port
 			Address:   ":0",
-			APIPrefix: config.APIPrefix,
+			APIPrefix: configHTTP.APIPrefix,
 			Debug:     true,
 		}, nil)
 
@@ -65,10 +65,10 @@ func TestServerStart(t *testing.T) {
 			}
 
 			// doing some request to be sure server started successfully
-			req, err := http.NewRequest(http.MethodGet, config.APIPrefix, nil)
+			req, err := http.NewRequest(http.MethodGet, configHTTP.APIPrefix, nil)
 			helpers.FailOnError(t, err)
 
-			response := helpers.ExecuteRequest(s, req, &config).Result()
+			response := helpers.ExecuteRequest(s, req, &configHTTP).Result()
 			checkResponseCode(t, http.StatusOK, response.StatusCode)
 
 			// stopping the server
@@ -81,4 +81,20 @@ func TestServerStart(t *testing.T) {
 			t.Fatal(err)
 		}
 	}, 5*time.Second)
+}
+
+// TestServerStartError checks how/if errors are handled in server.Start method.
+func TestServerStartError(t *testing.T) {
+	testServer := server.New(server.Configuration{
+		Address:   "localhost:99999",
+		APIPrefix: "",
+	}, nil)
+
+	err := testServer.Start()
+	if err == nil {
+		t.Fatal("Error should be reported")
+	}
+	if err.Error() != "listen tcp: address 99999: invalid port" {
+		t.Fatal("Invalid error message:", err.Error())
+	}
 }
