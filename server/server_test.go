@@ -19,6 +19,7 @@ package server_test
 import (
 	"context"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -46,13 +47,15 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 	}
 }
 
-func TestServerStart(t *testing.T) {
+// checkServerStart test if the HTTP/HTTPs server can be started properly
+func checkServerStart(t *testing.T, https bool) {
 	helpers.RunTestWithTimeout(t, func(t *testing.T) {
 		s := server.New(server.Configuration{
 			// will use any free port
 			Address:   ":0",
 			APIPrefix: config.APIPrefix,
 			Debug:     true,
+			UseHTTPS:  https,
 		}, nil)
 
 		go func() {
@@ -81,4 +84,35 @@ func TestServerStart(t *testing.T) {
 			t.Fatal(err)
 		}
 	}, 5*time.Second)
+}
+
+// TestServerStartHTTP checks if it's possible to start regular HTTP server
+func TestServerStartHTTP(t *testing.T) {
+	checkServerStart(t, false)
+}
+
+// TestServerStartHTTPs checks if it's possible to start HTTPs server
+func TestServerStartHTTPs(t *testing.T) {
+	// we need to be in the correct directory containing server.key and server.crt
+	err := os.Chdir("../")
+	if err != nil {
+		t.Fatal(err)
+	}
+	checkServerStart(t, true)
+}
+
+// TestServerStartError checks how/if errors are handled in server.Start method.
+func TestServerStartError(t *testing.T) {
+	testServer := server.New(server.Configuration{
+		Address:   "localhost:99999",
+		APIPrefix: "",
+	}, nil)
+
+	err := testServer.Start()
+	if err == nil {
+		t.Fatal("Error should be reported")
+	}
+	if err.Error() != "listen tcp: address 99999: invalid port" {
+		t.Fatal("Invalid error message:", err.Error())
+	}
 }
