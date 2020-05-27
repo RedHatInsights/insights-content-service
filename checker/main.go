@@ -6,10 +6,23 @@ import (
 
 	"github.com/RedHatInsights/insights-content-service/groups"
 	"github.com/RedHatInsights/insights-results-aggregator/content"
+	"github.com/RedHatInsights/insights-results-aggregator/logger"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
+	err := logger.InitZerolog(
+		logger.LoggingConfiguration{
+			Debug:                      true,
+			LogLevel:                   "debug",
+			LoggingToCloudWatchEnabled: false,
+		},
+		logger.CloudWatchConfiguration{},
+	)
+	if err != nil {
+		log.Fatal().Err(err).Msg("unable to initialize zerolog")
+	}
+
 	groupCfg, err := groups.ParseGroupConfigFile("./groups_config.yaml")
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to parse group config file")
