@@ -35,11 +35,14 @@ const (
 	configFileEnvVariableName = "INSIGHTS_CONTENT_SERVICE_CONFIG_FILE"
 )
 
-// Config has exactly the same structure as *.toml file
-var Config struct {
+// ConfigStruct is a structure holding the whole service configuration
+type ConfigStruct struct {
 	Server server.Configuration `mapstructure:"server" toml:"server"`
 	Groups groups.Configuration `mapstructure:"groups" toml:"groups"`
 }
+
+// Config has exactly the same structure as *.toml file
+var Config ConfigStruct
 
 // LoadConfiguration loads configuration from defaultConfigFile, file set in configFileEnvVariableName or from env
 func LoadConfiguration(defaultConfigFile string) error {
@@ -112,6 +115,9 @@ func GetGroupsConfiguration() groups.Configuration {
 
 // checkIfFileExists returns nil if path doesn't exist or isn't a file, otherwise it returns corresponding error
 func checkIfFileExists(path string) error {
+	if len(path) == 0 {
+		return fmt.Errorf("Empty path provided")
+	}
 	fileInfo, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		return fmt.Errorf("The following file path does not exist. Path: '%v'", path)

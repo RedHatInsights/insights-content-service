@@ -36,6 +36,10 @@ const (
 
 	// ExitStatusServerError is returned in case of any REST API server-related error
 	ExitStatusServerError
+
+	// ExitStatusOther represents other errors that might happen
+	ExitStatusOther
+
 	defaultConfigFilename = "config"
 )
 
@@ -81,11 +85,12 @@ func printInfo(msg string, val string) {
 	fmt.Printf("%s\t%s\n", msg, val)
 }
 
-func printVersionInfo() {
+func printVersionInfo() int {
 	printInfo("Version:", BuildVersion)
 	printInfo("Build time:", BuildTime)
 	printInfo("Branch:", BuildBranch)
 	printInfo("Commit:", BuildCommit)
+	return ExitStatusOK
 }
 
 func initInfoLog(msg string) {
@@ -119,20 +124,20 @@ The commands are:
 
 func printHelp() int {
 	fmt.Printf(helpMessageTemplate, os.Args[0])
-	return 0
+	return ExitStatusOK
 }
 
-func printConfig() int {
-	configBytes, err := json.MarshalIndent(conf.Config, "", "    ")
+func printConfig(config conf.ConfigStruct) int {
+	configBytes, err := json.MarshalIndent(config, "", "    ")
 
 	if err != nil {
 		log.Error().Err(err)
-		return 1
+		return ExitStatusOther
 	}
 
 	fmt.Println(string(configBytes))
 
-	return 0
+	return ExitStatusOK
 }
 
 func main() {
@@ -156,20 +161,18 @@ func handleCommand(command string) int {
 		logVersionInfo()
 
 		errCode := startService()
-		if errCode != 0 {
+		if errCode != ExitStatusOK {
 			return errCode
 		}
 		return ExitStatusOK
 	case "help", "print-help":
 		return printHelp()
 	case "print-config":
-		return printConfig()
+		return printConfig(conf.Config)
 	case "print-version-info":
-		printVersionInfo()
+		return printVersionInfo()
 	default:
 		fmt.Printf("\nCommand '%v' not found\n", command)
 		return printHelp()
 	}
-
-	return ExitStatusOK
 }

@@ -17,12 +17,17 @@ limitations under the License.
 package main_test
 
 import (
+	"bytes"
 	"strings"
 	"testing"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/tisnik/go-capture"
 
 	main "github.com/RedHatInsights/insights-content-service"
+	"github.com/RedHatInsights/insights-content-service/conf"
 )
 
 // checkStandardOutputStatus tests whether the standard output capturing was succesful
@@ -89,7 +94,7 @@ func TestPrintVersionInfo(t *testing.T) {
 // TestPrintConfig is dummy ATM - we'll check config output etc. in integration tests
 func TestPrintConfig(t *testing.T) {
 	captured, err := capture.StandardOutput(func() {
-		main.PrintConfig()
+		main.PrintConfig(conf.Config)
 	})
 	checkStandardOutputStatus(t, err)
 	checkConfigContent(t, captured)
@@ -132,4 +137,31 @@ func TestHandleCommandUnknownInput(t *testing.T) {
 	})
 	checkStandardOutputStatus(t, err)
 	checkUnknownCommand(t, captured)
+}
+
+// TestInitInfoLog check the function initInfoLog
+func TestInitInfoLog(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
+	expectedString := "*** message ***"
+	main.InitInfoLog(expectedString)
+
+	logContent := buf.String()
+	if !strings.Contains(logContent, expectedString) {
+		t.Fatal("Inconsistent log content", logContent)
+	}
+}
+
+// TestLogVersionInfo check the function logVersionInfo
+func TestLogVersionInfo(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
+	main.LogVersionInfo()
+
+	logContent := buf.String()
+	if !strings.Contains(logContent, "Build time:") {
+		t.Fatal("Inconsistent log content", logContent)
+	}
 }

@@ -26,4 +26,8 @@ var (
 	PrintHelp        = printHelp
 	PrintConfig      = printConfig
 	HandleCommand    = handleCommand
+	StartService     = startService
+	PrintInfo        = printInfo
+	InitInfoLog      = initInfoLog
+	LogVersionInfo   = logVersionInfo
 )
