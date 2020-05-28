@@ -58,5 +58,5 @@ func checkWrongEntryPoint() {
 
 // check whether other HTTP methods are rejected correctly for the REST API entry point
 func checkWrongMethodsForEntryPoint() {
-	checkGetEndpointByOtherMethods(apiURL)
+	checkGetEndpointByOtherMethods(apiURL, true)
 }
