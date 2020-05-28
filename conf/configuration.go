@@ -35,6 +35,7 @@ const (
 	configFileEnvVariableName = "INSIGHTS_CONTENT_SERVICE_CONFIG_FILE"
 )
 
+// ConfigStruct is a structure holding the whole service configuration
 type ConfigStruct struct {
 	Server server.Configuration `mapstructure:"server" toml:"server"`
 	Groups groups.Configuration `mapstructure:"groups" toml:"groups"`
