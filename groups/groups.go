@@ -35,6 +35,7 @@ type Group struct {
 func ParseGroupConfigFile(groupConfigPath string) (map[string]Group, error) {
 	configBytes, err := ioutil.ReadFile(filepath.Clean(groupConfigPath))
 	if err != nil {
+		log.Error().Err(err).Msg("Error reading groups configuration file")
 		return nil, err
 	}
 
