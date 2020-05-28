@@ -25,6 +25,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// groupConfigMap is a shorthand for the map used to store the group configuration.
 type groupConfigMap map[string]groups.Group
 
 var (
@@ -44,6 +45,7 @@ func main() {
 	checkRuleContent(groupCfg)
 }
 
+// initLogger initializes the zerolog library to pretty-print the log messages.
 func initLogger() {
 	err := logger.InitZerolog(
 		logger.LoggingConfiguration{
@@ -58,6 +60,8 @@ func initLogger() {
 	}
 }
 
+// checkGroupConfig reads the group configuration file and performs defined checks on it.
+// Then it returns the config to be used by the rule content checks.
 func checkGroupConfig() groupConfigMap {
 	groupCfg, err := groups.ParseGroupConfigFile(groupConfigPath)
 	if err != nil {
@@ -71,6 +75,7 @@ func checkGroupConfig() groupConfigMap {
 	// Unique group is just a check that makes sure no two groups have the same name property.
 	uniqueGroups := map[string]string{}
 
+	// For each group defined in the group configuration file.
 	for groupKey, group := range groupCfg {
 		if firstGroupKey, exists := uniqueGroups[group.Name]; exists {
 			log.Warn().Msgf("multiple groups with the name '%s' (first with key '%s', but also with key '%s')", group.Name, firstGroupKey, groupKey)
@@ -78,6 +83,7 @@ func checkGroupConfig() groupConfigMap {
 			uniqueGroups[group.Name] = groupKey
 		}
 
+		// For each tag assigned to the group.
 		for _, tag := range group.Tags {
 			if firstGroupName, exists := uniqueTags[tag]; exists {
 				log.Warn().Msgf("tag '%s' is defined multiple times (first time in group '%s', but also in group '%s')", tag, firstGroupName, group.Name)
@@ -90,13 +96,15 @@ func checkGroupConfig() groupConfigMap {
 	return groupCfg
 }
 
+// checkRuleContent checks if rule content files are not empty
+// and if the tags assigned to all error codes really exist.
 func checkRuleContent(groupCfg groupConfigMap) {
 	ruleContentDir, err := content.ParseRuleContentDir(contentDirPath)
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to parse group config file")
 	}
 
-	// For every rule.
+	// For every rule with a content available.
 	for ruleName, ruleContent := range ruleContentDir.Rules {
 		checkRuleAttributeNotEmpty(ruleName, "name", ruleContent.Plugin.Name)
 		checkRuleAttributeNotEmpty(ruleName, "node_id", ruleContent.Plugin.NodeID)
@@ -112,7 +120,7 @@ func checkRuleContent(groupCfg groupConfigMap) {
 			log.Warn().Msgf("rule '%s' contains no error code", ruleName)
 		}
 
-		// For every error code of that rule.
+		// For every error code of the rule.
 		for errCode, errContent := range ruleContent.ErrorKeys {
 			checkErrorCodeFileNotEmpty(ruleName, errCode, "generic.md", errContent.Generic)
 
@@ -128,6 +136,8 @@ func checkRuleContent(groupCfg groupConfigMap) {
 	}
 }
 
+// checkErrorCodeTags checks that the tags referenced by the error code are valid.
+// At the end, all assigned tags (and the groups they belong to) are printed in the form of a map.
 func checkErrorCodeTags(groupCfg groupConfigMap, ruleName string, errCode string, errContent content.RuleErrorKeyContent) {
 	errGroups := map[string]string{}
 
