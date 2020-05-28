@@ -83,8 +83,18 @@ func AssertAPIRequest(
 		serverConfig = &DefaultServerConfig
 	}
 
-	groups := make(map[string]groups.Group)
-	testServer := server.New(*serverConfig, groups)
+	groupsData := make(map[string]groups.Group)
+	groupsData["foo"] = groups.Group{
+		Name:        "group name: foo",
+		Description: "group description: foo",
+		Tags:        []string{"tag1", "tag2"},
+	}
+	groupsData["bar"] = groups.Group{
+		Name:        "group name: bar",
+		Description: "group description: bar",
+		Tags:        []string{"tag3", "tag4"},
+	}
+	testServer := server.New(*serverConfig, groupsData)
 
 	url := server.MakeURLToEndpoint(serverConfig.APIPrefix, request.Endpoint, request.EndpointArgs...)
 
