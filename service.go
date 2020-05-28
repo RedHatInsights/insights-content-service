@@ -36,6 +36,10 @@ const (
 
 	// ExitStatusServerError is returned in case of any REST API server-related error
 	ExitStatusServerError
+
+	// ExitStatusOther represents other errors that might happen
+	ExitStatusOther
+
 	defaultConfigFilename = "config"
 )
 
@@ -119,7 +123,7 @@ The commands are:
 
 func printHelp() int {
 	fmt.Printf(helpMessageTemplate, os.Args[0])
-	return 0
+	return ExitStatusOK
 }
 
 func printConfig(config conf.ConfigStruct) int {
@@ -127,12 +131,12 @@ func printConfig(config conf.ConfigStruct) int {
 
 	if err != nil {
 		log.Error().Err(err)
-		return 1
+		return ExitStatusOther
 	}
 
 	fmt.Println(string(configBytes))
 
-	return 0
+	return ExitStatusOK
 }
 
 func main() {
