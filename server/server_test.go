@@ -134,6 +134,23 @@ func TestServeAPISpecFileOK(t *testing.T) {
 	})
 }
 
+// TestServeAPISpecOptionsMethod checks whether it is not possible to access openapi.json via REST API server using other HTTP methods
+func TestServeAPISpecOptionsMethod(t *testing.T) {
+	// HTTP methods to check
+	methods := []string{http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions}
+
+	// check handling of all unsupported methods
+	for _, method := range methods {
+		helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+			Method:   method,
+			Endpoint: config.APISpecFile,
+		}, &helpers.APIResponse{
+			StatusCode: http.StatusMethodNotAllowed,
+			Body:       "",
+		})
+	}
+}
+
 // TestServeAPISpecFileError checks the error tests in REST API server handler
 func TestServeAPISpecFileError(t *testing.T) {
 	// openapi.json is really not there
@@ -170,6 +187,17 @@ func TestServeAPIWrongEndpoint(t *testing.T) {
 func TestServeListOfGroups(t *testing.T) {
 	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 		Method:   http.MethodGet,
+		Endpoint: "groups",
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
+		Body:       ``,
+	})
+}
+
+// TestServeListOfGroupsOptionsMethod checks the REST API server behaviour for group listing endpoint
+func TestServeListOfGroupsOptionsMethod(t *testing.T) {
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodOptions,
 		Endpoint: "groups",
 	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
