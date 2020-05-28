@@ -20,11 +20,18 @@ import (
 	"github.com/verdverm/frisby"
 )
 
+const openAPIURL = apiURL + "openapi.json"
+
 // checkOpenAPISpecifications checks whether OpenAPI endpoint is handled correctly
 func checkOpenAPISpecifications() {
-	f := frisby.Create("Check the OpenAPI endpoint").Get(apiURL + "openapi.json")
+	f := frisby.Create("Check the OpenAPI endpoint").Get(openAPIURL)
 	f.Send()
 	f.ExpectStatus(200)
 	f.ExpectHeader(contentTypeHeader, "application/json")
 	f.PrintReport()
+}
+
+// checkWrongMethodsForOpenAPIEndpoint checks whether other HTTP methods are rejected correctly for the REST API OpenAPI point
+func checkWrongMethodsForOpenAPIEndpoint() {
+	checkGetEndpointByOtherMethods(openAPIURL, true)
 }
