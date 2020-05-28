@@ -160,7 +160,7 @@ func handleCommand(command string) int {
 		logVersionInfo()
 
 		errCode := startService()
-		if errCode != 0 {
+		if errCode != ExitStatusOK {
 			return errCode
 		}
 		return ExitStatusOK
