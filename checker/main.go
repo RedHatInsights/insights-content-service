@@ -28,6 +28,29 @@ func main() {
 		log.Fatal().Err(err).Msg("unable to parse group config file")
 	}
 
+	// Check if all tags on all groups are unique.
+	// - If no groups contains the same tag multiple times.
+	// - If no two groups share the same tag name.
+	uniqueTags := map[string]string{}
+	// Unique group is just a check that makes sure no two groups have the same name property.
+	uniqueGroups := map[string]string{}
+
+	for groupKey, group := range groupCfg {
+		if firstGroupKey, exists := uniqueGroups[group.Name]; exists {
+			log.Warn().Msgf("multiple groups with the name '%s' (first with key '%s', but also with key '%s')", group.Name, firstGroupKey, groupKey)
+		} else {
+			uniqueGroups[group.Name] = groupKey
+		}
+
+		for _, tag := range group.Tags {
+			if firstGroupName, exists := uniqueTags[tag]; exists {
+				log.Warn().Msgf("tag '%s' is defined multiple times (first time in group '%s', but also in group '%s')", tag, firstGroupName, group.Name)
+			} else {
+				uniqueTags[tag] = group.Name
+			}
+		}
+	}
+
 	ruleContentDir, err := content.ParseRuleContentDir("../ccx-rules-ocp/content/")
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to parse group config file")
@@ -44,6 +67,10 @@ func main() {
 		checkRuleFileNotEmpty(ruleName, "reason.md", ruleContent.Reason)
 		checkRuleFileNotEmpty(ruleName, "resolution.md", ruleContent.Resolution)
 		checkRuleFileNotEmpty(ruleName, "summary.md", ruleContent.Summary)
+
+		if len(ruleContent.ErrorKeys) == 0 {
+			log.Warn().Msgf("rule '%s' contains no error code")
+		}
 
 		// For every error code of that rule.
 		for errCode, errContent := range ruleContent.ErrorKeys {
