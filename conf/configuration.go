@@ -35,11 +35,13 @@ const (
 	configFileEnvVariableName = "INSIGHTS_CONTENT_SERVICE_CONFIG_FILE"
 )
 
-// Config has exactly the same structure as *.toml file
-var Config struct {
+type ConfigStruct struct {
 	Server server.Configuration `mapstructure:"server" toml:"server"`
 	Groups groups.Configuration `mapstructure:"groups" toml:"groups"`
 }
+
+// Config has exactly the same structure as *.toml file
+var Config ConfigStruct
 
 // LoadConfiguration loads configuration from defaultConfigFile, file set in configFileEnvVariableName or from env
 func LoadConfiguration(defaultConfigFile string) error {

@@ -122,8 +122,8 @@ func printHelp() int {
 	return 0
 }
 
-func printConfig() int {
-	configBytes, err := json.MarshalIndent(conf.Config, "", "    ")
+func printConfig(config conf.ConfigStruct) int {
+	configBytes, err := json.MarshalIndent(config, "", "    ")
 
 	if err != nil {
 		log.Error().Err(err)
@@ -163,7 +163,7 @@ func handleCommand(command string) int {
 	case "help", "print-help":
 		return printHelp()
 	case "print-config":
-		return printConfig()
+		return printConfig(conf.Config)
 	case "print-version-info":
 		printVersionInfo()
 	default:

@@ -23,6 +23,7 @@ import (
 	"github.com/tisnik/go-capture"
 
 	main "github.com/RedHatInsights/insights-content-service"
+	"github.com/RedHatInsights/insights-content-service/conf"
 )
 
 // checkStandardOutputStatus tests whether the standard output capturing was succesful
@@ -89,7 +90,7 @@ func TestPrintVersionInfo(t *testing.T) {
 // TestPrintConfig is dummy ATM - we'll check config output etc. in integration tests
 func TestPrintConfig(t *testing.T) {
 	captured, err := capture.StandardOutput(func() {
-		main.PrintConfig()
+		main.PrintConfig(conf.Config)
 	})
 	checkStandardOutputStatus(t, err)
 	checkConfigContent(t, captured)
