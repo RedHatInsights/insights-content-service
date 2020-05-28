@@ -78,10 +78,12 @@ func (server *HTTPServer) Initialize(address string) http.Handler {
 	router := mux.NewRouter().StrictSlash(true)
 
 	if server.Config.EnableCORS {
+		log.Info().Msgf("Configuring CORS middleware")
 		router.Use(server.addCORSHeaders)
 		router.Use(server.handleOptionsMethod)
 	}
 	server.addEndpointsToRouter(router)
+	log.Info().Msgf("Server has been initiliazed")
 
 	return router
 }
