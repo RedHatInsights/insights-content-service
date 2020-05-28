@@ -33,4 +33,9 @@ func ServerTests() {
 	// tests for OpenAPI specification that is accessible via its endpoint as well
 	// implementation of these tests is stored in openapi.go
 	checkOpenAPISpecifications()
+	checkWrongMethodsForOpenAPIEndpoint()
+
+	// tests for the 'groups' endpoint
+	checkGroupsEndpoint()
+	checkWrongMethodsForGroupsEndpoint()
 }
