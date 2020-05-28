@@ -61,6 +61,15 @@ func TestLoadConfiguration(t *testing.T) {
 	loadProperConfigFile(t)
 }
 
+// TestLoadBrokenConfiguration loads a configuration file for testing
+func TestLoadBrokenConfiguraion(t *testing.T) {
+	os.Clearenv()
+	err := conf.LoadConfiguration("tests/config_improper_format")
+	if err == nil {
+		t.Fatal("Broken configuration file should be detected")
+	}
+}
+
 // TestLoadGroupsConfiguration tests loading the groups configuration sub-tree
 func TestLoadGroupsConfiguration(t *testing.T) {
 	loadProperConfigFile(t)
