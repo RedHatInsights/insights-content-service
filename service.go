@@ -85,11 +85,12 @@ func printInfo(msg string, val string) {
 	fmt.Printf("%s\t%s\n", msg, val)
 }
 
-func printVersionInfo() {
+func printVersionInfo() int {
 	printInfo("Version:", BuildVersion)
 	printInfo("Build time:", BuildTime)
 	printInfo("Branch:", BuildBranch)
 	printInfo("Commit:", BuildCommit)
+	return ExitStatusOK
 }
 
 func initInfoLog(msg string) {
@@ -169,11 +170,9 @@ func handleCommand(command string) int {
 	case "print-config":
 		return printConfig(conf.Config)
 	case "print-version-info":
-		printVersionInfo()
+		return printVersionInfo()
 	default:
 		fmt.Printf("\nCommand '%v' not found\n", command)
 		return printHelp()
 	}
-
-	return ExitStatusOK
 }
