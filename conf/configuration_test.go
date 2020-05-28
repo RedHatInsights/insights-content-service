@@ -112,12 +112,17 @@ func TestTryToLoadNonExistingConfig(t *testing.T) {
 
 // TestCheckIfFileExists tests the functionality of function checkIfFileExists
 func TestCheckIfFileExists(t *testing.T) {
-	err := conf.CheckIfFileExists("config.toml")
+	err := conf.CheckIfFileExists("")
+	if err == nil {
+		t.Fatal("File with empty name should not exists")
+	}
+
+	err = conf.CheckIfFileExists("config.toml")
 	if err != nil {
 		t.Fatal("File should exists:", err)
 	}
 
-	err = conf.CheckIfFileExists("")
+	err = conf.CheckIfFileExists("\n")
 	if err == nil {
 		t.Fatal("File '' should not exist")
 	}

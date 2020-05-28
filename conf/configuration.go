@@ -114,6 +114,9 @@ func GetGroupsConfiguration() groups.Configuration {
 
 // checkIfFileExists returns nil if path doesn't exist or isn't a file, otherwise it returns corresponding error
 func checkIfFileExists(path string) error {
+	if len(path) == 0 {
+		return fmt.Errorf("Empty path provided")
+	}
 	fileInfo, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		return fmt.Errorf("The following file path does not exist. Path: '%v'", path)
