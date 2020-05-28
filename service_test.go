@@ -17,8 +17,12 @@ limitations under the License.
 package main_test
 
 import (
+	"bytes"
 	"strings"
 	"testing"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/tisnik/go-capture"
 
@@ -133,4 +137,31 @@ func TestHandleCommandUnknownInput(t *testing.T) {
 	})
 	checkStandardOutputStatus(t, err)
 	checkUnknownCommand(t, captured)
+}
+
+// TestInitInfoLog check the function initInfoLog
+func TestInitInfoLog(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
+	expectedString := "*** message ***"
+	main.InitInfoLog(expectedString)
+
+	logContent := buf.String()
+	if !strings.Contains(logContent, expectedString) {
+		t.Fatal("Inconsistent log content", logContent)
+	}
+}
+
+// TestLogVersionInfo check the function logVersionInfo
+func TestLogVersionInfo(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
+	main.LogVersionInfo()
+
+	logContent := buf.String()
+	if !strings.Contains(logContent, "Build time:") {
+		t.Fatal("Inconsistent log content", logContent)
+	}
 }
