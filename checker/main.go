@@ -1,6 +1,21 @@
+// Copyright 2020 Red Hat, Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package main
 
 import (
+	"flag"
 	"fmt"
 	"strings"
 
@@ -10,7 +25,26 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type groupConfigMap map[string]groups.Group
+
+var (
+	groupConfigPath string = "./groups_config.yaml"
+	contentDirPath  string = "./content/"
+)
+
+func init() {
+	flag.StringVar(&groupConfigPath, "config", groupConfigPath, "Path to the group configuration YAML file.")
+	flag.StringVar(&contentDirPath, "content", contentDirPath, "Path to the content directory (the one containing the 'config.yaml' file).")
+	flag.Parse()
+}
+
 func main() {
+	initLogger()
+	groupCfg := checkGroupConfig()
+	checkRuleContent(groupCfg)
+}
+
+func initLogger() {
 	err := logger.InitZerolog(
 		logger.LoggingConfiguration{
 			Debug:                      true,
@@ -22,8 +56,10 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to initialize zerolog")
 	}
+}
 
-	groupCfg, err := groups.ParseGroupConfigFile("./groups_config.yaml")
+func checkGroupConfig() groupConfigMap {
+	groupCfg, err := groups.ParseGroupConfigFile(groupConfigPath)
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to parse group config file")
 	}
@@ -51,7 +87,11 @@ func main() {
 		}
 	}
 
-	ruleContentDir, err := content.ParseRuleContentDir("../ccx-rules-ocp/content/")
+	return groupCfg
+}
+
+func checkRuleContent(groupCfg groupConfigMap) {
+	ruleContentDir, err := content.ParseRuleContentDir(contentDirPath)
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to parse group config file")
 	}
@@ -69,13 +109,11 @@ func main() {
 		checkRuleFileNotEmpty(ruleName, "summary.md", ruleContent.Summary)
 
 		if len(ruleContent.ErrorKeys) == 0 {
-			log.Warn().Msgf("rule '%s' contains no error code")
+			log.Warn().Msgf("rule '%s' contains no error code", ruleName)
 		}
 
 		// For every error code of that rule.
 		for errCode, errContent := range ruleContent.ErrorKeys {
-			errGroups := map[string]string{}
-
 			checkErrorCodeFileNotEmpty(ruleName, errCode, "generic.md", errContent.Generic)
 
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "condition", errContent.Metadata.Condition)
@@ -85,32 +123,38 @@ func main() {
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "status", errContent.Metadata.Status)
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "likelihood", fmt.Sprint(errContent.Metadata.Likelihood))
 
-			// For every tag of that error code.
-			for _, errTag := range errContent.Metadata.Tags {
-				// Check for duplicate tags in the error code's content.
-				if _, exists := errGroups[errTag]; exists {
-					log.Error().Msgf("duplicate tag '%s' in content of '%s|%s'", errTag, ruleName, errCode)
-				}
-
-				// Find a group with the tag.
-				for _, group := range groupCfg {
-					for _, tag := range group.Tags {
-						if tag == errTag {
-							errGroups[errTag] = group.Name
-							break
-						}
-					}
-				}
-
-				// Check if at least one group with the tag was found.
-				if _, exists := errGroups[errTag]; !exists {
-					log.Error().Msgf("invalid tag '%s' in content of '%s|%s'", errTag, ruleName, errCode)
-				}
-			}
-
-			log.Info().Msgf("%s|%s: %v", ruleName, errCode, errGroups)
+			checkErrorCodeTags(groupCfg, ruleName, errCode, errContent)
 		}
 	}
+}
+
+func checkErrorCodeTags(groupCfg groupConfigMap, ruleName string, errCode string, errContent content.RuleErrorKeyContent) {
+	errGroups := map[string]string{}
+
+	// For every tag of that error code.
+	for _, errTag := range errContent.Metadata.Tags {
+		// Check for duplicate tags in the error code's content.
+		if _, exists := errGroups[errTag]; exists {
+			log.Error().Msgf("duplicate tag '%s' in content of '%s|%s'", errTag, ruleName, errCode)
+		}
+
+		// Find a group with the tag.
+		for _, group := range groupCfg {
+			for _, tag := range group.Tags {
+				if tag == errTag {
+					errGroups[errTag] = group.Name
+					break
+				}
+			}
+		}
+
+		// Check if at least one group with the tag was found.
+		if _, exists := errGroups[errTag]; !exists {
+			log.Error().Msgf("invalid tag '%s' in content of '%s|%s'", errTag, ruleName, errCode)
+		}
+	}
+
+	log.Info().Msgf("%s|%s: %v", ruleName, errCode, errGroups)
 }
 
 // Base rule content checks.
