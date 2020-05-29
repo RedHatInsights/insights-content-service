@@ -20,9 +20,10 @@ import (
 	"strings"
 
 	"github.com/RedHatInsights/insights-content-service/groups"
+	"github.com/rs/zerolog/log"
+
 	"github.com/RedHatInsights/insights-results-aggregator/content"
 	"github.com/RedHatInsights/insights-results-aggregator/logger"
-	"github.com/rs/zerolog/log"
 )
 
 // groupConfigMap is a shorthand for the map used to store the group configuration.
@@ -68,10 +69,6 @@ func checkGroupConfig() groupConfigMap {
 		log.Fatal().Err(err).Msg("unable to parse group config file")
 	}
 
-	// Check if all tags on all groups are unique.
-	// - If no groups contains the same tag multiple times.
-	// - If no two groups share the same tag name.
-	uniqueTags := map[string]string{}
 	// Unique group is just a check that makes sure no two groups have the same name property.
 	uniqueGroups := map[string]string{}
 
@@ -83,12 +80,16 @@ func checkGroupConfig() groupConfigMap {
 			uniqueGroups[group.Name] = groupKey
 		}
 
+		// Check for duplicate tag in a single group.
+		// The same tag being used by multiple groups is allowed.
+		uniqueTags := map[string]struct{}{}
+
 		// For each tag assigned to the group.
 		for _, tag := range group.Tags {
-			if firstGroupName, exists := uniqueTags[tag]; exists {
-				log.Warn().Msgf("tag '%s' is defined multiple times (first time in group '%s', but also in group '%s')", tag, firstGroupName, group.Name)
+			if _, exists := uniqueTags[tag]; exists {
+				log.Warn().Msgf("duplicate '%s' tag reference in group '%s'", tag, group.Name)
 			} else {
-				uniqueTags[tag] = group.Name
+				uniqueTags[tag] = struct{}{}
 			}
 		}
 	}
@@ -101,7 +102,7 @@ func checkGroupConfig() groupConfigMap {
 func checkRuleContent(groupCfg groupConfigMap) {
 	ruleContentDir, err := content.ParseRuleContentDir(contentDirPath)
 	if err != nil {
-		log.Fatal().Err(err).Msg("unable to parse group config file")
+		log.Fatal().Err(err).Msg("unable to rule content directory")
 	}
 
 	// For every rule with a content available.
@@ -139,7 +140,7 @@ func checkRuleContent(groupCfg groupConfigMap) {
 // checkErrorCodeTags checks that the tags referenced by the error code are valid.
 // At the end, all assigned tags (and the groups they belong to) are printed in the form of a map.
 func checkErrorCodeTags(groupCfg groupConfigMap, ruleName string, errCode string, errContent content.RuleErrorKeyContent) {
-	errGroups := map[string]string{}
+	errGroups := map[string][]string{}
 
 	// For every tag of that error code.
 	for _, errTag := range errContent.Metadata.Tags {
@@ -148,19 +149,24 @@ func checkErrorCodeTags(groupCfg groupConfigMap, ruleName string, errCode string
 			log.Error().Msgf("duplicate tag '%s' in content of '%s|%s'", errTag, ruleName, errCode)
 		}
 
+		// List of groups to which the tag belongs.
+		tagGroups := []string{}
+
 		// Find a group with the tag.
 		for _, group := range groupCfg {
 			for _, tag := range group.Tags {
 				if tag == errTag {
-					errGroups[errTag] = group.Name
+					errGroups[errTag] = append(tagGroups, group.Name)
 					break
 				}
 			}
 		}
 
 		// Check if at least one group with the tag was found.
-		if _, exists := errGroups[errTag]; !exists {
-			log.Error().Msgf("invalid tag '%s' in content of '%s|%s'", errTag, ruleName, errCode)
+		if len(tagGroups) > 0 {
+			errGroups[errTag] = tagGroups
+		} else {
+			log.Error().Msgf("unknown tag '%s' in content of '%s|%s'", errTag, ruleName, errCode)
 		}
 	}
 
