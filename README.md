@@ -169,7 +169,8 @@ It helps to ensure that:
 
 * tags referenced in the rule content are defined in the group configuration
 * rule content attributes and content files are not empty
-* no tag or group is redefined in the configuration file
+* every group name is unique
+* group tags are unique (within the group)
 
 It is necessary to have the rule content available locally in order to run the tool.
 
@@ -186,3 +187,8 @@ go run ./checker/ -config GROUP_CONFIG_YAML_PATH -content CONTENT_DIR_PATH
 
 After running this command, you should see a report for the given
 group configuration file and rule content directory in the terminal.
+
+After checking each error code, a summary is printed containing its tags
+and a list of groups to which the individual tags belong.
+Tags that do not belong to any defined group are reported
+as an error and will not be included in this summary.
