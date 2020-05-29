@@ -159,3 +159,30 @@ all pull requests:
 Please note that all checks mentioned above have to pass for the change to be merged into master branch.
 
 History of checks performed by CI is available at [RedHatInsights / insights-content-service](https://travis-ci.org/RedHatInsights/insights-content-service).
+
+## Rule content checker
+
+A utility for checking the rule content is currently included.
+It may be moved elsewhere in the future.
+
+It helps to ensure that:
+
+* tags referenced in the rule content are defined in the group configuration
+* rule content attributes and content files are not empty
+* no tag or group is redefined in the configuration file
+
+It is necessary to have the rule content available locally in order to run the tool.
+
+Once you have the rule content and the rule group configuration file,
+you can run the checker tool using the following command.
+Make sure to replace the placeholders with actual paths.
+The content directory must be the one containing the `config.yaml`
+file and the `external` directory with content for external rules.
+Other rules are not being checked by this tool at the moment.
+
+```shell
+go run ./checker/ -config GROUP_CONFIG_YAML_PATH -content CONTENT_DIR_PATH
+```
+
+After running this command, you should see a report for the given
+group configuration file and rule content directory in the terminal.
