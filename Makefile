@@ -6,6 +6,7 @@ default: build
 
 clean: ## Run go clean
 	@go clean
+	rm -f rest-api-tests
 
 build: ## Run go build
 	./build.sh
