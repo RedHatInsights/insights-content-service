@@ -27,21 +27,24 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 
+	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"
 )
 
 // HTTPServer in an implementation of Server interface
 type HTTPServer struct {
-	Config Configuration
-	Groups map[string]groups.Group
-	Serv   *http.Server
+	Config  Configuration
+	Groups  map[string]groups.Group
+	Content content.RuleContentDirectory
+	Serv    *http.Server
 }
 
 // New constructs new implementation of Server interface
-func New(config Configuration, groups map[string]groups.Group) *HTTPServer {
+func New(config Configuration, groups map[string]groups.Group, contentDir content.RuleContentDirectory) *HTTPServer {
 	return &HTTPServer{
-		Config: config,
-		Groups: groups,
+		Config:  config,
+		Groups:  groups,
+		Content: contentDir,
 	}
 }
 

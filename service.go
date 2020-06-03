@@ -26,6 +26,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/RedHatInsights/insights-content-service/conf"
+	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"
 	"github.com/RedHatInsights/insights-content-service/server"
 )
@@ -36,6 +37,9 @@ const (
 
 	// ExitStatusServerError is returned in case of any REST API server-related error
 	ExitStatusServerError
+
+	// ExitStatusReadContentError
+	ExitStatusReadContentError
 
 	// ExitStatusOther represents other errors that might happen
 	ExitStatusOther
@@ -70,7 +74,15 @@ func startService() int {
 		return ExitStatusServerError
 	}
 
-	serverInstance = server.New(serverCfg, groups)
+	ruleContentDirPath := conf.GetContentPathConfiguration()
+	contentDir, err := content.ParseRuleContentDir(ruleContentDirPath)
+
+	if osPathError, ok := err.(*os.PathError); ok {
+		log.Error().Err(osPathError).Msg("No rules directory")
+		return ExitStatusReadContentError
+	}
+
+	serverInstance = server.New(serverCfg, groups, contentDir)
 
 	err = serverInstance.Start()
 	if err != nil {

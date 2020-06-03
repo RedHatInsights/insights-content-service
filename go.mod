@@ -4,10 +4,14 @@ go 1.13
 
 require (
 	github.com/BurntSushi/toml v0.3.1
+	github.com/DATA-DOG/go-sqlmock v1.4.1
 	github.com/RedHatInsights/insights-operator-utils v1.0.1
 	github.com/RedHatInsights/insights-results-aggregator v0.0.0-20200522085341-3cf0c4554206
+	github.com/Shopify/sarama v1.26.0
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
+	github.com/deckarep/golang-set v1.7.1
 	github.com/go-yaml/yaml v2.1.0+incompatible
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.4
 	github.com/rs/zerolog v1.18.0
 	github.com/spf13/viper v1.7.0

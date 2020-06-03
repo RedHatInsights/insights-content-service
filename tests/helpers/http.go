@@ -24,6 +24,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"
 	"github.com/RedHatInsights/insights-content-service/server"
 	"github.com/RedHatInsights/insights-content-service/types"
@@ -94,7 +95,8 @@ func AssertAPIRequest(
 		Description: "group description: bar",
 		Tags:        []string{"tag3", "tag4"},
 	}
-	testServer := server.New(*serverConfig, groupsData)
+	contentDir := content.RuleContentDirectory{}
+	testServer := server.New(*serverConfig, groupsData, contentDir)
 
 	url := server.MakeURLToEndpoint(serverConfig.APIPrefix, request.Endpoint, request.EndpointArgs...)
 
