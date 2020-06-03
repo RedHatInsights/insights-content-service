@@ -156,7 +156,7 @@ func checkErrorCodeTags(groupCfg groupConfigMap, ruleName string, errCode string
 		for _, group := range groupCfg {
 			for _, tag := range group.Tags {
 				if tag == errTag {
-					errGroups[errTag] = append(tagGroups, group.Name)
+					tagGroups = append(tagGroups, group.Name)
 					break
 				}
 			}
