@@ -27,6 +27,7 @@ FROM registry.redhat.io/ubi8-minimal
 
 COPY --from=builder /opt/app-root/src/insights-content-service .
 COPY --from=builder /opt/app-root/src/openapi.json /openapi/openapi.json
+COPY --from=builder /opt/app-root/src/groups_config.yaml /groups/groups_config.yaml
 
 USER 1001
 
