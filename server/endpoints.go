@@ -18,7 +18,11 @@ package server
 
 import (
 	"fmt"
+	"net/http"
+	"path/filepath"
 	"regexp"
+
+	"github.com/gorilla/mux"
 )
 
 const (
@@ -28,6 +32,19 @@ const (
 	// GroupsEndpoint defines suffix of the groups request endpoint
 	GroupsEndpoint = "groups"
 )
+
+func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
+	apiPrefix := server.Config.APIPrefix
+	openAPIURL := apiPrefix + filepath.Base(server.Config.APISpecFile)
+
+	// common REST API endpoints
+	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
+	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc(apiPrefix+"test", server.getStaticContent).Methods(http.MethodGet, http.MethodOptions)
+
+	// OpenAPI specs
+	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)
+}
 
 // MakeURLToEndpoint creates URL to endpoint, use constants from file endpoints.go
 func MakeURLToEndpoint(apiPrefix, endpoint string, args ...interface{}) string {

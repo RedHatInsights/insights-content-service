@@ -22,7 +22,6 @@ package server
 import (
 	"context"
 	"net/http"
-	"path/filepath"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
@@ -89,18 +88,6 @@ func (server *HTTPServer) Initialize(address string) http.Handler {
 	log.Info().Msgf("Server has been initiliazed")
 
 	return router
-}
-
-func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
-	apiPrefix := server.Config.APIPrefix
-	openAPIURL := apiPrefix + filepath.Base(server.Config.APISpecFile)
-
-	// common REST API endpoints
-	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
-	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
-
-	// OpenAPI specs
-	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)
 }
 
 // addCORSHeaders - middleware for adding headers that should be in any response

@@ -38,7 +38,7 @@ const (
 	// ExitStatusServerError is returned in case of any REST API server-related error
 	ExitStatusServerError
 
-	// ExitStatusReadContentError
+	// ExitStatusReadContentError is returned when the static content parsing fails
 	ExitStatusReadContentError
 
 	// ExitStatusOther represents other errors that might happen
