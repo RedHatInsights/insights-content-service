@@ -31,6 +31,9 @@ const (
 
 	// GroupsEndpoint defines suffix of the groups request endpoint
 	GroupsEndpoint = "groups"
+
+	// AllContentEndpoint defines suffix for all the content
+	AllContentEndpoint = "content"
 )
 
 func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
@@ -40,7 +43,7 @@ func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 	// common REST API endpoints
 	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
 	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
-	router.HandleFunc(apiPrefix+"test", server.getStaticContent).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc(apiPrefix+AllContentEndpoint, server.getStaticContent).Methods(http.MethodGet, http.MethodOptions)
 
 	// OpenAPI specs
 	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)
