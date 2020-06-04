@@ -131,7 +131,7 @@ func makeRequest(t testing.TB, request *APIRequest, url string) *http.Request {
 
 // ExecuteRequest executes http request on a testServer
 func ExecuteRequest(testServer *server.HTTPServer, req *http.Request, config *server.Configuration) *httptest.ResponseRecorder {
-	router := testServer.Initialize(config.Address)
+	router := testServer.Initialize()
 
 	rr := httptest.NewRecorder()
 	router.ServeHTTP(rr, req)
