@@ -89,6 +89,15 @@ func TestLoadServerConfiguration(t *testing.T) {
 	assert.Equal(t, "/api/v1/", serverCfg.APIPrefix)
 }
 
+// TestLoadContentPathConfiguration tests loading the content path configuration
+func TestLoadContentPathConfiguration(t *testing.T) {
+	loadProperConfigFile(t)
+
+	contentPath := conf.GetContentPathConfiguration()
+
+	assert.Equal(t, "/rules-content", contentPath)
+}
+
 // TestLoadConfigurationEnvVariable tests loading the config. file for testing from an environment variable
 func TestLoadConfigurationEnvVariable(t *testing.T) {
 	os.Clearenv()

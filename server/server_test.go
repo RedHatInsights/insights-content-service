@@ -207,3 +207,13 @@ func TestServeListOfGroupsOptionsMethod(t *testing.T) {
 		Body:       ``,
 	})
 }
+
+// TestServerContent checks the REST API server behavior for content endpoint
+func TestServerContent(t *testing.T) {
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodGet,
+		Endpoint: "content",
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
+	})
+}
