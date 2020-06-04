@@ -2,12 +2,9 @@
 address = ":8080"
 api_prefix = "/api/v1/"
 api_spec_file = "openapi.json"
-debug = true
-auth = true
-auth_type = "xrh"
-use_https = false
-enable_cors = true
-content_service_url = "http://localhost:8081/api/v1/"
+
+[groups]
+path = "groups_config.yaml"
 
 [content]
 path = "./tests/content/ok/"
