@@ -26,6 +26,7 @@ import (
 
 	"github.com/rs/zerolog"
 
+	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/server"
 	"github.com/RedHatInsights/insights-content-service/tests/helpers"
 )
@@ -57,6 +58,7 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 
 // checkServerStart test if the HTTP/HTTPs server can be started properly
 func checkServerStart(t *testing.T, https bool) {
+	contentDir := content.RuleContentDirectory{}
 	helpers.RunTestWithTimeout(t, func(t *testing.T) {
 		s := server.New(server.Configuration{
 			// will use any free port
@@ -64,7 +66,7 @@ func checkServerStart(t *testing.T, https bool) {
 			APIPrefix: config.APIPrefix,
 			Debug:     true,
 			UseHTTPS:  https,
-		}, nil)
+		}, nil, contentDir)
 
 		go func() {
 			for {
@@ -106,10 +108,11 @@ func TestServerStartHTTPs(t *testing.T) {
 
 // TestServerStartError checks how/if errors are handled in server.Start method.
 func TestServerStartError(t *testing.T) {
+	contentDir := content.RuleContentDirectory{}
 	testServer := server.New(server.Configuration{
 		Address:   "localhost:99999",
 		APIPrefix: "",
-	}, nil)
+	}, nil, contentDir)
 
 	err := testServer.Start()
 	if err == nil {
@@ -202,5 +205,15 @@ func TestServeListOfGroupsOptionsMethod(t *testing.T) {
 	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
 		Body:       ``,
+	})
+}
+
+// TestServerContent checks the REST API server behavior for content endpoint
+func TestServerContent(t *testing.T) {
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodGet,
+		Endpoint: "content",
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
 	})
 }

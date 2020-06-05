@@ -33,12 +33,16 @@ import (
 
 const (
 	configFileEnvVariableName = "INSIGHTS_CONTENT_SERVICE_CONFIG_FILE"
+	defaultContentPath        = "/rules-content"
 )
 
 // ConfigStruct is a structure holding the whole service configuration
 type ConfigStruct struct {
-	Server server.Configuration `mapstructure:"server" toml:"server"`
-	Groups groups.Configuration `mapstructure:"groups" toml:"groups"`
+	Server  server.Configuration `mapstructure:"server" toml:"server"`
+	Groups  groups.Configuration `mapstructure:"groups" toml:"groups"`
+	Content struct {
+		ContentPath string `mapstructure:"path" toml:"path"`
+	} `mapstructure:"content" toml:"content"`
 }
 
 // Config has exactly the same structure as *.toml file
@@ -111,6 +115,15 @@ func GetGroupsConfiguration() groups.Configuration {
 	}
 
 	return Config.Groups
+}
+
+// GetContentPathConfiguration get the path to the content files from the configuration
+func GetContentPathConfiguration() string {
+	if len(Config.Content.ContentPath) == 0 {
+		Config.Content.ContentPath = defaultContentPath
+	}
+
+	return Config.Content.ContentPath
 }
 
 // checkIfFileExists returns nil if path doesn't exist or isn't a file, otherwise it returns corresponding error

@@ -15,6 +15,7 @@
 
 COLORS_RED=$(tput setab 1)
 COLORS_RESET=$(tput sgr0) # No Color
+LOG_LEVEL="fatal"
 VERBOSE=false
 
 function cleanup() {
@@ -49,8 +50,10 @@ fi
 
 function start_service() {
     echo "Starting a service"
-    ./insights-content-service ||
-    echo -e "${COLORS_RED}service exited with error${COLORS_RESET}" &
+    INSIGHTS_CONTENT_SERVICE__LOGGING__LOG_LEVEL=$LOG_LEVEL \
+    INSIGHTS_CONTENT_SERVICE_CONFIG_FILE=./tests/tests \
+      ./insights-content-service ||
+      echo -e "${COLORS_RED}service exited with error${COLORS_RESET}" &
     # shellcheck disable=2181
     if [ $? -ne 0 ]; then
         echo "Could not start the service"

@@ -22,26 +22,28 @@ package server
 import (
 	"context"
 	"net/http"
-	"path/filepath"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 
+	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"
 )
 
 // HTTPServer in an implementation of Server interface
 type HTTPServer struct {
-	Config Configuration
-	Groups map[string]groups.Group
-	Serv   *http.Server
+	Config  Configuration
+	Groups  map[string]groups.Group
+	Content content.RuleContentDirectory
+	Serv    *http.Server
 }
 
 // New constructs new implementation of Server interface
-func New(config Configuration, groups map[string]groups.Group) *HTTPServer {
+func New(config Configuration, groups map[string]groups.Group, contentDir content.RuleContentDirectory) *HTTPServer {
 	return &HTTPServer{
-		Config: config,
-		Groups: groups,
+		Config:  config,
+		Groups:  groups,
+		Content: contentDir,
 	}
 }
 
@@ -86,18 +88,6 @@ func (server *HTTPServer) Initialize() http.Handler {
 	log.Info().Msgf("Server has been initiliazed")
 
 	return router
-}
-
-func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
-	apiPrefix := server.Config.APIPrefix
-	openAPIURL := apiPrefix + filepath.Base(server.Config.APISpecFile)
-
-	// common REST API endpoints
-	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
-	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
-
-	// OpenAPI specs
-	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)
 }
 
 // addCORSHeaders - middleware for adding headers that should be in any response

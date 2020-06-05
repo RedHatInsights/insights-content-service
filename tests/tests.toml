@@ -7,4 +7,4 @@ api_spec_file = "openapi.json"
 path = "groups_config.yaml"
 
 [content]
-path = "rules-content"
+path = "./tests/content/ok/"

@@ -19,10 +19,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/RedHatInsights/insights-results-aggregator/content"
 	"github.com/RedHatInsights/insights-results-aggregator/logger"
 	"github.com/rs/zerolog/log"
 
+	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"
 )
 

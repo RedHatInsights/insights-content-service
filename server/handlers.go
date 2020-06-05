@@ -58,3 +58,18 @@ func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http
 	retval := responses.BuildOkResponseWithData("groups", groups)
 	_ = responses.SendOK(writer, retval)
 }
+
+// getStaticContent returns all the parsed rules' content
+func (server HTTPServer) getStaticContent(writer http.ResponseWriter, request *http.Request) {
+	data := map[string]interface{}{
+		"config": server.Content.Config,
+		"rules":  server.Content.Rules,
+	}
+	err := responses.SendOK(writer, responses.BuildOkResponseWithData("response", data))
+
+	if err != nil {
+		log.Error().Err(err)
+		handleServerError(err)
+	}
+
+}
