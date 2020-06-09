@@ -90,6 +90,33 @@
           }
         }
       }
+    },
+    "/content": {
+      "get": {
+        "summary": "Returns static content for all rules.",
+        "operationId": "getContent",
+        "responses": {
+          "200": {
+            "description": "A encoding/gob encoded value with all the static content.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rule-content": {
+                      "type": "strings"
+                    },
+                    "status": {
+                      "type": "strings",
+                      "example": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

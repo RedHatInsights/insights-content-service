@@ -66,9 +66,12 @@ func (server HTTPServer) getStaticContent(writer http.ResponseWriter, request *h
 	var err error
 	buffer := new(bytes.Buffer)
 	encoder := gob.NewEncoder(buffer)
-	err = encoder.Encode(server.Content)
-	encodedContent := buffer.Bytes()
+	if err = encoder.Encode(server.Content); err != nil {
+		log.Error().Err(err).Msg("Cannot encode rules static content")
+		handleServerError(err)
+	}
 
+	encodedContent := buffer.Bytes()
 	err = responses.SendOK(writer, responses.BuildOkResponseWithData("rule-content", encodedContent))
 
 	if err != nil {
