@@ -11,6 +11,11 @@ clean: ## Run go clean
 build: ## Run go build
 	./build.sh
 
+checker/checker: checker/main.go
+	cd checker
+	go build
+	cd ..
+
 fmt: ## Run go fmt -w for all sources
 	@echo "Running go formatting"
 	./gofmt.sh

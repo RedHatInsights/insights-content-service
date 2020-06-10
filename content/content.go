@@ -46,7 +46,7 @@ type ErrorKeyMetadata struct {
 
 // RuleErrorKeyContent wraps content of a single error key.
 type RuleErrorKeyContent struct {
-	Generic  []byte           `json:"generic"`
+	Generic  string           `json:"generic"`
 	Metadata ErrorKeyMetadata `json:"metadata"`
 }
 
@@ -61,10 +61,10 @@ type RulePluginInfo struct {
 
 // RuleContent wraps all the content available for a rule into a single structure.
 type RuleContent struct {
-	Summary    []byte                         `json:"summary"`
-	Reason     []byte                         `json:"reason"`
-	Resolution []byte                         `json:"resolution"`
-	MoreInfo   []byte                         `json:"more_info"`
+	Summary    string                         `json:"summary"`
+	Reason     string                         `json:"reason"`
+	Resolution string                         `json:"resolution"`
+	MoreInfo   string                         `json:"more_info"`
 	Plugin     RulePluginInfo                 `json:"plugin"`
 	ErrorKeys  map[string]RuleErrorKeyContent `json:"error_keys"`
 }
@@ -77,15 +77,32 @@ type RuleContentDirectory struct {
 
 // readFilesIntoByteArrayPointers reads the contents of the specified files
 // in the base directory and saves them via the specified byte slice pointers.
-func readFilesIntoByteArrayPointers(baseDir string, fileMap map[string]*[]byte) error {
-	for name, ptr := range fileMap {
+func readFilesIntoByteArray(baseDir string, filelist []string) (map[string][]byte, error) {
+	var filesContent = map[string][]byte{}
+	for _, name := range filelist {
 		var err error
-		*ptr, err = ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
+		ptr, err := ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
 		if err != nil {
-			return err
+			return nil, err
+		}
+		filesContent[name] = ptr
+	}
+	return filesContent, nil
+}
+
+// readFilesIntoStringPointers reads the content of the specified files
+// in the base directory and saves them via the specified string pointer
+func readFilesIntoString(baseDir string, filelist []string) (map[string]string, error) {
+	var filesContent = map[string]string{}
+	for _, name := range filelist {
+		var err error
+		rawBytes, err := ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
+		filesContent[name] = string(rawBytes)
+		if err != nil {
+			return nil, err
 		}
 	}
-	return nil
+	return filesContent, nil
 }
 
 // parseErrorContents reads the contents of the specified directory
@@ -104,17 +121,22 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 		if e.IsDir() {
 			name := e.Name()
 
-			var metadataBytes []byte
-
 			errContent := RuleErrorKeyContent{}
-			contentFiles := map[string]*[]byte{
-				"generic.md":    &errContent.Generic,
-				"metadata.yaml": &metadataBytes,
+			contentFiles := []string{"generic.md"}
+			yamlFiles := []string{"metadata.yaml"}
+
+			readStrings, err := readFilesIntoString(path.Join(ruleDirPath, name), contentFiles)
+			if err != nil {
+				return errorContents, err
 			}
-			if err := readFilesIntoByteArrayPointers(path.Join(ruleDirPath, name), contentFiles); err != nil {
+			errContent.Generic = readStrings["generic.md"]
+
+			readBytes, err := readFilesIntoByteArray(path.Join(ruleDirPath, name), yamlFiles)
+			if err != nil {
 				return errorContents, err
 			}
 
+			metadataBytes := readBytes["metadata.yaml"]
 			if err := yaml.Unmarshal(metadataBytes, &errContent.Metadata); err != nil {
 				return errorContents, err
 			}
@@ -133,20 +155,33 @@ func parseRuleContent(ruleDirPath string) (RuleContent, error) {
 		return RuleContent{}, err
 	}
 
-	var pluginBytes []byte
-
 	ruleContent := RuleContent{ErrorKeys: errorContents}
-	contentFiles := map[string]*[]byte{
-		"summary.md":    &ruleContent.Summary,
-		"reason.md":     &ruleContent.Reason,
-		"resolution.md": &ruleContent.Resolution,
-		"more_info.md":  &ruleContent.MoreInfo,
-		"plugin.yaml":   &pluginBytes,
+	contentFiles := []string{
+		"summary.md",
+		"reason.md",
+		"resolution.md",
+		"more_info.md",
 	}
-	if err := readFilesIntoByteArrayPointers(ruleDirPath, contentFiles); err != nil {
+	yamlFiles := []string{
+		"plugin.yaml",
+	}
+
+	readStrings, err := readFilesIntoString(ruleDirPath, contentFiles)
+	if err != nil {
 		return RuleContent{}, err
 	}
 
+	ruleContent.Summary = readStrings["summary.md"]
+	ruleContent.Reason = readStrings["reason.md"]
+	ruleContent.Resolution = readStrings["resolution.md"]
+	ruleContent.MoreInfo = readStrings["more_info.md"]
+
+	readBytes, err := readFilesIntoByteArray(ruleDirPath, yamlFiles)
+	if err != nil {
+		return RuleContent{}, err
+	}
+
+	pluginBytes := readBytes["plugin.yaml"]
 	if err := yaml.Unmarshal(pluginBytes, &ruleContent.Plugin); err != nil {
 		return RuleContent{}, err
 	}

@@ -94,9 +94,19 @@ path = "groups_config.yaml"
 
 Where `path` is the absolute or relative path to the groups configuration file.
 
-## Local setup
+## Static content configuration
 
-TBD
+This service parses the rules static content at startup. For that reason, configuring the directory
+where the rules content is deployed is mandatory within the configuration.
+
+To define the path where the service will look up for rules content, you should define the following:
+
+```toml
+[content]
+path = "rules-content"
+```
+
+Where `path` can be the absolute or relative path to the rules content directory.
 
 ## REST API schema based on OpenAPI 3.0
 
