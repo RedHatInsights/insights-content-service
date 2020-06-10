@@ -23,7 +23,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/RedHatInsights/insights-results-aggregator/tests/helpers"
+	"github.com/RedHatInsights/insights-operator-utils/tests/helpers"
 
 	"github.com/RedHatInsights/insights-content-service/content"
 )
