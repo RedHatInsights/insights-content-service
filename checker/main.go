@@ -194,7 +194,7 @@ func checkRuleAttributeNotEmpty(ruleName, attribName, value string) {
 func checkErrorCodeFileNotEmpty(ruleName, errorCode, fileName string, value string) {
 	checkStringNotEmpty(
 		fmt.Sprintf("content file '%s' of error code '%s|%s'", fileName, ruleName, errorCode),
-		string(value),
+		value,
 	)
 }
 
