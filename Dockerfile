@@ -16,10 +16,20 @@ FROM registry.redhat.io/rhel8/go-toolset:1.13 AS builder
 
 COPY . .
 
+ARG GITHUB_API_TOKEN
+
+ENV RULES_CONTENT_DIR=/rules-content \
+    RULES_REPO=https://github.com/RedHatInsights/ccx-rules-ocp/ \
+    GIT_ASKPASS=/tmp/git-askpass.sh
+
 USER 0
 
 # clone rules content repository and build the content service
 RUN umask 0022 && \
+    mkdir -p $RULES_CONTENT_DIR && \
+    echo "echo $GITHUB_API_TOKEN" > $GIT_ASKPASS && \
+    chmod +x $GIT_ASKPASS && \
+    git -C $RULES_CONTENT_DIR clone $RULES_REPO $RULES_CONTENT_DIR && \
     make build && \
     chmod a+x insights-content-service
 
@@ -28,6 +38,10 @@ FROM registry.redhat.io/ubi8-minimal
 COPY --from=builder /opt/app-root/src/insights-content-service .
 COPY --from=builder /opt/app-root/src/openapi.json /openapi/openapi.json
 COPY --from=builder /opt/app-root/src/groups_config.yaml /groups/groups_config.yaml
+# copy just the rule content instead of the whole repository
+COPY --from=builder /rules-content/content/ /rules-content
+# copy tutorial/fake rule hit on all reports
+COPY rules/tutorial/content/ /rules-content/external/rules
 
 USER 1001
 
