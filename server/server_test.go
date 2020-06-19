@@ -38,7 +38,6 @@ var config = server.Configuration{
 	APISpecFile: "openapi.json",
 	Debug:       true,
 	UseHTTPS:    false,
-	EnableCORS:  true,
 }
 
 func init() {

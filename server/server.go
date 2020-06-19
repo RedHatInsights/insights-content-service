@@ -79,27 +79,10 @@ func (server *HTTPServer) Initialize() http.Handler {
 
 	router := mux.NewRouter().StrictSlash(true)
 
-	if server.Config.EnableCORS {
-		log.Info().Msgf("Configuring CORS middleware")
-		router.Use(server.addCORSHeaders)
-		router.Use(server.handleOptionsMethod)
-	}
 	server.addEndpointsToRouter(router)
 	log.Info().Msgf("Server has been initiliazed")
 
 	return router
-}
-
-// addCORSHeaders - middleware for adding headers that should be in any response
-func (server *HTTPServer) addCORSHeaders(nextHandler http.Handler) http.Handler {
-	return http.HandlerFunc(
-		func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-			w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-			w.Header().Set("Access-Control-Allow-Credentials", "true")
-			nextHandler.ServeHTTP(w, r)
-		})
 }
 
 // handleOptionsMethod - middleware for handling OPTIONS method
