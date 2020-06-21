@@ -24,12 +24,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/RedHatInsights/insights-operator-utils/tests/helpers"
 	"github.com/rs/zerolog"
 
 	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/server"
-	cs_helpers "github.com/RedHatInsights/insights-content-service/tests/helpers"
+	"github.com/RedHatInsights/insights-content-service/tests/helpers"
 )
 
 var config = server.Configuration{
@@ -82,7 +81,7 @@ func checkServerStart(t *testing.T, https bool) {
 			req, err := http.NewRequest(http.MethodGet, config.APIPrefix, nil)
 			helpers.FailOnError(t, err)
 
-			response := cs_helpers.ExecuteRequest(s, req, &config).Result()
+			response := helpers.ExecuteRequest(s, req).Result()
 			checkResponseCode(t, http.StatusOK, response.StatusCode)
 
 			// stopping the server
@@ -129,10 +128,10 @@ func TestServeAPISpecFileOK(t *testing.T) {
 	fileData, err := ioutil.ReadFile(config.APISpecFile)
 	helpers.FailOnError(t, err)
 
-	cs_helpers.AssertAPIRequest(t, &config, &cs_helpers.APIRequest{
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 		Method:   http.MethodGet,
 		Endpoint: config.APISpecFile,
-	}, &cs_helpers.APIResponse{
+	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
 		Body:       string(fileData),
 	})
@@ -145,10 +144,10 @@ func TestServeAPISpecOptionsMethod(t *testing.T) {
 
 	// check handling of all unsupported methods
 	for _, method := range methods {
-		cs_helpers.AssertAPIRequest(t, &config, &cs_helpers.APIRequest{
+		helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 			Method:   method,
 			Endpoint: config.APISpecFile,
-		}, &cs_helpers.APIResponse{
+		}, &helpers.APIResponse{
 			StatusCode: http.StatusMethodNotAllowed,
 			Body:       "",
 		})
@@ -167,10 +166,10 @@ func TestServeAPISpecFileError(t *testing.T) {
 	err = os.Remove(dirName)
 	helpers.FailOnError(t, err)
 
-	cs_helpers.AssertAPIRequest(t, &config, &cs_helpers.APIRequest{
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 		Method:   http.MethodGet,
 		Endpoint: config.APISpecFile,
-	}, &cs_helpers.APIResponse{
+	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
 		Body:       ``,
 	})
@@ -178,10 +177,10 @@ func TestServeAPISpecFileError(t *testing.T) {
 
 // TestServeAPIWrongEndpoint checks the REST API server behaviour in case wrong endpoint is used in request
 func TestServeAPIWrongEndpoint(t *testing.T) {
-	cs_helpers.AssertAPIRequest(t, &config, &cs_helpers.APIRequest{
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 		Method:   http.MethodGet,
 		Endpoint: "wrong_endpoint",
-	}, &cs_helpers.APIResponse{
+	}, &helpers.APIResponse{
 		StatusCode: http.StatusNotFound,
 		Body:       ``,
 	})
@@ -189,10 +188,10 @@ func TestServeAPIWrongEndpoint(t *testing.T) {
 
 // TestServeListOfGroups checks the REST API server behaviour for group listing endpoint
 func TestServeListOfGroups(t *testing.T) {
-	cs_helpers.AssertAPIRequest(t, &config, &cs_helpers.APIRequest{
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 		Method:   http.MethodGet,
 		Endpoint: "groups",
-	}, &cs_helpers.APIResponse{
+	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
 		Body:       ``,
 	})
@@ -200,10 +199,10 @@ func TestServeListOfGroups(t *testing.T) {
 
 // TestServeListOfGroupsOptionsMethod checks the REST API server behaviour for group listing endpoint
 func TestServeListOfGroupsOptionsMethod(t *testing.T) {
-	cs_helpers.AssertAPIRequest(t, &config, &cs_helpers.APIRequest{
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 		Method:   http.MethodOptions,
 		Endpoint: "groups",
-	}, &cs_helpers.APIResponse{
+	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
 		Body:       ``,
 	})
@@ -211,10 +210,10 @@ func TestServeListOfGroupsOptionsMethod(t *testing.T) {
 
 // TestServerContent checks the REST API server behavior for content endpoint
 func TestServerContent(t *testing.T) {
-	cs_helpers.AssertAPIRequest(t, &config, &cs_helpers.APIRequest{
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 		Method:   http.MethodGet,
 		Endpoint: "content",
-	}, &cs_helpers.APIResponse{
+	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
 	})
 }

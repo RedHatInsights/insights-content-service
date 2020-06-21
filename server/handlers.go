@@ -33,6 +33,8 @@ func (server *HTTPServer) mainEndpoint(writer http.ResponseWriter, _ *http.Reque
 	err := responses.SendOK(writer, responses.BuildOkResponse())
 	if err != nil {
 		log.Error().Err(err).Msg(responseDataError)
+		handleServerError(err)
+		return
 	}
 }
 
@@ -57,25 +59,31 @@ func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http
 		groups = append(groups, group)
 	}
 
-	retval := responses.BuildOkResponseWithData("groups", groups)
-	_ = responses.SendOK(writer, retval)
+	err := responses.SendOK(writer, responses.BuildOkResponseWithData("groups", groups))
+	if err != nil {
+		log.Error().Err(err)
+		handleServerError(err)
+		return
+	}
 }
 
 // getStaticContent returns all the parsed rules' content
 func (server HTTPServer) getStaticContent(writer http.ResponseWriter, request *http.Request) {
-	var err error
 	buffer := new(bytes.Buffer)
 	encoder := gob.NewEncoder(buffer)
-	if err = encoder.Encode(server.Content); err != nil {
+
+	if err := encoder.Encode(server.Content); err != nil {
 		log.Error().Err(err).Msg("Cannot encode rules static content")
 		handleServerError(err)
+		return
 	}
 
 	encodedContent := buffer.Bytes()
-	err = responses.SendOK(writer, responses.BuildOkResponseWithData("rule-content", encodedContent))
 
+	err := responses.Send(http.StatusOK, writer, encodedContent)
 	if err != nil {
 		log.Error().Err(err)
 		handleServerError(err)
+		return
 	}
 }
