@@ -17,10 +17,8 @@ limitations under the License.
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"path/filepath"
-	"regexp"
 
 	"github.com/gorilla/mux"
 )
@@ -47,11 +45,4 @@ func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 
 	// OpenAPI specs
 	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)
-}
-
-// MakeURLToEndpoint creates URL to endpoint, use constants from file endpoints.go
-func MakeURLToEndpoint(apiPrefix, endpoint string, args ...interface{}) string {
-	re := regexp.MustCompile(`\{[a-zA-Z_0-9]+\}`)
-	endpoint = re.ReplaceAllString(endpoint, "%v")
-	return apiPrefix + fmt.Sprintf(endpoint, args...)
 }
