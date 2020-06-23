@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/RedHatInsights/insights-operator-utils v1.1.0
+	github.com/RedHatInsights/insights-operator-utils v1.2.0
 	github.com/RedHatInsights/insights-results-aggregator v0.0.0-20200604090056-3534f6dd9c1c
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible
