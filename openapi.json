@@ -65,10 +65,10 @@
                         "type": "object",
                         "properties": {
                           "title": {
-                            "type": "strings"
+                            "type": "string"
                           },
                           "description": {
-                            "type": "strings"
+                            "type": "string"
                           },
                           "tags": {
                             "type": "array",
@@ -104,10 +104,10 @@
                   "type": "object",
                   "properties": {
                     "rule-content": {
-                      "type": "strings"
+                      "type": "string"
                     },
                     "status": {
-                      "type": "strings",
+                      "type": "string",
                       "example": "ok"
                     }
                   }
