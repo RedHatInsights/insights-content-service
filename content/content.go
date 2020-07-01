@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 
 	"github.com/go-yaml/yaml"
+	"github.com/rs/zerolog/log"
 )
 
 // GlobalRuleConfig represents the file that contains
@@ -48,6 +49,7 @@ type ErrorKeyMetadata struct {
 type RuleErrorKeyContent struct {
 	Generic  string           `json:"generic"`
 	Metadata ErrorKeyMetadata `json:"metadata"`
+	Reason   string           `json:"reason"`
 }
 
 // RulePluginInfo is a Go representation of the `plugin.yaml`
@@ -83,7 +85,7 @@ func readFilesIntoByteArray(baseDir string, filelist []string) (map[string][]byt
 		var err error
 		ptr, err := ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
 		if err != nil {
-			return nil, err
+			log.Error().Err(err)
 		}
 		filesContent[name] = ptr
 	}
@@ -99,7 +101,7 @@ func readFilesIntoString(baseDir string, filelist []string) (map[string]string, 
 		rawBytes, err := ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
 		filesContent[name] = string(rawBytes)
 		if err != nil {
-			return nil, err
+			log.Error().Err(err)
 		}
 	}
 	return filesContent, nil
@@ -122,7 +124,10 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 			name := e.Name()
 
 			errContent := RuleErrorKeyContent{}
-			contentFiles := []string{"generic.md"}
+			contentFiles := []string{
+				"generic.md",
+				"reason.md",
+			}
 			yamlFiles := []string{"metadata.yaml"}
 
 			readStrings, err := readFilesIntoString(path.Join(ruleDirPath, name), contentFiles)
@@ -130,6 +135,7 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 				return errorContents, err
 			}
 			errContent.Generic = readStrings["generic.md"]
+			errContent.Reason = readStrings["reason.md"]
 
 			readBytes, err := readFilesIntoByteArray(path.Join(ruleDirPath, name), yamlFiles)
 			if err != nil {
@@ -226,6 +232,13 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 					return err
 				}
 
+				allRequiredFields := checkRequiredFields(ruleContent)
+
+				if !allRequiredFields {
+					// create an appropriate error and return
+					return Error()
+				}
+
 				// TODO: Add name uniqueness check.
 				(*contentMap)[name] = ruleContent
 			} else {
@@ -238,6 +251,28 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 	}
 
 	return nil
+}
+
+// checkRequiredFields search if all the required fields in the RuleContent are ok
+// at the moment only checks for Reason field
+func checkRequiredFields(rule RuleContent) bool {
+	if rule.Reason != "" {
+		return true
+	}
+
+	errorKeyReasonFound := false
+
+	for _, errorKeyContent := range rule.ErrorKeys {
+		if errorKeyContent.Reason != "" {
+			errorKeyReasonFound = true
+		} else {
+			if errorKeyReasonFound {
+				return false
+			}
+		}
+	}
+
+	return false
 }
 
 // ParseRuleContentDir finds all rule content in a directory and parses it.
