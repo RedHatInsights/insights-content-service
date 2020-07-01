@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2020 Red Hat, Inc
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<html>
+<head>
+<title>groups.go</title>
+<meta charset="utf-8"/>
+<style type="text/css">body {
+    background: rgb(225, 225, 225);
+    margin: 0px;
+    padding: 0px;
+}
+
+#docgo p {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+}
+
+#docgo div {
+    display: inline;
+}
+
+#docgo #background {
+    position: fixed;
+    top: 0; left: 525px; right: 0; bottom: 0;
+    background: rgb(47, 47, 47);
+    border-left: 1px solid #e5e5ee;
+    z-index: -1;
+}
+
+#docgo .keyword {
+    color: rgb(250, 200, 100);
+}
+
+#docgo .literal {
+    color: rgb(140, 190, 100);
+}
+
+#docgo .ident {
+    color: white;
+}
+
+#docgo .operator {
+    color: white;
+}
+
+#docgo .comment {
+}
+
+#docgo h1, h2, h3, h4, h5 {
+    text-align: left;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+}
+
+#docgo h1 {
+    margin-top: 40px;
+}
+
+#docgo .doc {
+    vertical-align: top;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+    font-size: 15px;
+    line-height: 22px;
+    color: black;
+    min-width: 450px;
+    max-width: 450px;
+    padding-top: 10px;
+    padding-right: 25px;
+    padding-bottom: 1px;
+    padding-left: 50px;
+    overflow-x: hidden;
+}
+
+#docgo .code {
+    min-width: 650px;
+    max-width: 650px;
+    padding-left: 25px;
+    padding-right: 15px;
+    border-left: 1px;
+    overflow-x: hidden;
+    vertical-align: top;
+}
+
+#docgo .code pre code  {
+    font-size: 12px;
+    line-height: 18px;
+    font-family: Menlo, Monaco, Consolas, "Lucida Console", monospace;
+    color: rgb(120, 120, 120);
+}
+</style>
+</head>
+<body>
+<div id="docgo">
+  <div id="background"></div>
+  <table>
+    <thead><tr><th class="doc"><h1>groups.go</h1></th><th class="code"></th></tr></thead>
+    <tbody>
+      
+      <tr class="section">
+	<td class="doc"></td>
+	<td class="code"><pre><code><div class="comment">/*
+Copyright © 2020 Red Hat, Inc.
+
+Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/</div>
+
+<div class="keyword">package</div> <div class="ident">tests</div><div class="operator"></div>
+
+<div class="keyword">import</div> <div class="operator">(</div>
+	<div class="literal">&#34;encoding/json&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;errors&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;unicode&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;unicode/utf8&#34;</div><div class="operator"></div>
+
+	<div class="literal">&#34;github.com/verdverm/frisby&#34;</div><div class="operator"></div>
+<div class="operator">)</div><div class="operator"></div>
+
+<div class="keyword">const</div> <div class="ident">groupsURL</div> <div class="operator">=</div> <div class="ident">apiURL</div> <div class="operator">&#43;</div> <div class="literal">&#34;groups&#34;</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>Group represents part of response containing list of groups</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">type</div> <div class="ident">Group</div> <div class="keyword">struct</div> <div class="operator">{</div>
+	<div class="ident">Description</div> <div class="ident">string</div>   <div class="literal">`json:&#34;description&#34;`</div><div class="operator"></div>
+	<div class="ident">Title</div>       <div class="ident">string</div>   <div class="literal">`json:&#34;title&#34;`</div><div class="operator"></div>
+	<div class="ident">Tags</div>        <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div> <div class="literal">`json:&#34;tags&#34;`</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>GroupsResponse represents response containing list of groups</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">type</div> <div class="ident">GroupsResponse</div> <div class="keyword">struct</div> <div class="operator">{</div>
+	<div class="ident">Groups</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">Group</div> <div class="literal">`json:&#34;groups&#34;`</div><div class="operator"></div>
+	<div class="ident">Status</div> <div class="ident">string</div>  <div class="literal">`json:&#34;status&#34;`</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+<div class="comment">/*
+checkGroupsResponseContent check if the response for &#39;groups&#39; endpoint has the following format:
+{
+    &#34;groups&#34;: [
+        {
+            &#34;description&#34;: &#34;High utilization, proposed tuned profiles, storage issues&#34;,
+            &#34;tags&#34;: [
+                &#34;performance&#34;
+            ],
+            &#34;title&#34;: &#34;Performance&#34;
+        },
+        {
+            &#34;description&#34;: &#34;Operator degraded, missing functionality due to misconfiguration or resource constraints.&#34;,
+            &#34;tags&#34;: [
+                &#34;service_availability&#34;
+            ],
+            &#34;title&#34;: &#34;Service Availability&#34;
+        },
+        {
+            &#34;description&#34;: &#34;Issues related to certificates, user management, security groups, specific port usage, storage permissions, usage of kubeadmin account, exposed keys etc.&#34;,
+            &#34;tags&#34;: [
+                &#34;security&#34;
+            ],
+            &#34;title&#34;: &#34;Security&#34;
+        },
+        {
+            &#34;description&#34;: &#34;Load balancer issues, machine api and autoscaler issues, failover issues, nodes down, cluster api/cluster provider issues.&#34;,
+            &#34;tags&#34;: [
+                &#34;fault_tolerance&#34;
+            ],
+            &#34;title&#34;: &#34;Fault Tolerance&#34;
+        }
+    ],
+    &#34;status&#34;: &#34;ok&#34;
+}
+*/</div>
+<div class="keyword">func</div> <div class="ident">checkGroupsResponseContent</div><div class="operator">(</div><div class="ident">payload</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">byte</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
+	<div class="ident">response</div> <div class="operator">:=</div> <div class="ident">GroupsResponse</div><div class="operator">{</div><div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>check if the 'groups' response has proper format</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">err</div> <div class="operator">:=</div> <div class="ident">json</div><div class="operator">.</div><div class="ident">Unmarshal</div><div class="operator">(</div><div class="ident">payload</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">response</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>deserialization failed</p>
+</td>
+	<td class="code"><pre><code>		<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">response</div><div class="operator">.</div><div class="ident">Status</div> <div class="operator">!=</div> <div class="literal">&#34;ok&#34;</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>unexpected status detected</p>
+</td>
+	<td class="code"><pre><code>		<div class="keyword">return</div> <div class="ident">errors</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="literal">&#34;ok status expected&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+	<div class="keyword">for</div> <div class="ident">_</div><div class="operator">,</div> <div class="ident">group</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">response</div><div class="operator">.</div><div class="ident">Groups</div> <div class="operator">{</div>
+		<div class="ident">err</div> <div class="operator">:=</div> <div class="ident">checkTextAttribute</div><div class="operator">(</div><div class="ident">group</div><div class="operator">.</div><div class="ident">Title</div><div class="operator">,</div> <div class="literal">&#34;title&#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+			<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
+		<div class="operator">}</div><div class="operator"></div>
+		<div class="ident">err</div> <div class="operator">=</div> <div class="ident">checkTextAttribute</div><div class="operator">(</div><div class="ident">group</div><div class="operator">.</div><div class="ident">Description</div><div class="operator">,</div> <div class="literal">&#34;description&#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+			<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
+		<div class="operator">}</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>everything seems to be ok</p>
+</td>
+	<td class="code"><pre><code>	<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>checkTextAttribute is a rudimentary check for text attributes</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkTextAttribute</div><div class="operator">(</div><div class="ident">text</div> <div class="ident">string</div><div class="operator">,</div> <div class="ident">what</div> <div class="ident">string</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>check for empty string</p>
+</td>
+	<td class="code"><pre><code>	<div class="keyword">if</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">text</div><div class="operator">)</div> <div class="operator">==</div> <div class="literal">0</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">errors</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="literal">&#34;empty &#34;</div> <div class="operator">&#43;</div> <div class="ident">what</div> <div class="operator">&#43;</div> <div class="literal">&#34; detected in a group&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>check the capitalization</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">firstRune</div><div class="operator">,</div> <div class="ident">_</div> <div class="operator">:=</div> <div class="ident">utf8</div><div class="operator">.</div><div class="ident">DecodeRuneInString</div><div class="operator">(</div><div class="ident">text</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">if</div> <div class="operator">!</div><div class="ident">unicode</div><div class="operator">.</div><div class="ident">IsUpper</div><div class="operator">(</div><div class="ident">firstRune</div><div class="operator">)</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">errors</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="ident">what</div> <div class="operator">&#43;</div> <div class="literal">&#34; should start by uppercase letter&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>everything seems to be ok</p>
+</td>
+	<td class="code"><pre><code>	<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>checkGroupsEndpoint checks whether 'groups' endpoint is handled correctly</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkGroupsEndpoint</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">f</div> <div class="operator">:=</div> <div class="ident">frisby</div><div class="operator">.</div><div class="ident">Create</div><div class="operator">(</div><div class="literal">&#34;Check the &#39;groups&#39; endpoint&#34;</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Get</div><div class="operator">(</div><div class="ident">groupsURL</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">f</div><div class="operator">.</div><div class="ident">Send</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">f</div><div class="operator">.</div><div class="ident">ExpectStatus</div><div class="operator">(</div><div class="literal">200</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">f</div><div class="operator">.</div><div class="ident">ExpectHeader</div><div class="operator">(</div><div class="ident">contentTypeHeader</div><div class="operator">,</div> <div class="literal">&#34;application/json; charset=utf-8&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">f</div><div class="operator">.</div><div class="ident">PrintReport</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>try to read payload</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">text</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">f</div><div class="operator">.</div><div class="ident">Resp</div><div class="operator">.</div><div class="ident">Content</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">f</div><div class="operator">.</div><div class="ident">AddError</div><div class="operator">(</div><div class="ident">err</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">return</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>payload seems to part of response - let's check its content</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">err</div> <div class="operator">=</div> <div class="ident">checkGroupsResponseContent</div><div class="operator">(</div><div class="ident">text</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">f</div><div class="operator">.</div><div class="ident">AddError</div><div class="operator">(</div><div class="ident">err</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>checkWrongMethodsForGroupsEndpoint check whether other HTTP methods are rejected correctly for the REST API 'groups' point</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkWrongMethodsForGroupsEndpoint</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">checkGetEndpointByOtherMethods</div><div class="operator">(</div><div class="ident">groupsURL</div><div class="operator">,</div> <div class="ident">false</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

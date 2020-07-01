@@ -1,6 +1,8 @@
-.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover license before_commit help
+.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover license before_commit help godoc
 
 SOURCES:=$(shell find . -name '*.go')
+BINARY:=insights-content-service
+DOCFILES:=$(addprefix docs/packages/, $(addsuffix .html, $(basename ${SOURCES})))
 
 default: build
 
@@ -8,7 +10,9 @@ clean: ## Run go clean
 	@go clean
 	rm -f rest-api-tests
 
-build: ## Run go build
+build: ${BINARY}
+
+${BINARY}: ${SOURCES}
 	./build.sh
 
 checker/checker: checker/main.go
@@ -85,3 +89,9 @@ help: ## Show this help screen
 	@grep -E '^[ a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ''
+
+docs/packages/%.html: %.go
+	mkdir -p $(dir $@)
+	docgo -outdir $(dir $@) $^
+
+godoc: ${DOCFILES}
