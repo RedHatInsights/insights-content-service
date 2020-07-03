@@ -105,6 +105,36 @@ func printVersionInfo() int {
 	return ExitStatusOK
 }
 
+func printGroups() int {
+	groupsConfig := conf.GetGroupsConfiguration()
+	groups, err := groups.ParseGroupConfigFile(groupsConfig.ConfigPath)
+
+	if err != nil {
+		log.Error().Err(err).Msg("Groups init error")
+		return ExitStatusServerError
+	}
+
+	fmt.Println(groups)
+	return ExitStatusOK
+}
+
+func printRules() int {
+	log.Info().Msg("Printing rules")
+	contentPath := conf.GetContentPathConfiguration()
+	contentDir, err := content.ParseRuleContentDir(contentPath)
+
+	if err != nil {
+		fmt.Println("Error parsing the content")
+		fmt.Println(err)
+		return ExitStatusReadContentError
+	}
+
+	for key, _ := range contentDir.Rules {
+		fmt.Println(key)
+	}
+	return ExitStatusOK
+}
+
 func initInfoLog(msg string) {
 	log.Info().Str("type", "init").Msg(msg)
 }
@@ -130,6 +160,8 @@ The commands are:
     help                prints help
     print-help          prints help
     print-config        prints current configuration set by files & env variables
+    print-groups        prints current groups configuration
+    print-rules         prints current parsed rules
     print-version-info  prints version info
 
 `
@@ -183,6 +215,10 @@ func handleCommand(command string) int {
 		return printConfig(conf.Config)
 	case "print-version-info":
 		return printVersionInfo()
+	case "print-groups":
+		return printGroups()
+	case "print-rules":
+		return printRules()
 	default:
 		fmt.Printf("\nCommand '%v' not found\n", command)
 		return printHelp()
