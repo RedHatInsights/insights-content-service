@@ -125,8 +125,7 @@ func printRules() int {
 	contentDir, err := content.ParseRuleContentDir(contentPath)
 
 	if err != nil {
-		fmt.Println("Error parsing the content")
-		fmt.Println(err)
+		log.Error().Err(err).Msg("Error parsing the content")
 		return ExitStatusReadContentError
 	}
 
