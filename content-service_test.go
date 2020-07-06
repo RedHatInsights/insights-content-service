@@ -131,6 +131,14 @@ func TestHandleCommandVersion(t *testing.T) {
 	checkVersionContent(t, captured)
 }
 
+// TestHandleCommmandPrintGroups tests if proper output is printed for command "print-groups"
+func TestHandleCommandPrintGroups(t *testing.T) {
+	_, err := capture.StandardOutput(func() {
+		main.HandleCommand("print-groups")
+	})
+	checkStandardOutputStatus(t, err)
+}
+
 // TestHandleCommandUnknownInput tests if proper output is printed for unknown command
 func TestHandleCommandUnknownInput(t *testing.T) {
 	captured, err := capture.StandardOutput(func() {
