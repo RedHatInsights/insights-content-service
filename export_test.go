@@ -30,4 +30,5 @@ var (
 	PrintInfo        = printInfo
 	InitInfoLog      = initInfoLog
 	LogVersionInfo   = logVersionInfo
+	PrintGroups      = printGroups
 )

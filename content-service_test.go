@@ -23,6 +23,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/tisnik/go-capture"
 
@@ -164,4 +165,10 @@ func TestLogVersionInfo(t *testing.T) {
 	if !strings.Contains(logContent, "Build time:") {
 		t.Fatal("Inconsistent log content", logContent)
 	}
+}
+
+// TestPrintGroupsEmptyConfig check the behaviour of the printGroups function when no groups are configured
+func TestPrintGroups(t *testing.T) {
+	retval := main.PrintGroups()
+	assert.Equal(t, main.ExitStatusServerError, retval)
 }

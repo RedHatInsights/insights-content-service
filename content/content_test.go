@@ -104,3 +104,11 @@ func TestContentParseNoExternal(t *testing.T) {
 	_, err := content.ParseRuleContentDir(noExternalPath)
 	assert.EqualError(t, err, fmt.Sprintf("open %s/external: no such file or directory", noExternalPath))
 }
+
+// TestContentParseNoReason tests failing when no reason file in rule or error key dirs is present
+func TestContentParseNoReason(t *testing.T) {
+	noReasonPath := "../tests/content/no_reason"
+	_, err := content.ParseRuleContentDir(noReasonPath)
+	assert.EqualError(t, err, "Missing required file: reason.md")
+
+}
