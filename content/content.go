@@ -47,9 +47,10 @@ type ErrorKeyMetadata struct {
 
 // RuleErrorKeyContent wraps content of a single error key.
 type RuleErrorKeyContent struct {
-	Generic  string           `json:"generic"`
-	Metadata ErrorKeyMetadata `json:"metadata"`
-	Reason   string           `json:"reason"`
+	Generic   string           `json:"generic"`
+	Metadata  ErrorKeyMetadata `json:"metadata"`
+	Reason    string           `json:"reason"`
+	hasReason bool
 }
 
 // RulePluginInfo is a Go representation of the `plugin.yaml`
@@ -69,6 +70,7 @@ type RuleContent struct {
 	MoreInfo   string                         `json:"more_info"`
 	Plugin     RulePluginInfo                 `json:"plugin"`
 	ErrorKeys  map[string]RuleErrorKeyContent `json:"error_keys"`
+	hasReason  bool
 }
 
 // RuleContentDirectory contains content for all available rules in a directory.
@@ -77,72 +79,49 @@ type RuleContentDirectory struct {
 	Rules  map[string]RuleContent
 }
 
-type fileContent struct {
-	content []byte
-	found   bool
-}
-
 // readFilesIntoByteArrayPointers reads the contents of the specified files
 // in the base directory and saves them via the specified byte slice pointers.
-func readFilesIntoFileContent(baseDir string, filelist []string) (map[string]fileContent, error) {
-	var filesContent = map[string]fileContent{}
+func readFilesIntoFileContent(baseDir string, filelist []string) (map[string][]byte, error) {
+	var filesContent = map[string][]byte{}
 	for _, name := range filelist {
 		log.Info().Msgf("Parsing %s/%s", baseDir, name)
 		var err error
-		content := fileContent{}
 		rawBytes, err := ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
 		if err != nil {
-			content.content = nil
-			content.found = false
+			filesContent[name] = nil
 			log.Error().Err(err)
 		} else {
-			content.content = rawBytes
-			content.found = true
+			filesContent[name] = rawBytes
 		}
-
-		filesContent[name] = content
 	}
 
 	return filesContent, nil
 }
 
-// readFilesIntoStringPointers reads the content of the specified files
-// in the base directory and saves them via the specified string pointer
-// func readFilesIntoString(baseDir string, filelist []string) (map[string]fileContent, error) {
-// 	var filesContent = map[string]string{}
-// 	for _, name := range filelist {
-// 		var err error
-// 		rawBytes, err := ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
-// 		filesContent[name] = string(rawBytes)
-// 		if err != nil {
-// 			log.Error().Err(err)
-// 		}
-// 	}
-// 	return filesContent, nil
-// }
-
 // createErrorContents takes a mapping of files into contents and perform
 // some checks about it
-func createErrorContents(contentRead map[string]fileContent) (*RuleErrorKeyContent, error) {
+func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, error) {
 	errorContent := RuleErrorKeyContent{}
 
-	if !contentRead["generic.md"].found {
+	if contentRead["generic.md"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "generic.md"}
 	}
 
-	errorContent.Generic = string(contentRead["generic.md"].content)
+	errorContent.Generic = string(contentRead["generic.md"])
 
-	if !contentRead["reason.md"].found {
+	if contentRead["reason.md"] == nil {
 		errorContent.Reason = ""
+		errorContent.hasReason = false
 	} else {
-		errorContent.Reason = string(contentRead["reason.md"].content)
+		errorContent.Reason = string(contentRead["reason.md"])
+		errorContent.hasReason = true
 	}
 
-	if !contentRead["metadata.yaml"].found {
+	if contentRead["metadata.yaml"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "metadata.yaml"}
 	}
 
-	if err := yaml.Unmarshal(contentRead["metadata.yaml"].content, &errorContent.Metadata); err != nil {
+	if err := yaml.Unmarshal(contentRead["metadata.yaml"], &errorContent.Metadata); err != nil {
 		return nil, err
 	}
 
@@ -188,39 +167,41 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 }
 
 // createRuleContent
-func createRuleContent(contentRead map[string]fileContent, errorKeys map[string]RuleErrorKeyContent) (*RuleContent, error) {
+func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleErrorKeyContent) (*RuleContent, error) {
 	ruleContent := RuleContent{ErrorKeys: errorKeys}
 
-	if !contentRead["summary.md"].found {
+	if contentRead["summary.md"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "summary.md"}
 	}
 
-	ruleContent.Summary = string(contentRead["summary.md"].content)
+	ruleContent.Summary = string(contentRead["summary.md"])
 
-	if !contentRead["reason.md"].found {
+	if contentRead["reason.md"] == nil {
 		// check error keys for a reason
 		ruleContent.Reason = ""
+		ruleContent.hasReason = false
 	} else {
-		ruleContent.Reason = string(contentRead["reason.md"].content)
+		ruleContent.Reason = string(contentRead["reason.md"])
+		ruleContent.hasReason = true
 	}
 
-	if !contentRead["resolution.md"].found {
+	if contentRead["resolution.md"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "resolution.md"}
 	}
 
-	ruleContent.Resolution = string(contentRead["resolution.md"].content)
+	ruleContent.Resolution = string(contentRead["resolution.md"])
 
-	if !contentRead["more_info.md"].found {
+	if contentRead["more_info.md"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "more_info.md"}
 	}
 
-	ruleContent.MoreInfo = string(contentRead["more_info.md"].content)
+	ruleContent.MoreInfo = string(contentRead["more_info.md"])
 
-	if !contentRead["plugin.yaml"].found {
+	if contentRead["plugin.yaml"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "plugin.yaml"}
 	}
 
-	if err := yaml.Unmarshal(contentRead["plugin.yaml"].content, &ruleContent.Plugin); err != nil {
+	if err := yaml.Unmarshal(contentRead["plugin.yaml"], &ruleContent.Plugin); err != nil {
 		return nil, err
 	}
 
@@ -293,7 +274,7 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 				if !allRequiredFields {
 					// create an appropriate error and return
 					log.Warn().Msgf("Some file in dir %s is missing", subdirPath)
-					return nil
+					return &MissingMandatoryFile{FileName: "reason.md"}
 				}
 
 				// TODO: Add name uniqueness check.
@@ -313,23 +294,17 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 // checkRequiredFields search if all the required fields in the RuleContent are ok
 // at the moment only checks for Reason field
 func checkRequiredFields(rule RuleContent) bool {
-	if rule.Reason != "" {
+	if rule.hasReason {
 		return true
 	}
 
-	errorKeyReasonFound := false
-
 	for _, errorKeyContent := range rule.ErrorKeys {
-		if errorKeyContent.Reason != "" {
-			errorKeyReasonFound = true
-		} else {
-			if errorKeyReasonFound {
-				return false
-			}
+		if !errorKeyContent.hasReason {
+			return false
 		}
 	}
 
-	return false
+	return true
 }
 
 // ParseRuleContentDir finds all rule content in a directory and parses it.

@@ -18,6 +18,7 @@ limitations under the License.
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -129,10 +130,16 @@ func printRules() int {
 		return ExitStatusReadContentError
 	}
 
-	for key, _ := range contentDir.Rules {
-		fmt.Println(key)
+	buffer := new(bytes.Buffer)
+	encoder := json.NewEncoder(buffer)
+
+	if err := encoder.Encode(contentDir); err == nil {
+		fmt.Println(buffer)
+		return ExitStatusOK
 	}
-	return ExitStatusOK
+
+	return ExitStatusOther
+
 }
 
 func initInfoLog(msg string) {
