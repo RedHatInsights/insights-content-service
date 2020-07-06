@@ -229,7 +229,7 @@ func parseRuleContent(ruleDirPath string) (RuleContent, error) {
 	}
 
 	ruleContent, err := createRuleContent(readContent, errorContents)
-	return *ruleContent, nil
+	return *ruleContent, err
 }
 
 // parseGlobalContentConfig reads the configuration file used to store
@@ -269,12 +269,12 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 					return err
 				}
 
-				allRequiredFields := checkRequiredFields(ruleContent)
+				err = checkRequiredFields(ruleContent)
 
-				if !allRequiredFields {
+				if err != nil {
 					// create an appropriate error and return
-					log.Warn().Msgf("Some file in dir %s is missing", subdirPath)
-					return &MissingMandatoryFile{FileName: "reason.md"}
+					log.Error().Err(err).Msgf("Some file in dir %s is missing: %s", subdirPath, err.Error())
+					return err
 				}
 
 				// TODO: Add name uniqueness check.
@@ -293,18 +293,18 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 
 // checkRequiredFields search if all the required fields in the RuleContent are ok
 // at the moment only checks for Reason field
-func checkRequiredFields(rule RuleContent) bool {
+func checkRequiredFields(rule RuleContent) error {
 	if rule.hasReason {
-		return true
+		return nil
 	}
 
 	for _, errorKeyContent := range rule.ErrorKeys {
 		if !errorKeyContent.hasReason {
-			return false
+			return &MissingMandatoryFile{FileName: "reason.md"}
 		}
 	}
 
-	return true
+	return nil
 }
 
 // ParseRuleContentDir finds all rule content in a directory and parses it.

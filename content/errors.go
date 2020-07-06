@@ -17,6 +17,7 @@ limitations under the License.
 // Package content contains logic for parsing rule content.
 package content
 
+// MissingMandatoryFile is an error raised while parsing, when a mandatory file is missing
 type MissingMandatoryFile struct {
 	FileName string
 }
