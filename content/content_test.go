@@ -81,7 +81,9 @@ func TestContentParseInvalidDir2(t *testing.T) {
 // TestContentParseMissingFile checks how missing file(s) in content directory are handled
 func TestContentParseMissingFile(t *testing.T) {
 	_, err := content.ParseRuleContentDir("../tests/content/missing/")
-	assert.Contains(t, err.Error(), ": no such file or directory")
+
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "Missing required file:")
 }
 
 // TestContentParseBadPluginYAML tests handling bad/incorrect plugin.yaml file

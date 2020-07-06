@@ -17,11 +17,13 @@ limitations under the License.
 // Package content contains logic for parsing rule content.
 package content
 
+import "fmt"
+
 // MissingMandatoryFile is an error raised while parsing, when a mandatory file is missing
 type MissingMandatoryFile struct {
 	FileName string
 }
 
 func (err MissingMandatoryFile) Error() string {
-	return err.FileName
+	return fmt.Sprintf("Missing required file: %s", err.FileName)
 }

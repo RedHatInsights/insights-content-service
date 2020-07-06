@@ -143,7 +143,6 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 	for _, e := range entries {
 		if e.IsDir() {
 			name := e.Name()
-
 			contentFiles := []string{
 				"generic.md",
 				"reason.md",
@@ -211,6 +210,7 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 // parseRuleContent attempts to parse all available rule content from the specified directory.
 func parseRuleContent(ruleDirPath string) (RuleContent, error) {
 	errorContents, err := parseErrorContents(ruleDirPath)
+
 	if err != nil {
 		return RuleContent{}, err
 	}
@@ -229,6 +229,10 @@ func parseRuleContent(ruleDirPath string) (RuleContent, error) {
 	}
 
 	ruleContent, err := createRuleContent(readContent, errorContents)
+
+	if err != nil {
+		return RuleContent{}, err
+	}
 	return *ruleContent, err
 }
 
