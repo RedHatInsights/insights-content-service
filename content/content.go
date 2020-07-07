@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 
 	"github.com/go-yaml/yaml"
+	"github.com/rs/zerolog/log"
 )
 
 // GlobalRuleConfig represents the file that contains
@@ -252,8 +253,24 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, error) {
 		Rules:  map[string]RuleContent{},
 	}
 
+	// parse external and internal rules separately, because there are currently more categories
+	// of rules, but they just don't have content yet, so in case the content for them appears.
+	// If we want to parse all of them, the full contentDirPath can be passed to parseRulesInDir without problems
 	externalContentDir := path.Join(contentDirPath, "external")
 	err = parseRulesInDir(externalContentDir, &contentDir.Rules)
+
+	if err != nil {
+		log.Error().Err(err).Msg("Cannot parse content of external rules")
+		return contentDir, err
+	}
+
+	internalContentDir := path.Join(contentDirPath, "internal")
+	err = parseRulesInDir(internalContentDir, &contentDir.Rules)
+
+	if err != nil {
+		log.Error().Err(err).Msg("Cannot parse content of internal rules")
+		return contentDir, err
+	}
 
 	return contentDir, err
 }
