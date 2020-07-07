@@ -102,3 +102,10 @@ func TestContentParseNoExternal(t *testing.T) {
 	_, err := content.ParseRuleContentDir(noExternalPath)
 	assert.EqualError(t, err, fmt.Sprintf("open %s/external: no such file or directory", noExternalPath))
 }
+
+// TestContentParseNoInternal tests condition where there is no folder for internal rules
+func TestContentParseNoInternal(t *testing.T) {
+	noInternalPath := "../tests/content/no_internal"
+	_, err := content.ParseRuleContentDir(noInternalPath)
+	assert.EqualError(t, err, fmt.Sprintf("open %s/internal: no such file or directory", noInternalPath))
+}
