@@ -111,7 +111,7 @@ func GetServerConfiguration() server.Configuration {
 func GetGroupsConfiguration() groups.Configuration {
 	err := checkIfFileExists(Config.Groups.ConfigPath)
 	if err != nil {
-		log.Fatal().Err(err).Msg("The groups configuration file is not defined")
+		log.Error().Err(err).Msg("The groups configuration file is not defined")
 	}
 
 	return Config.Groups
