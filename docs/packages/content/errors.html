@@ -17,7 +17,7 @@
 
 <html>
 <head>
-<title>export_test.go</title>
+<title>errors.go</title>
 <meta charset="utf-8"/>
 <style type="text/css">body {
     background: rgb(225, 225, 225);
@@ -112,7 +112,7 @@
 <div id="docgo">
   <div id="background"></div>
   <table>
-    <thead><tr><th class="doc"><h1>export_test.go</h1></th><th class="code"></th></tr></thead>
+    <thead><tr><th class="doc"><h1>errors.go</h1></th><th class="code"></th></tr></thead>
     <tbody>
       
       <tr class="section">
@@ -133,29 +133,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */</div>
 
-<div class="keyword">package</div> <div class="ident">main</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>Package content contains logic for parsing rule content.</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">package</div> <div class="ident">content</div><div class="operator"></div>
+
+<div class="keyword">import</div> <div class="literal">&#34;fmt&#34;</div><div class="operator"></div>
 
 </code></pre></td>
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>Export for testing</p>
-
-<p>Please look into the following blogpost:
-https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd
-to see why this trick is needed.</p>
+	<td class="doc"><p>MissingMandatoryFile is an error raised while parsing, when a mandatory file is missing</p>
 </td>
-	<td class="code"><pre><code><div class="keyword">var</div> <div class="operator">(</div>
-	<div class="ident">PrintVersionInfo</div> <div class="operator">=</div> <div class="ident">printVersionInfo</div><div class="operator"></div>
-	<div class="ident">PrintHelp</div>        <div class="operator">=</div> <div class="ident">printHelp</div><div class="operator"></div>
-	<div class="ident">PrintConfig</div>      <div class="operator">=</div> <div class="ident">printConfig</div><div class="operator"></div>
-	<div class="ident">HandleCommand</div>    <div class="operator">=</div> <div class="ident">handleCommand</div><div class="operator"></div>
-	<div class="ident">StartService</div>     <div class="operator">=</div> <div class="ident">startService</div><div class="operator"></div>
-	<div class="ident">PrintInfo</div>        <div class="operator">=</div> <div class="ident">printInfo</div><div class="operator"></div>
-	<div class="ident">InitInfoLog</div>      <div class="operator">=</div> <div class="ident">initInfoLog</div><div class="operator"></div>
-	<div class="ident">LogVersionInfo</div>   <div class="operator">=</div> <div class="ident">logVersionInfo</div><div class="operator"></div>
-	<div class="ident">PrintGroups</div>      <div class="operator">=</div> <div class="ident">printGroups</div><div class="operator"></div>
-<div class="operator">)</div><div class="operator"></div>
+	<td class="code"><pre><code><div class="keyword">type</div> <div class="ident">MissingMandatoryFile</div> <div class="keyword">struct</div> <div class="operator">{</div>
+	<div class="ident">FileName</div> <div class="ident">string</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+<div class="keyword">func</div> <div class="operator">(</div><div class="ident">err</div> <div class="ident">MissingMandatoryFile</div><div class="operator">)</div> <div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div> <div class="ident">string</div> <div class="operator">{</div>
+	<div class="keyword">return</div> <div class="ident">fmt</div><div class="operator">.</div><div class="ident">Sprintf</div><div class="operator">(</div><div class="literal">&#34;Missing required file: %s&#34;</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">.</div><div class="ident">FileName</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
       </tr>

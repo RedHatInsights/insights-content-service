@@ -21,17 +21,18 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 const (
 	// MainEndpoint defines suffix of the root endpoint
 	MainEndpoint = ""
-
 	// GroupsEndpoint defines suffix of the groups request endpoint
 	GroupsEndpoint = "groups"
-
 	// AllContentEndpoint defines suffix for all the content
 	AllContentEndpoint = "content"
+	// MetricsEndpoint returns prometheus metrics
+	MetricsEndpoint = "metrics"
 )
 
 func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
@@ -42,6 +43,9 @@ func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
 	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
 	router.HandleFunc(apiPrefix+AllContentEndpoint, server.getStaticContent).Methods(http.MethodGet, http.MethodOptions)
+
+	// Prometheus metrics
+	router.Handle(apiPrefix+MetricsEndpoint, promhttp.Handler()).Methods(http.MethodGet)
 
 	// OpenAPI specs
 	router.HandleFunc(openAPIURL, server.serveAPISpecFile).Methods(http.MethodGet)
