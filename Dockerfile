@@ -29,7 +29,7 @@ RUN umask 0022 && \
     mkdir -p $RULES_CONTENT_DIR && \
     echo "echo $GITHUB_API_TOKEN" > $GIT_ASKPASS && \
     chmod +x $GIT_ASKPASS && \
-    git -C $RULES_CONTENT_DIR clone $RULES_REPO $RULES_CONTENT_DIR && \
+    git -C $RULES_CONTENT_DIR clone --depth=1 --branch latest-release $RULES_REPO $RULES_CONTENT_DIR && \
     make build && \
     chmod a+x insights-content-service
 
