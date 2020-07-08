@@ -148,7 +148,6 @@ func TestServeAPISpecOptionsMethod(t *testing.T) {
 			Endpoint: config.APISpecFile,
 		}, &helpers.APIResponse{
 			StatusCode: http.StatusMethodNotAllowed,
-			Body:       "",
 		})
 	}
 }
@@ -170,7 +169,6 @@ func TestServeAPISpecFileError(t *testing.T) {
 		Endpoint: config.APISpecFile,
 	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
-		Body:       ``,
 	})
 }
 
@@ -181,7 +179,6 @@ func TestServeAPIWrongEndpoint(t *testing.T) {
 		Endpoint: "wrong_endpoint",
 	}, &helpers.APIResponse{
 		StatusCode: http.StatusNotFound,
-		Body:       ``,
 	})
 }
 
@@ -192,7 +189,6 @@ func TestServeListOfGroups(t *testing.T) {
 		Endpoint: "groups",
 	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
-		Body:       ``,
 	})
 }
 
@@ -203,7 +199,6 @@ func TestServeListOfGroupsOptionsMethod(t *testing.T) {
 		Endpoint: "groups",
 	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
-		Body:       ``,
 	})
 }
 
