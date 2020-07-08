@@ -14,21 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+// Package content contains logic for parsing rule content.
+package content
 
-// Export for testing
-//
-// Please look into the following blogpost:
-// https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd
-// to see why this trick is needed.
-var (
-	PrintVersionInfo = printVersionInfo
-	PrintHelp        = printHelp
-	PrintConfig      = printConfig
-	HandleCommand    = handleCommand
-	StartService     = startService
-	PrintInfo        = printInfo
-	InitInfoLog      = initInfoLog
-	LogVersionInfo   = logVersionInfo
-	PrintGroups      = printGroups
-)
+import "fmt"
+
+// MissingMandatoryFile is an error raised while parsing, when a mandatory file is missing
+type MissingMandatoryFile struct {
+	FileName string
+}
+
+func (err MissingMandatoryFile) Error() string {
+	return fmt.Sprintf("Missing required file: %s", err.FileName)
+}
