@@ -23,6 +23,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/tisnik/go-capture"
 
@@ -130,6 +131,14 @@ func TestHandleCommandVersion(t *testing.T) {
 	checkVersionContent(t, captured)
 }
 
+// TestHandleCommmandPrintGroups tests if proper output is printed for command "print-groups"
+func TestHandleCommandPrintGroups(t *testing.T) {
+	_, err := capture.StandardOutput(func() {
+		main.HandleCommand("print-groups")
+	})
+	checkStandardOutputStatus(t, err)
+}
+
 // TestHandleCommandUnknownInput tests if proper output is printed for unknown command
 func TestHandleCommandUnknownInput(t *testing.T) {
 	captured, err := capture.StandardOutput(func() {
@@ -164,4 +173,10 @@ func TestLogVersionInfo(t *testing.T) {
 	if !strings.Contains(logContent, "Build time:") {
 		t.Fatal("Inconsistent log content", logContent)
 	}
+}
+
+// TestPrintGroupsEmptyConfig check the behaviour of the printGroups function when no groups are configured
+func TestPrintGroups(t *testing.T) {
+	retval := main.PrintGroups()
+	assert.Equal(t, main.ExitStatusServerError, retval)
 }

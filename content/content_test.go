@@ -81,7 +81,9 @@ func TestContentParseInvalidDir2(t *testing.T) {
 // TestContentParseMissingFile checks how missing file(s) in content directory are handled
 func TestContentParseMissingFile(t *testing.T) {
 	_, err := content.ParseRuleContentDir("../tests/content/missing/")
-	assert.Contains(t, err.Error(), ": no such file or directory")
+
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "Missing required file:")
 }
 
 // TestContentParseBadPluginYAML tests handling bad/incorrect plugin.yaml file
@@ -108,4 +110,11 @@ func TestContentParseNoInternal(t *testing.T) {
 	noInternalPath := "../tests/content/no_internal"
 	_, err := content.ParseRuleContentDir(noInternalPath)
 	assert.EqualError(t, err, fmt.Sprintf("open %s/internal: no such file or directory", noInternalPath))
+}
+
+// TestContentParseNoReason tests failing when no reason file in rule or error key dirs is present
+func TestContentParseNoReason(t *testing.T) {
+	noReasonPath := "../tests/content/no_reason"
+	_, err := content.ParseRuleContentDir(noReasonPath)
+	assert.EqualError(t, err, "Missing required file: reason.md")
 }
