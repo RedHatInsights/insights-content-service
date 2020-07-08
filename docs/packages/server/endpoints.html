@@ -140,6 +140,7 @@ limitations under the License.
 	<div class="literal">&#34;path/filepath&#34;</div><div class="operator"></div>
 
 	<div class="literal">&#34;github.com/gorilla/mux&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;github.com/prometheus/client_golang/prometheus/promhttp&#34;</div><div class="operator"></div>
 <div class="operator">)</div><div class="operator"></div>
 
 <div class="keyword">const</div> <div class="operator">(</div>
@@ -150,7 +151,6 @@ limitations under the License.
 	<td class="doc"><p>MainEndpoint defines suffix of the root endpoint</p>
 </td>
 	<td class="code"><pre><code>	<div class="ident">MainEndpoint</div> <div class="operator">=</div> <div class="literal">&#34;&#34;</div><div class="operator"></div>
-
 </code></pre></td>
       </tr>
       
@@ -158,7 +158,6 @@ limitations under the License.
 	<td class="doc"><p>GroupsEndpoint defines suffix of the groups request endpoint</p>
 </td>
 	<td class="code"><pre><code>	<div class="ident">GroupsEndpoint</div> <div class="operator">=</div> <div class="literal">&#34;groups&#34;</div><div class="operator"></div>
-
 </code></pre></td>
       </tr>
       
@@ -166,6 +165,13 @@ limitations under the License.
 	<td class="doc"><p>AllContentEndpoint defines suffix for all the content</p>
 </td>
 	<td class="code"><pre><code>	<div class="ident">AllContentEndpoint</div> <div class="operator">=</div> <div class="literal">&#34;content&#34;</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>MetricsEndpoint returns prometheus metrics</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">MetricsEndpoint</div> <div class="operator">=</div> <div class="literal">&#34;metrics&#34;</div><div class="operator"></div>
 <div class="operator">)</div><div class="operator"></div>
 
 <div class="keyword">func</div> <div class="operator">(</div><div class="ident">server</div> <div class="operator">*</div><div class="ident">HTTPServer</div><div class="operator">)</div> <div class="ident">addEndpointsToRouter</div><div class="operator">(</div><div class="ident">router</div> <div class="operator">*</div><div class="ident">mux</div><div class="operator">.</div><div class="ident">Router</div><div class="operator">)</div> <div class="operator">{</div>
@@ -181,6 +187,14 @@ limitations under the License.
 	<td class="code"><pre><code>	<div class="ident">router</div><div class="operator">.</div><div class="ident">HandleFunc</div><div class="operator">(</div><div class="ident">apiPrefix</div><div class="operator">&#43;</div><div class="ident">MainEndpoint</div><div class="operator">,</div> <div class="ident">server</div><div class="operator">.</div><div class="ident">mainEndpoint</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Methods</div><div class="operator">(</div><div class="ident">http</div><div class="operator">.</div><div class="ident">MethodGet</div><div class="operator">)</div><div class="operator"></div>
 	<div class="ident">router</div><div class="operator">.</div><div class="ident">HandleFunc</div><div class="operator">(</div><div class="ident">apiPrefix</div><div class="operator">&#43;</div><div class="ident">GroupsEndpoint</div><div class="operator">,</div> <div class="ident">server</div><div class="operator">.</div><div class="ident">listOfGroups</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Methods</div><div class="operator">(</div><div class="ident">http</div><div class="operator">.</div><div class="ident">MethodGet</div><div class="operator">,</div> <div class="ident">http</div><div class="operator">.</div><div class="ident">MethodOptions</div><div class="operator">)</div><div class="operator"></div>
 	<div class="ident">router</div><div class="operator">.</div><div class="ident">HandleFunc</div><div class="operator">(</div><div class="ident">apiPrefix</div><div class="operator">&#43;</div><div class="ident">AllContentEndpoint</div><div class="operator">,</div> <div class="ident">server</div><div class="operator">.</div><div class="ident">getStaticContent</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Methods</div><div class="operator">(</div><div class="ident">http</div><div class="operator">.</div><div class="ident">MethodGet</div><div class="operator">,</div> <div class="ident">http</div><div class="operator">.</div><div class="ident">MethodOptions</div><div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>Prometheus metrics</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">router</div><div class="operator">.</div><div class="ident">Handle</div><div class="operator">(</div><div class="ident">apiPrefix</div><div class="operator">&#43;</div><div class="ident">MetricsEndpoint</div><div class="operator">,</div> <div class="ident">promhttp</div><div class="operator">.</div><div class="ident">Handler</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Methods</div><div class="operator">(</div><div class="ident">http</div><div class="operator">.</div><div class="ident">MethodGet</div><div class="operator">)</div><div class="operator"></div>
 
 </code></pre></td>
       </tr>
