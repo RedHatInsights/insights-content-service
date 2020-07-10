@@ -142,6 +142,7 @@ limitations under the License.
 	<td class="code"><pre><code><div class="keyword">package</div> <div class="ident">main</div><div class="operator"></div>
 
 <div class="keyword">import</div> <div class="operator">(</div>
+	<div class="literal">&#34;bytes&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;encoding/json&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;fmt&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;os&#34;</div><div class="operator"></div>
@@ -274,6 +275,41 @@ limitations under the License.
 	<div class="keyword">return</div> <div class="ident">ExitStatusOK</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
+<div class="keyword">func</div> <div class="ident">printGroups</div><div class="operator">(</div><div class="operator">)</div> <div class="ident">int</div> <div class="operator">{</div>
+	<div class="ident">groupsConfig</div> <div class="operator">:=</div> <div class="ident">conf</div><div class="operator">.</div><div class="ident">GetGroupsConfiguration</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">groups</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">groups</div><div class="operator">.</div><div class="ident">ParseGroupConfigFile</div><div class="operator">(</div><div class="ident">groupsConfig</div><div class="operator">.</div><div class="ident">ConfigPath</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Groups init error&#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">return</div> <div class="ident">ExitStatusServerError</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="ident">fmt</div><div class="operator">.</div><div class="ident">Println</div><div class="operator">(</div><div class="ident">groups</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">return</div> <div class="ident">ExitStatusOK</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+<div class="keyword">func</div> <div class="ident">printRules</div><div class="operator">(</div><div class="operator">)</div> <div class="ident">int</div> <div class="operator">{</div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Printing rules&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">contentPath</div> <div class="operator">:=</div> <div class="ident">conf</div><div class="operator">.</div><div class="ident">GetContentPathConfiguration</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">contentDir</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="ident">contentPath</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Error parsing the content&#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">return</div> <div class="ident">ExitStatusReadContentError</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="ident">buffer</div> <div class="operator">:=</div> <div class="ident">new</div><div class="operator">(</div><div class="ident">bytes</div><div class="operator">.</div><div class="ident">Buffer</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">encoder</div> <div class="operator">:=</div> <div class="ident">json</div><div class="operator">.</div><div class="ident">NewEncoder</div><div class="operator">(</div><div class="ident">buffer</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">encoder</div><div class="operator">.</div><div class="ident">Encode</div><div class="operator">(</div><div class="ident">contentDir</div><div class="operator">)</div><div class="operator">;</div> <div class="ident">err</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">fmt</div><div class="operator">.</div><div class="ident">Println</div><div class="operator">(</div><div class="ident">buffer</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">return</div> <div class="ident">ExitStatusOK</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">return</div> <div class="ident">ExitStatusOther</div><div class="operator"></div>
+
+<div class="operator">}</div><div class="operator"></div>
+
 <div class="keyword">func</div> <div class="ident">initInfoLog</div><div class="operator">(</div><div class="ident">msg</div> <div class="ident">string</div><div class="operator">)</div> <div class="operator">{</div>
 	<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Str</div><div class="operator">(</div><div class="literal">&#34;type&#34;</div><div class="operator">,</div> <div class="literal">&#34;init&#34;</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="ident">msg</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
@@ -299,6 +335,8 @@ The commands are:
     help                prints help
     print-help          prints help
     print-config        prints current configuration set by files &amp; env variables
+    print-groups        prints current groups configuration
+    print-rules         prints current parsed rules
     print-version-info  prints version info
 
 `</div><div class="operator"></div>
@@ -352,6 +390,10 @@ The commands are:
 		<div class="keyword">return</div> <div class="ident">printConfig</div><div class="operator">(</div><div class="ident">conf</div><div class="operator">.</div><div class="ident">Config</div><div class="operator">)</div><div class="operator"></div>
 	<div class="keyword">case</div> <div class="literal">&#34;print-version-info&#34;</div><div class="operator">:</div>
 		<div class="keyword">return</div> <div class="ident">printVersionInfo</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">case</div> <div class="literal">&#34;print-groups&#34;</div><div class="operator">:</div>
+		<div class="keyword">return</div> <div class="ident">printGroups</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">case</div> <div class="literal">&#34;print-rules&#34;</div><div class="operator">:</div>
+		<div class="keyword">return</div> <div class="ident">printRules</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
 	<div class="keyword">default</div><div class="operator">:</div>
 		<div class="ident">fmt</div><div class="operator">.</div><div class="ident">Printf</div><div class="operator">(</div><div class="literal">&#34;\nCommand &#39;%v&#39; not found\n&#34;</div><div class="operator">,</div> <div class="ident">command</div><div class="operator">)</div><div class="operator"></div>
 		<div class="keyword">return</div> <div class="ident">printHelp</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>

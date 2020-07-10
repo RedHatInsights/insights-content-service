@@ -38,9 +38,9 @@ FROM registry.redhat.io/ubi8-minimal
 COPY --from=builder /opt/app-root/src/insights-content-service .
 COPY --from=builder /opt/app-root/src/openapi.json /openapi/openapi.json
 COPY --from=builder /opt/app-root/src/groups_config.yaml /groups/groups_config.yaml
-# copy just the rule content instead of the whole repository
+# copy just the rule content instead of the whole ocp-rules repository
 COPY --from=builder /rules-content/content/ /rules-content
-# copy tutorial/fake rule hit on all reports
+# copy tutorial/fake rule to external rules to be hit by all reports
 COPY rules/tutorial/content/ /rules-content/external/rules
 
 USER 1001

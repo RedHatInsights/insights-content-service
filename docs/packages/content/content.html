@@ -148,6 +148,7 @@ limitations under the License.
 	<div class="literal">&#34;path/filepath&#34;</div><div class="operator"></div>
 
 	<div class="literal">&#34;github.com/go-yaml/yaml&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;github.com/rs/zerolog/log&#34;</div><div class="operator"></div>
 <div class="operator">)</div><div class="operator"></div>
 
 </code></pre></td>
@@ -185,8 +186,10 @@ file inside of an error key content directory.</p>
 	<td class="doc"><p>RuleErrorKeyContent wraps content of a single error key.</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">type</div> <div class="ident">RuleErrorKeyContent</div> <div class="keyword">struct</div> <div class="operator">{</div>
-	<div class="ident">Generic</div>  <div class="ident">string</div>           <div class="literal">`json:&#34;generic&#34;`</div><div class="operator"></div>
-	<div class="ident">Metadata</div> <div class="ident">ErrorKeyMetadata</div> <div class="literal">`json:&#34;metadata&#34;`</div><div class="operator"></div>
+	<div class="ident">Generic</div>   <div class="ident">string</div>           <div class="literal">`json:&#34;generic&#34;`</div><div class="operator"></div>
+	<div class="ident">Metadata</div>  <div class="ident">ErrorKeyMetadata</div> <div class="literal">`json:&#34;metadata&#34;`</div><div class="operator"></div>
+	<div class="ident">Reason</div>    <div class="ident">string</div>           <div class="literal">`json:&#34;reason&#34;`</div><div class="operator"></div>
+	<div class="ident">hasReason</div> <div class="ident">bool</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -216,6 +219,7 @@ file inside of the rule content directory.</p>
 	<div class="ident">MoreInfo</div>   <div class="ident">string</div>                         <div class="literal">`json:&#34;more_info&#34;`</div><div class="operator"></div>
 	<div class="ident">Plugin</div>     <div class="ident">RulePluginInfo</div>                 <div class="literal">`json:&#34;plugin&#34;`</div><div class="operator"></div>
 	<div class="ident">ErrorKeys</div>  <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">RuleErrorKeyContent</div> <div class="literal">`json:&#34;error_keys&#34;`</div><div class="operator"></div>
+	<div class="ident">hasReason</div>  <div class="ident">bool</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -236,16 +240,20 @@ file inside of the rule content directory.</p>
 	<td class="doc"><p>readFilesIntoByteArrayPointers reads the contents of the specified files
 in the base directory and saves them via the specified byte slice pointers.</p>
 </td>
-	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">readFilesIntoByteArray</div><div class="operator">(</div><div class="ident">baseDir</div> <div class="ident">string</div><div class="operator">,</div> <div class="ident">filelist</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">)</div> <div class="operator">(</div><div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="operator">[</div><div class="operator">]</div><div class="ident">byte</div><div class="operator">,</div> <div class="ident">error</div><div class="operator">)</div> <div class="operator">{</div>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">readFilesIntoFileContent</div><div class="operator">(</div><div class="ident">baseDir</div> <div class="ident">string</div><div class="operator">,</div> <div class="ident">filelist</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">)</div> <div class="operator">(</div><div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="operator">[</div><div class="operator">]</div><div class="ident">byte</div><div class="operator">,</div> <div class="ident">error</div><div class="operator">)</div> <div class="operator">{</div>
 	<div class="keyword">var</div> <div class="ident">filesContent</div> <div class="operator">=</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="operator">[</div><div class="operator">]</div><div class="ident">byte</div><div class="operator">{</div><div class="operator">}</div><div class="operator"></div>
 	<div class="keyword">for</div> <div class="ident">_</div><div class="operator">,</div> <div class="ident">name</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">filelist</div> <div class="operator">{</div>
+		<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msgf</div><div class="operator">(</div><div class="literal">&#34;Parsing %s/%s&#34;</div><div class="operator">,</div> <div class="ident">baseDir</div><div class="operator">,</div> <div class="ident">name</div><div class="operator">)</div><div class="operator"></div>
 		<div class="keyword">var</div> <div class="ident">err</div> <div class="ident">error</div><div class="operator"></div>
-		<div class="ident">ptr</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">ioutil</div><div class="operator">.</div><div class="ident">ReadFile</div><div class="operator">(</div><div class="ident">filepath</div><div class="operator">.</div><div class="ident">Clean</div><div class="operator">(</div><div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">baseDir</div><div class="operator">,</div> <div class="ident">name</div><div class="operator">)</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+		<div class="ident">rawBytes</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">ioutil</div><div class="operator">.</div><div class="ident">ReadFile</div><div class="operator">(</div><div class="ident">filepath</div><div class="operator">.</div><div class="ident">Clean</div><div class="operator">(</div><div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">baseDir</div><div class="operator">,</div> <div class="ident">name</div><div class="operator">)</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
 		<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
-			<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
+			<div class="ident">filesContent</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">nil</div><div class="operator"></div>
+			<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+		<div class="operator">}</div> <div class="keyword">else</div> <div class="operator">{</div>
+			<div class="ident">filesContent</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">rawBytes</div><div class="operator"></div>
 		<div class="operator">}</div><div class="operator"></div>
-		<div class="ident">filesContent</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">ptr</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
+
 	<div class="keyword">return</div> <div class="ident">filesContent</div><div class="operator">,</div> <div class="ident">nil</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
@@ -253,20 +261,35 @@ in the base directory and saves them via the specified byte slice pointers.</p>
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>readFilesIntoStringPointers reads the content of the specified files
-in the base directory and saves them via the specified string pointer</p>
+	<td class="doc"><p>createErrorContents takes a mapping of files into contents and perform
+some checks about it</p>
 </td>
-	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">readFilesIntoString</div><div class="operator">(</div><div class="ident">baseDir</div> <div class="ident">string</div><div class="operator">,</div> <div class="ident">filelist</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">)</div> <div class="operator">(</div><div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">string</div><div class="operator">,</div> <div class="ident">error</div><div class="operator">)</div> <div class="operator">{</div>
-	<div class="keyword">var</div> <div class="ident">filesContent</div> <div class="operator">=</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">string</div><div class="operator">{</div><div class="operator">}</div><div class="operator"></div>
-	<div class="keyword">for</div> <div class="ident">_</div><div class="operator">,</div> <div class="ident">name</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">filelist</div> <div class="operator">{</div>
-		<div class="keyword">var</div> <div class="ident">err</div> <div class="ident">error</div><div class="operator"></div>
-		<div class="ident">rawBytes</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">ioutil</div><div class="operator">.</div><div class="ident">ReadFile</div><div class="operator">(</div><div class="ident">filepath</div><div class="operator">.</div><div class="ident">Clean</div><div class="operator">(</div><div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">baseDir</div><div class="operator">,</div> <div class="ident">name</div><div class="operator">)</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
-		<div class="ident">filesContent</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">string</div><div class="operator">(</div><div class="ident">rawBytes</div><div class="operator">)</div><div class="operator"></div>
-		<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
-			<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
-		<div class="operator">}</div><div class="operator"></div>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">createErrorContents</div><div class="operator">(</div><div class="ident">contentRead</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="operator">[</div><div class="operator">]</div><div class="ident">byte</div><div class="operator">)</div> <div class="operator">(</div><div class="operator">*</div><div class="ident">RuleErrorKeyContent</div><div class="operator">,</div> <div class="ident">error</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">errorContent</div> <div class="operator">:=</div> <div class="ident">RuleErrorKeyContent</div><div class="operator">{</div><div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;generic.md&#34;</div><div class="operator">]</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">MissingMandatoryFile</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;generic.md&#34;</div><div class="operator">}</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
-	<div class="keyword">return</div> <div class="ident">filesContent</div><div class="operator">,</div> <div class="ident">nil</div><div class="operator"></div>
+
+	<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Generic</div> <div class="operator">=</div> <div class="ident">string</div><div class="operator">(</div><div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;generic.md&#34;</div><div class="operator">]</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;reason.md&#34;</div><div class="operator">]</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Reason</div> <div class="operator">=</div> <div class="literal">&#34;&#34;</div><div class="operator"></div>
+		<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">hasReason</div> <div class="operator">=</div> <div class="ident">false</div><div class="operator"></div>
+	<div class="operator">}</div> <div class="keyword">else</div> <div class="operator">{</div>
+		<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Reason</div> <div class="operator">=</div> <div class="ident">string</div><div class="operator">(</div><div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;reason.md&#34;</div><div class="operator">]</div><div class="operator">)</div><div class="operator"></div>
+		<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">hasReason</div> <div class="operator">=</div> <div class="ident">true</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">]</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">MissingMandatoryFile</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">}</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">yaml</div><div class="operator">.</div><div class="ident">Unmarshal</div><div class="operator">(</div><div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">]</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">)</div><div class="operator">;</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">errorContent</div><div class="operator">,</div> <div class="ident">nil</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -289,28 +312,22 @@ so it is not necessary to ever check that elsewhere.</p>
 	<div class="keyword">for</div> <div class="ident">_</div><div class="operator">,</div> <div class="ident">e</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">entries</div> <div class="operator">{</div>
 		<div class="keyword">if</div> <div class="ident">e</div><div class="operator">.</div><div class="ident">IsDir</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
 			<div class="ident">name</div> <div class="operator">:=</div> <div class="ident">e</div><div class="operator">.</div><div class="ident">Name</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
-
-			<div class="ident">errContent</div> <div class="operator">:=</div> <div class="ident">RuleErrorKeyContent</div><div class="operator">{</div><div class="operator">}</div><div class="operator"></div>
-			<div class="ident">contentFiles</div> <div class="operator">:=</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">{</div><div class="literal">&#34;generic.md&#34;</div><div class="operator">}</div><div class="operator"></div>
-			<div class="ident">yamlFiles</div> <div class="operator">:=</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">{</div><div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">}</div><div class="operator"></div>
-
-			<div class="ident">readStrings</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">readFilesIntoString</div><div class="operator">(</div><div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">ruleDirPath</div><div class="operator">,</div> <div class="ident">name</div><div class="operator">)</div><div class="operator">,</div> <div class="ident">contentFiles</div><div class="operator">)</div><div class="operator"></div>
-			<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
-				<div class="keyword">return</div> <div class="ident">errorContents</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
+			<div class="ident">contentFiles</div> <div class="operator">:=</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">{</div>
+				<div class="literal">&#34;generic.md&#34;</div><div class="operator">,</div>
+				<div class="literal">&#34;reason.md&#34;</div><div class="operator">,</div>
+				<div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">,</div>
 			<div class="operator">}</div><div class="operator"></div>
-			<div class="ident">errContent</div><div class="operator">.</div><div class="ident">Generic</div> <div class="operator">=</div> <div class="ident">readStrings</div><div class="operator">[</div><div class="literal">&#34;generic.md&#34;</div><div class="operator">]</div><div class="operator"></div>
 
-			<div class="ident">readBytes</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">readFilesIntoByteArray</div><div class="operator">(</div><div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">ruleDirPath</div><div class="operator">,</div> <div class="ident">name</div><div class="operator">)</div><div class="operator">,</div> <div class="ident">yamlFiles</div><div class="operator">)</div><div class="operator"></div>
+			<div class="ident">readContents</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">readFilesIntoFileContent</div><div class="operator">(</div><div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">ruleDirPath</div><div class="operator">,</div> <div class="ident">name</div><div class="operator">)</div><div class="operator">,</div> <div class="ident">contentFiles</div><div class="operator">)</div><div class="operator"></div>
 			<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 				<div class="keyword">return</div> <div class="ident">errorContents</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 			<div class="operator">}</div><div class="operator"></div>
 
-			<div class="ident">metadataBytes</div> <div class="operator">:=</div> <div class="ident">readBytes</div><div class="operator">[</div><div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">]</div><div class="operator"></div>
-			<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">yaml</div><div class="operator">.</div><div class="ident">Unmarshal</div><div class="operator">(</div><div class="ident">metadataBytes</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">errContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">)</div><div class="operator">;</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+			<div class="ident">errContents</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">createErrorContents</div><div class="operator">(</div><div class="ident">readContents</div><div class="operator">)</div><div class="operator"></div>
+			<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 				<div class="keyword">return</div> <div class="ident">errorContents</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 			<div class="operator">}</div><div class="operator"></div>
-
-			<div class="ident">errorContents</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">errContent</div><div class="operator"></div>
+			<div class="ident">errorContents</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="operator">*</div><div class="ident">errContents</div><div class="operator"></div>
 		<div class="operator">}</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
 
@@ -321,46 +338,86 @@ so it is not necessary to ever check that elsewhere.</p>
       </tr>
       
       <tr class="section">
+	<td class="doc"><p>createRuleContent</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">createRuleContent</div><div class="operator">(</div><div class="ident">contentRead</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="operator">[</div><div class="operator">]</div><div class="ident">byte</div><div class="operator">,</div> <div class="ident">errorKeys</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">RuleErrorKeyContent</div><div class="operator">)</div> <div class="operator">(</div><div class="operator">*</div><div class="ident">RuleContent</div><div class="operator">,</div> <div class="ident">error</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">ruleContent</div> <div class="operator">:=</div> <div class="ident">RuleContent</div><div class="operator">{</div><div class="ident">ErrorKeys</div><div class="operator">:</div> <div class="ident">errorKeys</div><div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;summary.md&#34;</div><div class="operator">]</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">MissingMandatoryFile</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;summary.md&#34;</div><div class="operator">}</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Summary</div> <div class="operator">=</div> <div class="ident">string</div><div class="operator">(</div><div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;summary.md&#34;</div><div class="operator">]</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;reason.md&#34;</div><div class="operator">]</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>check error keys for a reason</p>
+</td>
+	<td class="code"><pre><code>		<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Reason</div> <div class="operator">=</div> <div class="literal">&#34;&#34;</div><div class="operator"></div>
+		<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">hasReason</div> <div class="operator">=</div> <div class="ident">false</div><div class="operator"></div>
+	<div class="operator">}</div> <div class="keyword">else</div> <div class="operator">{</div>
+		<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Reason</div> <div class="operator">=</div> <div class="ident">string</div><div class="operator">(</div><div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;reason.md&#34;</div><div class="operator">]</div><div class="operator">)</div><div class="operator"></div>
+		<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">hasReason</div> <div class="operator">=</div> <div class="ident">true</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;resolution.md&#34;</div><div class="operator">]</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">MissingMandatoryFile</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;resolution.md&#34;</div><div class="operator">}</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Resolution</div> <div class="operator">=</div> <div class="ident">string</div><div class="operator">(</div><div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;resolution.md&#34;</div><div class="operator">]</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;more_info.md&#34;</div><div class="operator">]</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">MissingMandatoryFile</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;more_info.md&#34;</div><div class="operator">}</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">MoreInfo</div> <div class="operator">=</div> <div class="ident">string</div><div class="operator">(</div><div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;more_info.md&#34;</div><div class="operator">]</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;plugin.yaml&#34;</div><div class="operator">]</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">MissingMandatoryFile</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;plugin.yaml&#34;</div><div class="operator">}</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">yaml</div><div class="operator">.</div><div class="ident">Unmarshal</div><div class="operator">(</div><div class="ident">contentRead</div><div class="operator">[</div><div class="literal">&#34;plugin.yaml&#34;</div><div class="operator">]</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Plugin</div><div class="operator">)</div><div class="operator">;</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">ruleContent</div><div class="operator">,</div> <div class="ident">nil</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
 	<td class="doc"><p>parseRuleContent attempts to parse all available rule content from the specified directory.</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">parseRuleContent</div><div class="operator">(</div><div class="ident">ruleDirPath</div> <div class="ident">string</div><div class="operator">)</div> <div class="operator">(</div><div class="ident">RuleContent</div><div class="operator">,</div> <div class="ident">error</div><div class="operator">)</div> <div class="operator">{</div>
 	<div class="ident">errorContents</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">parseErrorContents</div><div class="operator">(</div><div class="ident">ruleDirPath</div><div class="operator">)</div><div class="operator"></div>
+
 	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 		<div class="keyword">return</div> <div class="ident">RuleContent</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
 
-	<div class="ident">ruleContent</div> <div class="operator">:=</div> <div class="ident">RuleContent</div><div class="operator">{</div><div class="ident">ErrorKeys</div><div class="operator">:</div> <div class="ident">errorContents</div><div class="operator">}</div><div class="operator"></div>
 	<div class="ident">contentFiles</div> <div class="operator">:=</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">{</div>
 		<div class="literal">&#34;summary.md&#34;</div><div class="operator">,</div>
 		<div class="literal">&#34;reason.md&#34;</div><div class="operator">,</div>
 		<div class="literal">&#34;resolution.md&#34;</div><div class="operator">,</div>
 		<div class="literal">&#34;more_info.md&#34;</div><div class="operator">,</div>
-	<div class="operator">}</div><div class="operator"></div>
-	<div class="ident">yamlFiles</div> <div class="operator">:=</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">{</div>
 		<div class="literal">&#34;plugin.yaml&#34;</div><div class="operator">,</div>
 	<div class="operator">}</div><div class="operator"></div>
 
-	<div class="ident">readStrings</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">readFilesIntoString</div><div class="operator">(</div><div class="ident">ruleDirPath</div><div class="operator">,</div> <div class="ident">contentFiles</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">readContent</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">readFilesIntoFileContent</div><div class="operator">(</div><div class="ident">ruleDirPath</div><div class="operator">,</div> <div class="ident">contentFiles</div><div class="operator">)</div><div class="operator"></div>
 	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 		<div class="keyword">return</div> <div class="ident">RuleContent</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
 
-	<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Summary</div> <div class="operator">=</div> <div class="ident">readStrings</div><div class="operator">[</div><div class="literal">&#34;summary.md&#34;</div><div class="operator">]</div><div class="operator"></div>
-	<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Reason</div> <div class="operator">=</div> <div class="ident">readStrings</div><div class="operator">[</div><div class="literal">&#34;reason.md&#34;</div><div class="operator">]</div><div class="operator"></div>
-	<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Resolution</div> <div class="operator">=</div> <div class="ident">readStrings</div><div class="operator">[</div><div class="literal">&#34;resolution.md&#34;</div><div class="operator">]</div><div class="operator"></div>
-	<div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">MoreInfo</div> <div class="operator">=</div> <div class="ident">readStrings</div><div class="operator">[</div><div class="literal">&#34;more_info.md&#34;</div><div class="operator">]</div><div class="operator"></div>
+	<div class="ident">ruleContent</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">createRuleContent</div><div class="operator">(</div><div class="ident">readContent</div><div class="operator">,</div> <div class="ident">errorContents</div><div class="operator">)</div><div class="operator"></div>
 
-	<div class="ident">readBytes</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">readFilesIntoByteArray</div><div class="operator">(</div><div class="ident">ruleDirPath</div><div class="operator">,</div> <div class="ident">yamlFiles</div><div class="operator">)</div><div class="operator"></div>
 	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 		<div class="keyword">return</div> <div class="ident">RuleContent</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
-
-	<div class="ident">pluginBytes</div> <div class="operator">:=</div> <div class="ident">readBytes</div><div class="operator">[</div><div class="literal">&#34;plugin.yaml&#34;</div><div class="operator">]</div><div class="operator"></div>
-	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">yaml</div><div class="operator">.</div><div class="ident">Unmarshal</div><div class="operator">(</div><div class="ident">pluginBytes</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">ruleContent</div><div class="operator">.</div><div class="ident">Plugin</div><div class="operator">)</div><div class="operator">;</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
-		<div class="keyword">return</div> <div class="ident">RuleContent</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
-	<div class="operator">}</div><div class="operator"></div>
-
-	<div class="keyword">return</div> <div class="ident">ruleContent</div><div class="operator">,</div> <div class="ident">nil</div><div class="operator"></div>
+	<div class="keyword">return</div> <div class="operator">*</div><div class="ident">ruleContent</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -415,6 +472,19 @@ of the directory is much easier to access here without an extra call.</p>
 					<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
 				<div class="operator">}</div><div class="operator"></div>
 
+				<div class="ident">err</div> <div class="operator">=</div> <div class="ident">checkRequiredFields</div><div class="operator">(</div><div class="ident">ruleContent</div><div class="operator">)</div><div class="operator"></div>
+
+				<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>create an appropriate error and return</p>
+</td>
+	<td class="code"><pre><code>					<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msgf</div><div class="operator">(</div><div class="literal">&#34;Some file in dir %s is missing: %s&#34;</div><div class="operator">,</div> <div class="ident">subdirPath</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+					<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
+				<div class="operator">}</div><div class="operator"></div>
+
 </code></pre></td>
       </tr>
       
@@ -433,6 +503,27 @@ of the directory is much easier to access here without an extra call.</p>
 					<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
 				<div class="operator">}</div><div class="operator"></div>
 			<div class="operator">}</div><div class="operator"></div>
+		<div class="operator">}</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>checkRequiredFields search if all the required fields in the RuleContent are ok
+at the moment only checks for Reason field</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkRequiredFields</div><div class="operator">(</div><div class="ident">rule</div> <div class="ident">RuleContent</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
+	<div class="keyword">if</div> <div class="ident">rule</div><div class="operator">.</div><div class="ident">hasReason</div> <div class="operator">{</div>
+		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">for</div> <div class="ident">_</div><div class="operator">,</div> <div class="ident">errorKeyContent</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">rule</div><div class="operator">.</div><div class="ident">ErrorKeys</div> <div class="operator">{</div>
+		<div class="keyword">if</div> <div class="operator">!</div><div class="ident">errorKeyContent</div><div class="operator">.</div><div class="ident">hasReason</div> <div class="operator">{</div>
+			<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">MissingMandatoryFile</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;reason.md&#34;</div><div class="operator">}</div><div class="operator"></div>
 		<div class="operator">}</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
 

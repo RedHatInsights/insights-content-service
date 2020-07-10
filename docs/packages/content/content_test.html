@@ -240,7 +240,9 @@ content available, but the file structure is otherwise okay, succeeds.</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestContentParseMissingFile</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
 	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="literal">&#34;../tests/content/missing/&#34;</div><div class="operator">)</div><div class="operator"></div>
-	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Contains</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">,</div> <div class="literal">&#34;: no such file or directory&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">NotNil</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Contains</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">,</div> <div class="literal">&#34;Missing required file:&#34;</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -275,6 +277,19 @@ content available, but the file structure is otherwise okay, succeeds.</p>
 	<div class="ident">noExternalPath</div> <div class="operator">:=</div> <div class="literal">&#34;../tests/content/no_external&#34;</div><div class="operator"></div>
 	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="ident">noExternalPath</div><div class="operator">)</div><div class="operator"></div>
 	<div class="ident">assert</div><div class="operator">.</div><div class="ident">EqualError</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">,</div> <div class="ident">fmt</div><div class="operator">.</div><div class="ident">Sprintf</div><div class="operator">(</div><div class="literal">&#34;open %s/external: no such file or directory&#34;</div><div class="operator">,</div> <div class="ident">noExternalPath</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>TestContentParseNoReason tests failing when no reason file in rule or error key dirs is present</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestContentParseNoReason</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">noReasonPath</div> <div class="operator">:=</div> <div class="literal">&#34;../tests/content/no_reason&#34;</div><div class="operator"></div>
+	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="ident">noReasonPath</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">EqualError</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">,</div> <div class="literal">&#34;Missing required file: reason.md&#34;</div><div class="operator">)</div><div class="operator"></div>
+
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>

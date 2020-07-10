@@ -23,6 +23,7 @@ import (
 	"context"
 	"net/http"
 
+	httputils "github.com/RedHatInsights/insights-operator-utils/http"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 
@@ -78,6 +79,7 @@ func (server *HTTPServer) Initialize() http.Handler {
 	log.Info().Msgf("Initializing HTTP server at '%s'", server.Config.Address)
 
 	router := mux.NewRouter().StrictSlash(true)
+	router.Use(httputils.LogRequest)
 
 	server.addEndpointsToRouter(router)
 	log.Info().Msgf("Server has been initiliazed")
