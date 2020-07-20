@@ -133,7 +133,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */</div>
 
-<div class="keyword">package</div> <div class="ident">conf</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>Package conf contains definition of data type named ConfigStruct that
+represents configuration of Content service. This package also contains
+function named LoadConfiguration that can be used to load configuration from
+provided configuration file and/or from environment variables. Additionally
+two specific functions named GetServerConfiguration, GetGroupsConfiguration,
+and GetContentPathConfiguration are to be used to return specific
+configuration options.</p>
+
+<p>Generated documentation is available at:
+https://godoc.org/github.com/RedHatInsights/insights-content-service/conf</p>
+
+<p>Documentation in literate-programming-style is available at:
+https://redhatinsights.github.io/insights-content-service/packages/conf/configuration.html</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">package</div> <div class="ident">conf</div><div class="operator"></div>
 
 <div class="keyword">import</div> <div class="operator">(</div>
 	<div class="literal">&#34;bytes&#34;</div><div class="operator"></div>
@@ -181,7 +199,8 @@ limitations under the License.
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>LoadConfiguration loads configuration from defaultConfigFile, file set in configFileEnvVariableName or from env</p>
+	<td class="doc"><p>LoadConfiguration loads configuration from defaultConfigFile, file set in
+configFileEnvVariableName or from env</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">LoadConfiguration</div><div class="operator">(</div><div class="ident">defaultConfigFile</div> <div class="ident">string</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
 	<div class="ident">configFile</div><div class="operator">,</div> <div class="ident">specified</div> <div class="operator">:=</div> <div class="ident">os</div><div class="operator">.</div><div class="ident">LookupEnv</div><div class="operator">(</div><div class="ident">configFileEnvVariableName</div><div class="operator">)</div><div class="operator"></div>
@@ -190,7 +209,8 @@ limitations under the License.
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>we need to separate the directory name and filename without extension</p>
+	<td class="doc"><p>we need to separate the directory name and filename without
+extension</p>
 </td>
 	<td class="code"><pre><code>		<div class="ident">directory</div><div class="operator">,</div> <div class="ident">basename</div> <div class="operator">:=</div> <div class="ident">filepath</div><div class="operator">.</div><div class="ident">Split</div><div class="operator">(</div><div class="ident">configFile</div><div class="operator">)</div><div class="operator"></div>
 		<div class="ident">file</div> <div class="operator">:=</div> <div class="ident">strings</div><div class="operator">.</div><div class="ident">TrimSuffix</div><div class="operator">(</div><div class="ident">basename</div><div class="operator">,</div> <div class="ident">filepath</div><div class="operator">.</div><div class="ident">Ext</div><div class="operator">(</div><div class="ident">basename</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
@@ -219,7 +239,8 @@ limitations under the License.
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>viper is not smart enough to understand the structure of config by itself</p>
+	<td class="doc"><p>viper is not smart enough to understand the structure of
+config by itself</p>
 </td>
 	<td class="code"><pre><code>		<div class="ident">fakeTomlConfigWriter</div> <div class="operator">:=</div> <div class="ident">new</div><div class="operator">(</div><div class="ident">bytes</div><div class="operator">.</div><div class="ident">Buffer</div><div class="operator">)</div><div class="operator"></div>
 
@@ -290,7 +311,8 @@ limitations under the License.
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>GetContentPathConfiguration get the path to the content files from the configuration</p>
+	<td class="doc"><p>GetContentPathConfiguration get the path to the content files from the
+configuration</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">GetContentPathConfiguration</div><div class="operator">(</div><div class="operator">)</div> <div class="ident">string</div> <div class="operator">{</div>
 	<div class="keyword">if</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">Config</div><div class="operator">.</div><div class="ident">Content</div><div class="operator">.</div><div class="ident">ContentPath</div><div class="operator">)</div> <div class="operator">==</div> <div class="literal">0</div> <div class="operator">{</div>
@@ -304,7 +326,8 @@ limitations under the License.
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>checkIfFileExists returns nil if path doesn't exist or isn't a file, otherwise it returns corresponding error</p>
+	<td class="doc"><p>checkIfFileExists returns nil if path doesn't exist or isn't a file,
+otherwise it returns corresponding error</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkIfFileExists</div><div class="operator">(</div><div class="ident">path</div> <div class="ident">string</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
 	<div class="keyword">if</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">path</div><div class="operator">)</div> <div class="operator">==</div> <div class="literal">0</div> <div class="operator">{</div>
