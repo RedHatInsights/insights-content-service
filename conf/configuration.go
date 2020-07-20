@@ -14,6 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package conf contains definition of data type named ConfigStruct that
+// represents configuration of Content service. This package also contains
+// function named LoadConfiguration that can be used to load configuration from
+// provided configuration file and/or from environment variables. Additionally
+// two specific functions named GetServerConfiguration, GetGroupsConfiguration,
+// and GetContentPathConfiguration are to be used to return specific
+// configuration options.
+//
+// Generated documentation is available at:
+// https://godoc.org/github.com/RedHatInsights/insights-content-service/conf
+//
+// Documentation in literate-programming-style is available at:
+// https://redhatinsights.github.io/insights-content-service/packages/conf/configuration.html
 package conf
 
 import (
@@ -48,11 +61,13 @@ type ConfigStruct struct {
 // Config has exactly the same structure as *.toml file
 var Config ConfigStruct
 
-// LoadConfiguration loads configuration from defaultConfigFile, file set in configFileEnvVariableName or from env
+// LoadConfiguration loads configuration from defaultConfigFile, file set in
+// configFileEnvVariableName or from env
 func LoadConfiguration(defaultConfigFile string) error {
 	configFile, specified := os.LookupEnv(configFileEnvVariableName)
 	if specified {
-		// we need to separate the directory name and filename without extension
+		// we need to separate the directory name and filename without
+		// extension
 		directory, basename := filepath.Split(configFile)
 		file := strings.TrimSuffix(basename, filepath.Ext(basename))
 		// parse the configuration
@@ -66,7 +81,8 @@ func LoadConfiguration(defaultConfigFile string) error {
 
 	err := viper.ReadInConfig()
 	if _, isNotFoundError := err.(viper.ConfigFileNotFoundError); !specified && isNotFoundError {
-		// viper is not smart enough to understand the structure of config by itself
+		// viper is not smart enough to understand the structure of
+		// config by itself
 		fakeTomlConfigWriter := new(bytes.Buffer)
 
 		err := toml.NewEncoder(fakeTomlConfigWriter).Encode(Config)
@@ -117,7 +133,8 @@ func GetGroupsConfiguration() groups.Configuration {
 	return Config.Groups
 }
 
-// GetContentPathConfiguration get the path to the content files from the configuration
+// GetContentPathConfiguration get the path to the content files from the
+// configuration
 func GetContentPathConfiguration() string {
 	if len(Config.Content.ContentPath) == 0 {
 		Config.Content.ContentPath = defaultContentPath
@@ -126,7 +143,8 @@ func GetContentPathConfiguration() string {
 	return Config.Content.ContentPath
 }
 
-// checkIfFileExists returns nil if path doesn't exist or isn't a file, otherwise it returns corresponding error
+// checkIfFileExists returns nil if path doesn't exist or isn't a file,
+// otherwise it returns corresponding error
 func checkIfFileExists(path string) error {
 	if len(path) == 0 {
 		return fmt.Errorf("Empty path provided")
