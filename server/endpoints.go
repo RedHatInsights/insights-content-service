@@ -31,6 +31,8 @@ const (
 	GroupsEndpoint = "groups"
 	// AllContentEndpoint defines suffix for all the content
 	AllContentEndpoint = "content"
+	// RuleNamesEndpoint returns all the rule names available
+	RuleNamesEndpoint = "rules"
 	// MetricsEndpoint returns prometheus metrics
 	MetricsEndpoint = "metrics"
 )
@@ -43,6 +45,7 @@ func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
 	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
 	router.HandleFunc(apiPrefix+AllContentEndpoint, server.getStaticContent).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc(apiPrefix+RuleNamesEndpoint, server.getRuleNames).Methods(http.MethodGet)
 
 	// Prometheus metrics
 	router.Handle(apiPrefix+MetricsEndpoint, promhttp.Handler()).Methods(http.MethodGet)

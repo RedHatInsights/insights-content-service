@@ -169,6 +169,13 @@ limitations under the License.
       </tr>
       
       <tr class="section">
+	<td class="doc"><p>RuleNamesEndpoint returns all the rule names available</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">RuleNamesEndpoint</div> <div class="operator">=</div> <div class="literal">&#34;rules&#34;</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
 	<td class="doc"><p>MetricsEndpoint returns prometheus metrics</p>
 </td>
 	<td class="code"><pre><code>	<div class="ident">MetricsEndpoint</div> <div class="operator">=</div> <div class="literal">&#34;metrics&#34;</div><div class="operator"></div>
@@ -187,6 +194,7 @@ limitations under the License.
 	<td class="code"><pre><code>	<div class="ident">router</div><div class="operator">.</div><div class="ident">HandleFunc</div><div class="operator">(</div><div class="ident">apiPrefix</div><div class="operator">&#43;</div><div class="ident">MainEndpoint</div><div class="operator">,</div> <div class="ident">server</div><div class="operator">.</div><div class="ident">mainEndpoint</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Methods</div><div class="operator">(</div><div class="ident">http</div><div class="operator">.</div><div class="ident">MethodGet</div><div class="operator">)</div><div class="operator"></div>
 	<div class="ident">router</div><div class="operator">.</div><div class="ident">HandleFunc</div><div class="operator">(</div><div class="ident">apiPrefix</div><div class="operator">&#43;</div><div class="ident">GroupsEndpoint</div><div class="operator">,</div> <div class="ident">server</div><div class="operator">.</div><div class="ident">listOfGroups</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Methods</div><div class="operator">(</div><div class="ident">http</div><div class="operator">.</div><div class="ident">MethodGet</div><div class="operator">,</div> <div class="ident">http</div><div class="operator">.</div><div class="ident">MethodOptions</div><div class="operator">)</div><div class="operator"></div>
 	<div class="ident">router</div><div class="operator">.</div><div class="ident">HandleFunc</div><div class="operator">(</div><div class="ident">apiPrefix</div><div class="operator">&#43;</div><div class="ident">AllContentEndpoint</div><div class="operator">,</div> <div class="ident">server</div><div class="operator">.</div><div class="ident">getStaticContent</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Methods</div><div class="operator">(</div><div class="ident">http</div><div class="operator">.</div><div class="ident">MethodGet</div><div class="operator">,</div> <div class="ident">http</div><div class="operator">.</div><div class="ident">MethodOptions</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">router</div><div class="operator">.</div><div class="ident">HandleFunc</div><div class="operator">(</div><div class="ident">apiPrefix</div><div class="operator">&#43;</div><div class="ident">RuleNamesEndpoint</div><div class="operator">,</div> <div class="ident">server</div><div class="operator">.</div><div class="ident">getRuleNames</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Methods</div><div class="operator">(</div><div class="ident">http</div><div class="operator">.</div><div class="ident">MethodGet</div><div class="operator">)</div><div class="operator"></div>
 
 </code></pre></td>
       </tr>
