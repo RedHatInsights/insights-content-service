@@ -24,6 +24,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/RedHatInsights/insights-operator-utils/metrics"
 	"github.com/rs/zerolog/log"
 
 	"github.com/RedHatInsights/insights-content-service/conf"
@@ -73,6 +74,11 @@ func startService() int {
 	if err != nil {
 		log.Error().Err(err).Msg("Groups init error")
 		return ExitStatusServerError
+	}
+
+	metricsCfg := conf.GetMetricsConfiguration()
+	if metricsCfg.Namespace != "" {
+		metrics.AddAPIMetricsWithNamespace(metricsCfg.Namespace)
 	}
 
 	ruleContentDirPath := conf.GetContentPathConfiguration()
