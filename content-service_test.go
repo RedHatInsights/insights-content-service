@@ -139,6 +139,14 @@ func TestHandleCommandPrintGroups(t *testing.T) {
 	checkStandardOutputStatus(t, err)
 }
 
+// TestHandleCommmandPrintRules tests if proper output is printed for command "print-rules"
+func TestHandleCommandPrintRules(t *testing.T) {
+	_, err := capture.StandardOutput(func() {
+		main.HandleCommand("print-rules")
+	})
+	checkStandardOutputStatus(t, err)
+}
+
 // TestHandleCommandUnknownInput tests if proper output is printed for unknown command
 func TestHandleCommandUnknownInput(t *testing.T) {
 	captured, err := capture.StandardOutput(func() {
