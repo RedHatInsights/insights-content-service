@@ -8,3 +8,6 @@ path = "groups_config.yaml"
 
 [content]
 path = "rules-content"
+
+[metrics]
+namespace = "insights_content_service"

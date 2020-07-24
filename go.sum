@@ -23,8 +23,8 @@ github.com/PuerkitoBio/goquery v1.5.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBK
 github.com/RedHatInsights/cloudwatch v0.0.0-20200512151223-b0b55757a24b h1:IFT3csatW9XMCEi54wRo+GiFshT4E2V2vWCKYg7413w=
 github.com/RedHatInsights/cloudwatch v0.0.0-20200512151223-b0b55757a24b/go.mod h1:8l+HqU8iWM6hA9kSAHgY3ItSlpEsPr8fb2R0GBp9S0U=
 github.com/RedHatInsights/insights-operator-utils v1.0.1/go.mod h1:gRzYBMY4csuOXgrxUuC10WUkz6STOm3mqVsQCb+AGOQ=
-github.com/RedHatInsights/insights-operator-utils v1.3.2 h1:e7D2e+pkxDMNMd9ZVxM+6CjGG+O79LKrHLXE5OuQOKo=
-github.com/RedHatInsights/insights-operator-utils v1.3.2/go.mod h1:F7KKAdWFR70H+3fa89ciXqimNycHdqO9HjLWRdZwOug=
+github.com/RedHatInsights/insights-operator-utils v1.4.0 h1:R1ktc6+y/UGSKQyzRV3QN8S7ulqhnc2vcXJXCCYCn4M=
+github.com/RedHatInsights/insights-operator-utils v1.4.0/go.mod h1:F7KKAdWFR70H+3fa89ciXqimNycHdqO9HjLWRdZwOug=
 github.com/RedHatInsights/insights-results-aggregator v0.0.0-20200604090056-3534f6dd9c1c h1:/kb5AwNxizPf+0R4OWWRvWbLqAwf07Bu97R4WVHk2Uw=
 github.com/RedHatInsights/insights-results-aggregator v0.0.0-20200604090056-3534f6dd9c1c/go.mod h1:7Pc15NYXErx7BMJ4rF1Hacm+29G6atzjhwBpXNFMt+0=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
