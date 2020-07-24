@@ -327,6 +327,19 @@ limitations under the License.
       </tr>
       
       <tr class="section">
+	<td class="doc"><p>TestHandleCommmandPrintRules tests if proper output is printed for command &quot;print-rules&quot;</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestHandleCommandPrintRules</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">capture</div><div class="operator">.</div><div class="ident">StandardOutput</div><div class="operator">(</div><div class="keyword">func</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
+		<div class="ident">main</div><div class="operator">.</div><div class="ident">HandleCommand</div><div class="operator">(</div><div class="literal">&#34;print-rules&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">checkStandardOutputStatus</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
 	<td class="doc"><p>TestHandleCommandUnknownInput tests if proper output is printed for unknown command</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestHandleCommandUnknownInput</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
