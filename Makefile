@@ -90,14 +90,18 @@ help: ## Show this help screen
 	@echo ''
 
 docs/packages/%.html: %.go
+	env | grep GO
 	mkdir -p $(dir $@)
 	docgo -outdir $(dir $@) $^
 	addlicense -c "Red Hat, Inc" -l "apache" -v $@
 
+godoc: export GO111MODULE=off
 godoc: install_docgo install_addlicense ${DOCFILES}
 
+install_docgo: export GO111MODULE=off
 install_docgo:
-	[[ `command -v docgo` ]] || GO111MODULE=off go get -u github.com/dhconnelly/docgo
+	[[ `command -v docgo` ]] || go get -u github.com/dhconnelly/docgo
 
+install_addlicense: export GO111MODULE=off
 install_addlicense:
-	[[ `command -v addlicense` ]] || GO111MODULE=off go get -u github.com/google/addlicense
+	[[ `command -v addlicense` ]] || go get -u github.com/google/addlicense

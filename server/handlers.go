@@ -88,8 +88,8 @@ func (server HTTPServer) getStaticContent(writer http.ResponseWriter, request *h
 	}
 }
 
-// getRuleNames returns a list of the names of the rules
-func (server HTTPServer) getRuleNames(writer http.ResponseWriter, request *http.Request) {
+// getRuleIDs returns a list of the names of the rules
+func (server HTTPServer) getRuleIDs(writer http.ResponseWriter, request *http.Request) {
 	ruleNames := make([]string, 0, len(server.Content.Rules))
 	for _, ruleContent := range server.Content.Rules {
 		ruleNames = append(ruleNames, ruleContent.Plugin.PythonModule)
