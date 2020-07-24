@@ -86,3 +86,15 @@ path = "rules-content"
 ```
 
 Where `path` can be the absolute or relative path to the rules content directory.
+
+## Metrics configuration
+
+Metrics configuration is in section `[metrics]` in config file
+
+```toml
+[metrics]
+namespace = "mynamespace"
+```
+
+* `namespace` if defined, it is used as `Namespace` argument when creating all
+  the Prometheus metrics exposed by this service.
