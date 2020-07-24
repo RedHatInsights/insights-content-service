@@ -95,5 +95,10 @@ func (server HTTPServer) getRuleNames(writer http.ResponseWriter, request *http.
 		ruleNames = append(ruleNames, ruleContent.Plugin.PythonModule)
 	}
 
-	responses.SendOK(writer, responses.BuildOkResponseWithData("rules", ruleNames))
+	err := responses.SendOK(writer, responses.BuildOkResponseWithData("rules", ruleNames))
+	if err != nil {
+		log.Error().Err(err)
+		handleServerError(err)
+		return
+	}
 }

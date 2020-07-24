@@ -211,3 +211,13 @@ func TestServerContent(t *testing.T) {
 		StatusCode: http.StatusOK,
 	})
 }
+
+// TestServerRuleNames checks the REST API server behaviour for rules endpoint
+func TestRuleNames(t *testing.T) {
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodGet,
+		Endpoint: "rules",
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
+	})
+}
