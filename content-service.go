@@ -182,7 +182,7 @@ The commands are:
 
 `
 
-func printHelp() int {
+func printHelp() ExitCode {
 	fmt.Printf(helpMessageTemplate, os.Args[0])
 	return ExitStatusOK
 }
@@ -212,7 +212,7 @@ func main() {
 		command = strings.ToLower(strings.TrimSpace(os.Args[1]))
 	}
 
-	os.Exit(handleCommand(command))
+	os.Exit(int(handleCommand(command)))
 }
 
 func handleCommand(command string) ExitCode {
