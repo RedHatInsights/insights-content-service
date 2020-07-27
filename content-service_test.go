@@ -177,6 +177,6 @@ func TestLogVersionInfo(t *testing.T) {
 
 // TestPrintGroupsEmptyConfig check the behaviour of the printGroups function when no groups are configured
 func TestPrintGroups(t *testing.T) {
-	retval := main.PrintGroups()
+	retval := int(main.PrintGroups())
 	assert.Equal(t, main.ExitStatusServerError, retval)
 }

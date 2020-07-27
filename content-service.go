@@ -33,6 +33,10 @@ import (
 	"github.com/RedHatInsights/insights-content-service/server"
 )
 
+// ExitCode represents numeric value returned to parent process when the
+// current process finishes
+type ExitCode int
+
 const (
 	// ExitStatusOK means that the tool finished with success
 	ExitStatusOK = iota
@@ -66,7 +70,7 @@ var (
 )
 
 // startService starts service and returns error code
-func startService() int {
+func startService() ExitCode {
 	serverCfg := conf.GetServerConfiguration()
 	groupsCfg := conf.GetGroupsConfiguration()
 	groups, err := groups.ParseGroupConfigFile(groupsCfg.ConfigPath)
@@ -104,7 +108,7 @@ func printInfo(msg string, val string) {
 	fmt.Printf("%s\t%s\n", msg, val)
 }
 
-func printVersionInfo() int {
+func printVersionInfo() ExitCode {
 	printInfo("Version:", BuildVersion)
 	printInfo("Build time:", BuildTime)
 	printInfo("Branch:", BuildBranch)
@@ -112,7 +116,7 @@ func printVersionInfo() int {
 	return ExitStatusOK
 }
 
-func printGroups() int {
+func printGroups() ExitCode {
 	groupsConfig := conf.GetGroupsConfiguration()
 	groups, err := groups.ParseGroupConfigFile(groupsConfig.ConfigPath)
 
@@ -125,7 +129,7 @@ func printGroups() int {
 	return ExitStatusOK
 }
 
-func printRules() int {
+func printRules() ExitCode {
 	log.Info().Msg("Printing rules")
 	contentPath := conf.GetContentPathConfiguration()
 	contentDir, err := content.ParseRuleContentDir(contentPath)
@@ -178,12 +182,12 @@ The commands are:
 
 `
 
-func printHelp() int {
+func printHelp() ExitCode {
 	fmt.Printf(helpMessageTemplate, os.Args[0])
 	return ExitStatusOK
 }
 
-func printConfig(config conf.ConfigStruct) int {
+func printConfig(config conf.ConfigStruct) ExitCode {
 	configBytes, err := json.MarshalIndent(config, "", "    ")
 
 	if err != nil {
@@ -208,10 +212,10 @@ func main() {
 		command = strings.ToLower(strings.TrimSpace(os.Args[1]))
 	}
 
-	os.Exit(handleCommand(command))
+	os.Exit(int(handleCommand(command)))
 }
 
-func handleCommand(command string) int {
+func handleCommand(command string) ExitCode {
 	switch command {
 	case "start-service":
 		logVersionInfo()
