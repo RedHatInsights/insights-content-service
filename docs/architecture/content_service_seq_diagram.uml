@@ -29,6 +29,7 @@ footer Copyright © 2020 Red Hat, Inc. Author: Pavel Tisnovsky
 actor "Author of\nrule content" as author
 database "Internal\nGitLab\nrepository\n<&fork>" as gitlab
 database "External\nGitHab\nrepository\n<&fork>" as github
+participant "OpenShift\ntooling" as openshift #ffa0a0
 participant "Insights\nContent Service" as content_service #a0a0ff
 participant "Smart\nProxy" as smart_proxy #a0a0ff
 collections "REST API\nconsumers" as consumers
@@ -36,19 +37,26 @@ collections "REST API\nconsumers" as consumers
 == New content or update of existing content ==
 author -> gitlab: Merge into\nmain branch
 
-== Data synchronization ==
+== Data synchronization to Content Service ==
 gitlab -> github: New commit(s)
 github -> github: Merge commit
-gitlab -> content_service: Webhook - new changes
-content_service -> content_service: Restart pod
-content_service -> github: Clone\nrepository
-github -> content_service: Repository\ncontent
-content_service -> content_service: Read content
+gitlab -> openshift: Webhook - new changes
+openshift -> github:  Clone\nrepository
+github -> openshift: Repository content
+openshift -> openshift: Rebuild image
+note right: OpenShift rebuild Insights\nContent Service image\nwith new rules content included
+openshift -> openshift: Restart pod
+openshift -> content_service: Set replicas > 0
+note right: Now the Content Service\nexposes new rules content\nvia its REST API
+
+== Synchronization between Smart Proxy and Content Service ==
+smart_proxy -> content_service: Get content\nfor rule ID
+note right: Smart proxy needs\nto periodically\nupdate its cache
+content_service -> smart_proxy: Here's\nrequired\ncontent
+smart_proxy -> smart_proxy: Update content\nin cache
 
 == Providing recommendations to consumers ==
 consumers -> smart_proxy: Get\nrecommendations\norg ID\ncluster ID
-smart_proxy -> content_service: Get content\nfor rule ID
-content_service -> smart_proxy: Here's\nrequired\ncontent
 smart_proxy -> smart_proxy: Merge results\nwith content
 smart_proxy -> consumers: Recommendations\nfor cluster
 
