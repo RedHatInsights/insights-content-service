@@ -50,7 +50,7 @@ openshift -> content_service: Set replicas > 0
 note right: Now the Content Service\nexposes new rules content\nvia its REST API
 
 == Synchronization between Smart Proxy and Content Service ==
-smart_proxy -> content_service: Get content\nfor rule ID
+smart_proxy -> content_service: Get new content\nfor all rules
 note right: Smart proxy needs\nto periodically\nupdate its cache
 content_service -> smart_proxy: Here's\nrequired\ncontent
 smart_proxy -> smart_proxy: Update content\nin cache

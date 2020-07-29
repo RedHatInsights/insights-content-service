@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1205px" preserveAspectRatio="none" style="width:901px;height:1205px;" version="1.1" viewBox="0 0 901 1205" width="901px" zoomAndPan="magnify">
+  <defs>
+    <filter height="300%" id="fa9aombtn4jfe" width="300%" x="-1" y="-1">
+      <feGaussianBlur result="blurOut" stdDeviation="2.0"/>
+      <feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/>
+      <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/>
+      <feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/>
+    </filter>
+  </defs>
+  <g>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="54" x2="54" y1="121.8646" y2="1075.513"/>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="159" x2="159" y1="121.8646" y2="1075.513"/>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="283" x2="283" y1="121.8646" y2="1075.513"/>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="430" x2="430" y1="121.8646" y2="1075.513"/>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="556.5" x2="556.5" y1="121.8646" y2="1075.513"/>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="687.5" x2="687.5" y1="121.8646" y2="1075.513"/>
+    <line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="834" x2="834" y1="121.8646" y2="1075.513"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="18" y="102.266">Author of</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="86" x="8" y="118.5628">rule content</text>
+    <ellipse cx="54" cy="32.2708" fill="#FEFECE" filter="url(#fa9aombtn4jfe)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/>
+    <path d="M54,40.2708 L54,67.2708 M41,48.2708 L67,48.2708 M54,67.2708 L41,82.2708 M54,67.2708 L67,82.2708 " fill="none" filter="url(#fa9aombtn4jfe)" style="stroke: #A80036; stroke-width: 2.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="18" y="1087.5081">Author of</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="86" x="8" y="1103.805">rule content</text>
+    <ellipse cx="54" cy="1117.1068" fill="#FEFECE" filter="url(#fa9aombtn4jfe)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/>
+    <path d="M54,1125.1068 L54,1152.1068 M41,1133.1068 L67,1133.1068 M54,1152.1068 L41,1167.1068 M54,1152.1068 L67,1167.1068 " fill="none" filter="url(#fa9aombtn4jfe)" style="stroke: #A80036; stroke-width: 2.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="55" x="128.5" y="76.6357">Internal</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="133" y="92.9326">GitLab</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="72" x="120" y="109.2295">repository</text>
+    <path d="M153.0833,112.5313 C152.1173,112.5313 151.3333,113.3153 151.3333,114.2813 C151.3333,115.0466 151.8163,115.6836 152.5,115.9216 L152.5,118.4743 C151.8163,118.7123 151.3333,119.3493 151.3333,120.1146 C151.3333,121.0806 152.1173,121.8646 153.0833,121.8646 C154.0493,121.8646 154.8333,121.0806 154.8333,120.1146 C154.8333,119.4204 154.4355,118.8301 153.8487,118.5466 C153.9537,118.4416 154.0878,118.3646 154.25,118.3646 L156.5833,118.3646 C157.5435,118.3646 158.3333,117.5748 158.3333,116.6146 L158.3333,115.9216 C159.017,115.6836 159.5,115.0466 159.5,114.2813 C159.5,113.3153 158.716,112.5313 157.75,112.5313 C156.784,112.5313 156,113.3153 156,114.2813 C156,115.0466 156.483,115.6836 157.1667,115.9216 L157.1667,116.6146 C157.1667,116.9378 156.9065,117.1979 156.5833,117.1979 L154.25,117.1979 C154.0505,117.1979 153.8463,117.2446 153.6667,117.3076 L153.6667,115.9216 C154.3503,115.6836 154.8333,115.0466 154.8333,114.2813 C154.8333,113.3153 154.0493,112.5313 153.0833,112.5313 " fill="#000000" style="stroke: ; stroke-width: 0.0; stroke-dasharray: ;"/>
+    <path d="M141,27.6406 C141,17.6406 159,17.6406 159,17.6406 C159,17.6406 177,17.6406 177,27.6406 L177,53.6406 C177,63.6406 159,63.6406 159,63.6406 C159,63.6406 141,63.6406 141,53.6406 L141,27.6406 " fill="#FEFECE" filter="url(#fa9aombtn4jfe)" style="stroke: #000000; stroke-width: 1.5;"/>
+    <path d="M141,27.6406 C141,37.6406 159,37.6406 159,37.6406 C159,37.6406 177,37.6406 177,27.6406 " fill="none" style="stroke: #000000; stroke-width: 1.5;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="55" x="128.5" y="1087.5081">Internal</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="133" y="1103.805">GitLab</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="72" x="120" y="1120.1019">repository</text>
+    <path d="M153.0833,1123.4036 C152.1173,1123.4036 151.3333,1124.1876 151.3333,1125.1536 C151.3333,1125.919 151.8163,1126.556 152.5,1126.794 L152.5,1129.3466 C151.8163,1129.5846 151.3333,1130.2216 151.3333,1130.987 C151.3333,1131.953 152.1173,1132.737 153.0833,1132.737 C154.0493,1132.737 154.8333,1131.953 154.8333,1130.987 C154.8333,1130.2928 154.4355,1129.7025 153.8487,1129.419 C153.9537,1129.314 154.0878,1129.237 154.25,1129.237 L156.5833,1129.237 C157.5435,1129.237 158.3333,1128.4471 158.3333,1127.487 L158.3333,1126.794 C159.017,1126.556 159.5,1125.919 159.5,1125.1536 C159.5,1124.1876 158.716,1123.4036 157.75,1123.4036 C156.784,1123.4036 156,1124.1876 156,1125.1536 C156,1125.919 156.483,1126.556 157.1667,1126.794 L157.1667,1127.487 C157.1667,1127.8101 156.9065,1128.0703 156.5833,1128.0703 L154.25,1128.0703 C154.0505,1128.0703 153.8463,1128.117 153.6667,1128.18 L153.6667,1126.794 C154.3503,1126.556 154.8333,1125.919 154.8333,1125.1536 C154.8333,1124.1876 154.0493,1123.4036 153.0833,1123.4036 " fill="#000000" style="stroke: ; stroke-width: 0.0; stroke-dasharray: ;"/>
+    <path d="M141,1142.737 C141,1132.737 159,1132.737 159,1132.737 C159,1132.737 177,1132.737 177,1142.737 L177,1168.737 C177,1178.737 159,1178.737 159,1178.737 C159,1178.737 141,1178.737 141,1168.737 L141,1142.737 " fill="#FEFECE" filter="url(#fa9aombtn4jfe)" style="stroke: #000000; stroke-width: 1.5;"/>
+    <path d="M141,1142.737 C141,1152.737 159,1152.737 159,1152.737 C159,1152.737 177,1152.737 177,1142.737 " fill="none" style="stroke: #000000; stroke-width: 1.5;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="59" x="250.5" y="76.6357">External</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="49" x="255.5" y="92.9326">GitHab</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="72" x="244" y="109.2295">repository</text>
+    <path d="M277.0833,112.5313 C276.1173,112.5313 275.3333,113.3153 275.3333,114.2813 C275.3333,115.0466 275.8163,115.6836 276.5,115.9216 L276.5,118.4743 C275.8163,118.7123 275.3333,119.3493 275.3333,120.1146 C275.3333,121.0806 276.1173,121.8646 277.0833,121.8646 C278.0493,121.8646 278.8333,121.0806 278.8333,120.1146 C278.8333,119.4204 278.4355,118.8301 277.8487,118.5466 C277.9537,118.4416 278.0878,118.3646 278.25,118.3646 L280.5833,118.3646 C281.5435,118.3646 282.3333,117.5748 282.3333,116.6146 L282.3333,115.9216 C283.017,115.6836 283.5,115.0466 283.5,114.2813 C283.5,113.3153 282.716,112.5313 281.75,112.5313 C280.784,112.5313 280,113.3153 280,114.2813 C280,115.0466 280.483,115.6836 281.1667,115.9216 L281.1667,116.6146 C281.1667,116.9378 280.9065,117.1979 280.5833,117.1979 L278.25,117.1979 C278.0505,117.1979 277.8463,117.2446 277.6667,117.3076 L277.6667,115.9216 C278.3503,115.6836 278.8333,115.0466 278.8333,114.2813 C278.8333,113.3153 278.0493,112.5313 277.0833,112.5313 " fill="#000000" style="stroke: ; stroke-width: 0.0; stroke-dasharray: ;"/>
+    <path d="M265,27.6406 C265,17.6406 283,17.6406 283,17.6406 C283,17.6406 301,17.6406 301,27.6406 L301,53.6406 C301,63.6406 283,63.6406 283,63.6406 C283,63.6406 265,63.6406 265,53.6406 L265,27.6406 " fill="#FEFECE" filter="url(#fa9aombtn4jfe)" style="stroke: #000000; stroke-width: 1.5;"/>
+    <path d="M265,27.6406 C265,37.6406 283,37.6406 283,37.6406 C283,37.6406 301,37.6406 301,27.6406 " fill="none" style="stroke: #000000; stroke-width: 1.5;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="59" x="250.5" y="1087.5081">External</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="49" x="255.5" y="1103.805">GitHab</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="72" x="244" y="1120.1019">repository</text>
+    <path d="M277.0833,1123.4036 C276.1173,1123.4036 275.3333,1124.1876 275.3333,1125.1536 C275.3333,1125.919 275.8163,1126.556 276.5,1126.794 L276.5,1129.3466 C275.8163,1129.5846 275.3333,1130.2216 275.3333,1130.987 C275.3333,1131.953 276.1173,1132.737 277.0833,1132.737 C278.0493,1132.737 278.8333,1131.953 278.8333,1130.987 C278.8333,1130.2928 278.4355,1129.7025 277.8487,1129.419 C277.9537,1129.314 278.0878,1129.237 278.25,1129.237 L280.5833,1129.237 C281.5435,1129.237 282.3333,1128.4471 282.3333,1127.487 L282.3333,1126.794 C283.017,1126.556 283.5,1125.919 283.5,1125.1536 C283.5,1124.1876 282.716,1123.4036 281.75,1123.4036 C280.784,1123.4036 280,1124.1876 280,1125.1536 C280,1125.919 280.483,1126.556 281.1667,1126.794 L281.1667,1127.487 C281.1667,1127.8101 280.9065,1128.0703 280.5833,1128.0703 L278.25,1128.0703 C278.0505,1128.0703 277.8463,1128.117 277.6667,1128.18 L277.6667,1126.794 C278.3503,1126.556 278.8333,1125.919 278.8333,1125.1536 C278.8333,1124.1876 278.0493,1123.4036 277.0833,1123.4036 " fill="#000000" style="stroke: ; stroke-width: 0.0; stroke-dasharray: ;"/>
+    <path d="M265,1142.737 C265,1132.737 283,1132.737 283,1132.737 C283,1132.737 301,1132.737 301,1142.737 L301,1168.737 C301,1178.737 283,1178.737 283,1178.737 C283,1178.737 265,1178.737 265,1168.737 L265,1142.737 " fill="#FEFECE" filter="url(#fa9aombtn4jfe)" style="stroke: #000000; stroke-width: 1.5;"/>
+    <path d="M265,1142.737 C265,1152.737 283,1152.737 283,1152.737 C283,1152.737 301,1152.737 301,1142.737 " fill="none" style="stroke: #000000; stroke-width: 1.5;"/>
+    <rect fill="#FFA0A0" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="84" x="386" y="70.2708"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="70" x="393" y="90.266">OpenShift</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="49" x="403.5" y="106.5628">tooling</text>
+    <rect fill="#FFA0A0" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="84" x="386" y="1074.513"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="70" x="393" y="1094.5081">OpenShift</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="49" x="403.5" y="1110.805">tooling</text>
+    <rect fill="#A0A0FF" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="127" x="491.5" y="70.2708"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="54" x="528" y="90.266">Insights</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="113" x="498.5" y="106.5628">Content Service</text>
+    <rect fill="#A0A0FF" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="127" x="491.5" y="1074.513"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="54" x="528" y="1094.5081">Insights</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="113" x="498.5" y="1110.805">Content Service</text>
+    <rect fill="#A0A0FF" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="57" x="657.5" y="70.2708"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="43" x="664.5" y="90.266">Smart</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="39" x="666.5" y="106.5628">Proxy</text>
+    <rect fill="#A0A0FF" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="57" x="657.5" y="1074.513"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="43" x="664.5" y="1094.5081">Smart</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="39" x="666.5" y="1110.805">Proxy</text>
+    <rect fill="#FEFECE" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="92" x="788" y="66.2708"/>
+    <rect fill="#FEFECE" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="92" x="784" y="70.2708"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="63" x="798.5" y="90.266">REST API</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="78" x="791" y="106.5628">consumers</text>
+    <rect fill="#FEFECE" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="92" x="788" y="1074.513"/>
+    <rect fill="#FEFECE" filter="url(#fa9aombtn4jfe)" height="46.5938" style="stroke: #A80036; stroke-width: 1.5;" width="92" x="784" y="1078.513"/>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="63" x="798.5" y="1098.5081">REST API</text>
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="78" x="791" y="1114.805">consumers</text>
+    <rect fill="#EEEEEE" filter="url(#fa9aombtn4jfe)" height="3" style="stroke: #EEEEEE; stroke-width: 1.0;" width="886" x="3" y="152.431"/>
+    <line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="889" y1="152.431" y2="152.431"/>
+    <line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="889" y1="155.431" y2="155.431"/>
+    <rect fill="#EEEEEE" filter="url(#fa9aombtn4jfe)" height="23.1328" style="stroke: #000000; stroke-width: 2.0;" width="331" x="280.5" y="141.8646"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="312" x="286.5" y="157.9315">New content or update of existing content</text>
+    <polygon fill="#A80036" points="147,207.263,157,211.263,147,215.263,151,211.263" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="54" x2="153" y1="211.263" y2="211.263"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="69" x="61" y="191.0643">Merge into</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="81" x="61" y="206.1971">main branch</text>
+    <rect fill="#EEEEEE" filter="url(#fa9aombtn4jfe)" height="3" style="stroke: #EEEEEE; stroke-width: 1.0;" width="886" x="3" y="239.8294"/>
+    <line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="889" y1="239.8294" y2="239.8294"/>
+    <line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="889" y1="242.8294" y2="242.8294"/>
+    <rect fill="#EEEEEE" filter="url(#fa9aombtn4jfe)" height="23.1328" style="stroke: #000000; stroke-width: 2.0;" width="315" x="288.5" y="229.263"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="296" x="294.5" y="245.3299">Data synchronization to Content Service</text>
+    <polygon fill="#A80036" points="271,279.5286,281,283.5286,271,287.5286,275,283.5286" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="159" x2="277" y1="283.5286" y2="283.5286"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="100" x="166" y="278.4627">New commit(s)</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="283" x2="325" y1="312.6615" y2="312.6615"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="325" x2="325" y1="312.6615" y2="325.6615"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="284" x2="325" y1="325.6615" y2="325.6615"/>
+    <polygon fill="#A80036" points="294,321.6615,284,325.6615,294,329.6615,290,325.6615" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="94" x="290" y="307.5955">Merge commit</text>
+    <polygon fill="#A80036" points="418,350.7943,428,354.7943,418,358.7943,422,354.7943" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="159" x2="424" y1="354.7943" y2="354.7943"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="159" x="166" y="349.7284">Webhook - new changes</text>
+    <polygon fill="#A80036" points="294,395.0599,284,399.0599,294,403.0599,290,399.0599" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="288" x2="429" y1="399.0599" y2="399.0599"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="37" x="300" y="378.8612">Clone</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="66" x="300" y="393.994">repository</text>
+    <polygon fill="#A80036" points="418,424.1927,428,428.1927,418,432.1927,422,428.1927" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="283" x2="424" y1="428.1927" y2="428.1927"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="123" x="290" y="423.1268">Repository content</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="430" x2="472" y1="470.9583" y2="470.9583"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="472" x2="472" y1="470.9583" y2="483.9583"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="431" x2="472" y1="483.9583" y2="483.9583"/>
+    <polygon fill="#A80036" points="441,479.9583,431,483.9583,441,487.9583,437,483.9583" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="94" x="437" y="465.8924">Rebuild image</text>
+    <path d="M543,441.1927 L543,496.1927 L771,496.1927 L771,451.1927 L761,441.1927 L543,441.1927 " fill="#FBFB77" filter="url(#fa9aombtn4jfe)" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <path d="M761,441.1927 L761,451.1927 L771,451.1927 L761,441.1927 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="168" x="549" y="458.2596">OpenShift rebuild Insights</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="148" x="549" y="473.3924">Content Service image</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="207" x="549" y="488.5252">with new rules content included</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="430" x2="472" y1="526.724" y2="526.724"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="472" x2="472" y1="526.724" y2="539.724"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="431" x2="472" y1="539.724" y2="539.724"/>
+    <polygon fill="#A80036" points="441,535.724,431,539.724,441,543.724,437,539.724" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="75" x="437" y="521.658">Restart pod</text>
+    <polygon fill="#A80036" points="545,584.9896,555,588.9896,545,592.9896,549,588.9896" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="430" x2="551" y1="588.9896" y2="588.9896"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="103" x="437" y="583.9237">Set replicas &gt; 0</text>
+    <path d="M562,552.724 L562,607.724 L757,607.724 L757,562.724 L747,552.724 L562,552.724 " fill="#FBFB77" filter="url(#fa9aombtn4jfe)" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <path d="M747,552.724 L747,562.724 L757,562.724 L747,552.724 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="161" x="568" y="569.7909">Now the Content Service</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="174" x="568" y="584.9237">exposes new rules content</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="102" x="568" y="600.0565">via its REST API</text>
+    <rect fill="#EEEEEE" filter="url(#fa9aombtn4jfe)" height="3" style="stroke: #EEEEEE; stroke-width: 1.0;" width="886" x="3" y="637.6888"/>
+    <line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="889" y1="637.6888" y2="637.6888"/>
+    <line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="889" y1="640.6888" y2="640.6888"/>
+    <rect fill="#EEEEEE" filter="url(#fa9aombtn4jfe)" height="23.1328" style="stroke: #000000; stroke-width: 2.0;" width="451" x="220.5" y="627.1224"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="432" x="226.5" y="643.1893">Synchronization between Smart Proxy and Content Service</text>
+    <polygon fill="#A80036" points="568,705.0872,558,709.0872,568,713.0872,564,709.0872" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="562" x2="687" y1="709.0872" y2="709.0872"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="107" x="574" y="688.8885">Get new content</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="74" x="574" y="704.0213">for all rules</text>
+    <path d="M693,665.2552 L693,720.2552 L837,720.2552 L837,675.2552 L827,665.2552 L693,665.2552 " fill="#FBFB77" filter="url(#fa9aombtn4jfe)" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <path d="M827,665.2552 L827,675.2552 L837,675.2552 L827,665.2552 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="123" x="699" y="682.3221">Smart proxy needs</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="93" x="699" y="697.4549">to periodically</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="107" x="699" y="712.5877">update its cache</text>
+    <polygon fill="#A80036" points="676,777.0521,686,781.0521,676,785.0521,680,781.0521" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="557" x2="682" y1="781.0521" y2="781.0521"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="42" x="564" y="745.7205">Here's</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="54" x="564" y="760.8534">required</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="49" x="564" y="775.9862">content</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="688" x2="730" y1="825.3177" y2="825.3177"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="730" x2="730" y1="825.3177" y2="838.3177"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="689" x2="730" y1="838.3177" y2="838.3177"/>
+    <polygon fill="#A80036" points="699,834.3177,689,838.3177,699,842.3177,695,838.3177" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="100" x="695" y="805.119">Update content</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="54" x="695" y="820.2518">in cache</text>
+    <rect fill="#EEEEEE" filter="url(#fa9aombtn4jfe)" height="3" style="stroke: #EEEEEE; stroke-width: 1.0;" width="886" x="3" y="866.8841"/>
+    <line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="889" y1="866.8841" y2="866.8841"/>
+    <line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="889" y1="869.8841" y2="869.8841"/>
+    <rect fill="#EEEEEE" filter="url(#fa9aombtn4jfe)" height="23.1328" style="stroke: #000000; stroke-width: 2.0;" width="329" x="281.5" y="856.3177"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="310" x="287.5" y="872.3846">Providing recommendations to consumers</text>
+    <polygon fill="#A80036" points="699,951.9818,689,955.9818,699,959.9818,695,955.9818" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="693" x2="833" y1="955.9818" y2="955.9818"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="23" x="705" y="905.5174">Get</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="118" x="705" y="920.6502">recommendations</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="39" x="705" y="935.783">org ID</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="62" x="705" y="950.9159">cluster ID</text>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="688" x2="730" y1="1000.2474" y2="1000.2474"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="730" x2="730" y1="1000.2474" y2="1013.2474"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="689" x2="730" y1="1013.2474" y2="1013.2474"/>
+    <polygon fill="#A80036" points="699,1009.2474,689,1013.2474,699,1017.2474,695,1013.2474" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="88" x="695" y="980.0487">Merge results</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="81" x="695" y="995.1815">with content</text>
+    <polygon fill="#A80036" points="822,1053.513,832,1057.513,822,1061.513,826,1057.513" style="stroke: #A80036; stroke-width: 1.0;"/>
+    <line style="stroke: #A80036; stroke-width: 1.0;" x1="688" x2="828" y1="1057.513" y2="1057.513"/>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="122" x="695" y="1037.3143">Recommendations</text>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="66" x="695" y="1052.4471">for cluster</text>
+    <text fill="#888888" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="252" x="637" y="12.2822">Sequence diagram for data flow in Content Service</text>
+    <text fill="#888888" font-family="sans-serif" font-size="10" lengthAdjust="spacingAndGlyphs" textLength="276" x="308" y="1192.0192">Copyright © 2020 Red Hat, Inc. Author: Pavel Tisnovsky</text>
+    <!--MD5=[5465fda01ffe06ae7d42d5a70c54f5ed]
+@startuml
+
+header Sequence diagram for data flow in Content Service
+footer Copyright © 2020 Red Hat, Inc. Author: Pavel Tisnovsky
+
+actor "Author of\nrule content" as author
+database "Internal\nGitLab\nrepository\n<&fork>" as gitlab
+database "External\nGitHab\nrepository\n<&fork>" as github
+participant "OpenShift\ntooling" as openshift #ffa0a0
+participant "Insights\nContent Service" as content_service #a0a0ff
+participant "Smart\nProxy" as smart_proxy #a0a0ff
+collections "REST API\nconsumers" as consumers
+
+== New content or update of existing content ==
+author -> gitlab: Merge into\nmain branch
+
+== Data synchronization to Content Service ==
+gitlab -> github: New commit(s)
+github -> github: Merge commit
+gitlab -> openshift: Webhook - new changes
+openshift -> github:  Clone\nrepository
+github -> openshift: Repository content
+openshift -> openshift: Rebuild image
+note right: OpenShift rebuild Insights\nContent Service image\nwith new rules content included
+openshift -> openshift: Restart pod
+openshift -> content_service: Set replicas > 0
+note right: Now the Content Service\nexposes new rules content\nvia its REST API
+
+== Synchronization between Smart Proxy and Content Service ==
+smart_proxy -> content_service: Get new content\nfor all rules
+note right: Smart proxy needs\nto periodically\nupdate its cache
+content_service -> smart_proxy: Here's\nrequired\ncontent
+smart_proxy -> smart_proxy: Update content\nin cache
+
+== Providing recommendations to consumers ==
+consumers -> smart_proxy: Get\nrecommendations\norg ID\ncluster ID
+smart_proxy -> smart_proxy: Merge results\nwith content
+smart_proxy -> consumers: Recommendations\nfor cluster
+
+@enduml
+
+PlantUML version 1.2019.12(Sun Nov 03 11:24:54 CET 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 1.8.0_191-b12
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+-->
+  </g>
+</svg>
