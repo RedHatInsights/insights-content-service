@@ -37,6 +37,7 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
+	"github.com/RedHatInsights/insights-results-aggregator/logger"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 
@@ -61,7 +62,8 @@ type ConfigStruct struct {
 	Content struct {
 		ContentPath string `mapstructure:"path" toml:"path"`
 	} `mapstructure:"content" toml:"content"`
-	Metrics MetricsConf `mapstructure:"metrics" toml:"metrics"`
+	Metrics MetricsConf                 `mapstructure:"metrics" toml:"metrics"`
+	Logging logger.LoggingConfiguration `mapstructure:"logging" toml:"logging"`
 }
 
 // Config has exactly the same structure as *.toml file
@@ -152,6 +154,11 @@ func GetContentPathConfiguration() string {
 // GetMetricsConfiguration get MetricsConf from the loaded configuration
 func GetMetricsConfiguration() MetricsConf {
 	return Config.Metrics
+}
+
+// GetLoggingConfiguration returns logging configuration
+func GetLoggingConfiguration() logger.LoggingConfiguration {
+	return Config.Logging
 }
 
 // checkIfFileExists returns nil if path doesn't exist or isn't a file,
