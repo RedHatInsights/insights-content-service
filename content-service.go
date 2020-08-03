@@ -25,6 +25,7 @@ import (
 	"strings"
 
 	"github.com/RedHatInsights/insights-operator-utils/metrics"
+	"github.com/RedHatInsights/insights-results-aggregator/logger"
 	"github.com/rs/zerolog/log"
 
 	"github.com/RedHatInsights/insights-content-service/conf"
@@ -203,6 +204,13 @@ func printConfig(config conf.ConfigStruct) ExitCode {
 func main() {
 	err := conf.LoadConfiguration(defaultConfigFilename)
 	if err != nil {
+		panic(err)
+	}
+
+	logCfg := conf.GetLoggingConfiguration()
+	// Cloudwatch support is being handled in a separate task, so force disable until it is done
+	logCfg.LoggingToCloudWatchEnabled = false
+	if err = logger.InitZerolog(logCfg, logger.CloudWatchConfiguration{}); err != nil {
 		panic(err)
 	}
 

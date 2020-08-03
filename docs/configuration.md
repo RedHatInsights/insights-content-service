@@ -98,3 +98,18 @@ namespace = "mynamespace"
 
 * `namespace` if defined, it is used as `Namespace` argument when creating all
   the Prometheus metrics exposed by this service.
+  
+## Logging configuration
+
+Logging configuration is in section `[logging]` in config file
+
+```toml
+[logging]
+debug = false
+log_level = "info"
+```
+
+* `debug` if set to `true`, it will make the logs shown in console to be printed
+  in a human readable format instead of JSON.
+* `log_level` should be one of the following values: `debug`, `info`, `warn`,
+  `warning`, `error` or `fatal`.

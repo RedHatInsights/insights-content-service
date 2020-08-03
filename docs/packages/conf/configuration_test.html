@@ -291,6 +291,32 @@ limitations under the License.
       </tr>
       
       <tr class="section">
+	<td class="doc"><p>TestGetMetricsConfiguration checks if the metrics section is loaded properly</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestGetMetricsConfiguration</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">TestLoadConfiguration</div><div class="operator">(</div><div class="ident">t</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">metricsCfg</div> <div class="operator">:=</div> <div class="ident">conf</div><div class="operator">.</div><div class="ident">GetMetricsConfiguration</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Equal</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="literal">&#34;contentservice&#34;</div><div class="operator">,</div> <div class="ident">metricsCfg</div><div class="operator">.</div><div class="ident">Namespace</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>TestGetLoggingConfiguration checks if the logging section is loaded properly</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestGetLoggingConfiguration</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">TestLoadConfiguration</div><div class="operator">(</div><div class="ident">t</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">loggingCfg</div> <div class="operator">:=</div> <div class="ident">conf</div><div class="operator">.</div><div class="ident">GetLoggingConfiguration</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">True</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">loggingCfg</div><div class="operator">.</div><div class="ident">Debug</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
 	<td class="doc"><p>TestCheckIfFileExists tests the functionality of function checkIfFileExists</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestCheckIfFileExists</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>

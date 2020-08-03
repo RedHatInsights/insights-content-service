@@ -378,11 +378,22 @@ limitations under the License.
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>TestPrintGroupsEmptyConfig check the behaviour of the printGroups function when no groups are configured</p>
+	<td class="doc"><p>TestPrintGroups check the behaviour of the printGroups function when no groups are configured</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestPrintGroups</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
 	<div class="ident">retval</div> <div class="operator">:=</div> <div class="ident">int</div><div class="operator">(</div><div class="ident">main</div><div class="operator">.</div><div class="ident">PrintGroups</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
 	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Equal</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">main</div><div class="operator">.</div><div class="ident">ExitStatusServerError</div><div class="operator">,</div> <div class="ident">retval</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>TestPrintRules check the behaviour of the printRules function when no rules are configured</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestPrintRules</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">retval</div> <div class="operator">:=</div> <div class="ident">int</div><div class="operator">(</div><div class="ident">main</div><div class="operator">.</div><div class="ident">PrintRules</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Equal</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">main</div><div class="operator">.</div><div class="ident">ExitStatusReadContentError</div><div class="operator">,</div> <div class="ident">retval</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
