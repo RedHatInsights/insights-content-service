@@ -5,3 +5,10 @@ api_spec_file = "openapi.json"
 
 [groups]
 path = "groups_config.yaml"
+
+[metrics]
+namespace = "contentservice"
+
+[logging]
+debug = true
+

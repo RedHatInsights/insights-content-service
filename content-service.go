@@ -210,7 +210,9 @@ func main() {
 	logCfg := conf.GetLoggingConfiguration()
 	// Cloudwatch support is being handled in a separate task, so force disable until it is done
 	logCfg.LoggingToCloudWatchEnabled = false
-	err = logger.InitZerolog(logCfg, logger.CloudWatchConfiguration{})
+	if err = logger.InitZerolog(logCfg, logger.CloudWatchConfiguration{}); err != nil {
+		panic(err)
+	}
 
 	command := "start-service"
 
