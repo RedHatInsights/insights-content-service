@@ -128,6 +128,22 @@ func TestTryToLoadNonExistingConfig(t *testing.T) {
 	}
 }
 
+// TestGetMetricsConfiguration checks if the metrics section is loaded properly
+func TestGetMetricsConfiguration(t *testing.T) {
+	TestLoadConfiguration(t)
+
+	metricsCfg := conf.GetMetricsConfiguration()
+	assert.Equal(t, "contentservice", metricsCfg.Namespace)
+}
+
+// TestGetLoggingConfiguration checks if the logging section is loaded properly
+func TestGetLoggingConfiguration(t *testing.T) {
+	TestLoadConfiguration(t)
+
+	loggingCfg := conf.GetLoggingConfiguration()
+	assert.True(t, loggingCfg.Debug)
+}
+
 // TestCheckIfFileExists tests the functionality of function checkIfFileExists
 func TestCheckIfFileExists(t *testing.T) {
 	err := conf.CheckIfFileExists("")

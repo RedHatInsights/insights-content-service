@@ -1,4 +1,4 @@
-.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover license before_commit help godoc
+.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover license before_commit help godoc install_docgo install_addlicense
 
 SOURCES:=$(shell find . -name '*.go')
 BINARY:=insights-content-service
@@ -74,9 +74,8 @@ integration_tests: ## Run all integration tests
 	@echo "Running all integration tests"
 	@./test.sh
 
-license:
-	GO111MODULE=off go get -u github.com/google/addlicense && \
-		addlicense -c "Red Hat, Inc" -l "apache" -v ./
+license: install_addlicense
+	addlicense -c "Red Hat, Inc" -l "apache" -v ./
 
 before_commit: style test license
 	./check_coverage.sh
@@ -93,5 +92,15 @@ help: ## Show this help screen
 docs/packages/%.html: %.go
 	mkdir -p $(dir $@)
 	docgo -outdir $(dir $@) $^
+	addlicense -c "Red Hat, Inc" -l "apache" -v $@
 
-godoc: ${DOCFILES}
+godoc: export GO111MODULE=off
+godoc: install_docgo install_addlicense ${DOCFILES}
+
+install_docgo: export GO111MODULE=off
+install_docgo:
+	[[ `command -v docgo` ]] || GO111MODULE=off go get -u github.com/dhconnelly/docgo
+
+install_docgo: export GO111MODULE=off
+install_addlicense:
+	[[ `command -v addlicense` ]] || GO111MODULE=off go get -u github.com/google/addlicense

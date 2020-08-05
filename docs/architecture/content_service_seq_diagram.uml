@@ -1,0 +1,63 @@
+//
+// vim:syntax=plantuml
+//
+// Copyright © 2020 Red Hat, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Generate PNG image with sequence diagram by using the following command:
+// java -jar plantuml.jar content_service_seq_diagram.uml
+//
+// Generate SVG drawing with sequence diagram by using the following command:
+// java -jar plantuml.jar -tsvg content_service_seq_diagram.uml
+
+@startuml
+
+header Sequence diagram for data flow in Content Service
+footer Copyright © 2020 Red Hat, Inc. Author: Pavel Tisnovsky
+
+actor "Author of\nrule content" as author
+database "Internal\nGitLab\nrepository\n<&fork>" as gitlab
+database "External\nGitHab\nrepository\n<&fork>" as github
+participant "OpenShift\ntooling" as openshift #ffa0a0
+participant "Insights\nContent Service" as content_service #a0a0ff
+participant "Smart\nProxy" as smart_proxy #a0a0ff
+collections "REST API\nconsumers" as consumers
+
+== New content or update of existing content ==
+author -> gitlab: Merge into\nmain branch
+
+== Data synchronization to Content Service ==
+gitlab -> github: New commit(s)
+github -> github: Merge commit
+gitlab -> openshift: Webhook - new changes
+openshift -> github:  Clone\nrepository
+github -> openshift: Repository content
+openshift -> openshift: Rebuild image
+note right: OpenShift rebuild Insights\nContent Service image\nwith new rules content included
+openshift -> openshift: Restart pod
+openshift -> content_service: Set replicas > 0
+note right: Now the Content Service\nexposes new rules content\nvia its REST API
+
+== Synchronization between Smart Proxy and Content Service ==
+smart_proxy -> content_service: Get new content\nfor all rules
+note right: Smart proxy needs\nto periodically\nupdate its cache
+content_service -> smart_proxy: Here's\nrequired\ncontent
+smart_proxy -> smart_proxy: Update content\nin cache
+
+== Providing recommendations to consumers ==
+consumers -> smart_proxy: Get\nrecommendations\norg ID\ncluster ID
+smart_proxy -> smart_proxy: Merge results\nwith content
+smart_proxy -> consumers: Recommendations\nfor cluster
+
+@enduml
