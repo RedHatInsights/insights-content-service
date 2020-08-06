@@ -29,6 +29,6 @@ all pull requests:
 * `abcgo` to measure ABC metrics for Go source code and check if the metrics
   does not exceed specified threshold.
 
-Please note that all checks mentioned above have to pass for the change to be merged into master branch.
+Please note that all checks mentioned above have to pass for the change to be merged into main branch (the main branch is configured in repository settings on GitHub).
 
 History of checks performed by CI is available at [RedHatInsights / insights-content-service](https://travis-ci.org/RedHatInsights/insights-content-service).
