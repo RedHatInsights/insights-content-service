@@ -22,5 +22,4 @@ type Configuration struct {
 	APIPrefix   string `mapstructure:"api_prefix" toml:"api_prefix"`
 	APISpecFile string `mapstructure:"api_spec_file" toml:"api_spec_file"`
 	Debug       bool   `mapstructure:"debug" toml:"debug"`
-	UseHTTPS    bool   `mapstructure:"use_https" toml:"use_https"`
 }

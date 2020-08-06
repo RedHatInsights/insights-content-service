@@ -36,7 +36,6 @@ var DefaultServerConfig = server.Configuration{
 	APIPrefix:   "/api/test/",
 	APISpecFile: "openapi.json",
 	Debug:       true,
-	UseHTTPS:    false,
 }
 
 // AssertAPIRequest creates new server

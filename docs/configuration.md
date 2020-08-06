@@ -42,7 +42,7 @@ configuration outside the main configuration, like passwords and secret tokens.
 
 ## Server configuration
 
-The HTTP/HTTPS server configuration is in section `[server]` in the
+The HTTP server configuration is in section `[server]` in the
 configuration file.
 
 ```toml
