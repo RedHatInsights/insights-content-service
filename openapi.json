@@ -94,6 +94,7 @@
     "/content": {
       "get": {
         "summary": "Returns static content for all rules.",
+        "description": "The static content is taken from the memory cache and send in gob format",
         "operationId": "getContent",
         "responses": {
           "200": {
