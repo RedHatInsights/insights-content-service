@@ -50,6 +50,7 @@
     "/groups": {
       "get": {
         "summary": "Returns a list of groups.",
+        "description": "List of all groups represented as an array of objects is returned in a response",
         "operationId": "getGroups",
         "responses": {
           "200": {
