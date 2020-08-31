@@ -36,7 +36,6 @@ var config = server.Configuration{
 	APIPrefix:   "/api/test/",
 	APISpecFile: "openapi.json",
 	Debug:       true,
-	UseHTTPS:    false,
 }
 
 func init() {
@@ -49,22 +48,21 @@ func init() {
 	}
 }
 
-func checkResponseCode(t *testing.T, expected, actual int) {
+func checkResponseCode(t testing.TB, expected, actual int) {
 	if expected != actual {
 		t.Errorf("Expected response code %d. Got %d\n", expected, actual)
 	}
 }
 
-// checkServerStart test if the HTTP/HTTPs server can be started properly
-func checkServerStart(t *testing.T, https bool) {
+// TestServerStartHTTP checks if it's possible to start regular HTTP server
+func TestServerStartHTTP(t *testing.T) {
 	contentDir := content.RuleContentDirectory{}
-	helpers.RunTestWithTimeout(t, func(t *testing.T) {
+	helpers.RunTestWithTimeout(t, func(t testing.TB) {
 		s := server.New(server.Configuration{
 			// will use any free port
 			Address:   ":0",
 			APIPrefix: config.APIPrefix,
 			Debug:     true,
-			UseHTTPS:  https,
 		}, nil, contentDir)
 
 		go func() {
@@ -93,16 +91,6 @@ func checkServerStart(t *testing.T, https bool) {
 			t.Fatal(err)
 		}
 	}, 5*time.Second)
-}
-
-// TestServerStartHTTP checks if it's possible to start regular HTTP server
-func TestServerStartHTTP(t *testing.T) {
-	checkServerStart(t, false)
-}
-
-// TestServerStartHTTPs checks if it's possible to start HTTPs server
-func TestServerStartHTTPs(t *testing.T) {
-	checkServerStart(t, true)
 }
 
 // TestServerStartError checks how/if errors are handled in server.Start method.
@@ -168,7 +156,7 @@ func TestServeAPISpecFileError(t *testing.T) {
 		Method:   http.MethodGet,
 		Endpoint: config.APISpecFile,
 	}, &helpers.APIResponse{
-		StatusCode: http.StatusOK,
+		StatusCode: http.StatusInternalServerError,
 	})
 }
 

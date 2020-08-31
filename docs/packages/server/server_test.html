@@ -155,7 +155,6 @@ limitations under the License.
 	<div class="ident">APIPrefix</div><div class="operator">:</div>   <div class="literal">&#34;/api/test/&#34;</div><div class="operator">,</div>
 	<div class="ident">APISpecFile</div><div class="operator">:</div> <div class="literal">&#34;openapi.json&#34;</div><div class="operator">,</div>
 	<div class="ident">Debug</div><div class="operator">:</div>       <div class="ident">true</div><div class="operator">,</div>
-	<div class="ident">UseHTTPS</div><div class="operator">:</div>    <div class="ident">false</div><div class="operator">,</div>
 <div class="operator">}</div><div class="operator"></div>
 
 <div class="keyword">func</div> <div class="ident">init</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
@@ -173,7 +172,7 @@ limitations under the License.
 	<div class="operator">}</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
-<div class="keyword">func</div> <div class="ident">checkResponseCode</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">,</div> <div class="ident">expected</div><div class="operator">,</div> <div class="ident">actual</div> <div class="ident">int</div><div class="operator">)</div> <div class="operator">{</div>
+<div class="keyword">func</div> <div class="ident">checkResponseCode</div><div class="operator">(</div><div class="ident">t</div> <div class="ident">testing</div><div class="operator">.</div><div class="ident">TB</div><div class="operator">,</div> <div class="ident">expected</div><div class="operator">,</div> <div class="ident">actual</div> <div class="ident">int</div><div class="operator">)</div> <div class="operator">{</div>
 	<div class="keyword">if</div> <div class="ident">expected</div> <div class="operator">!=</div> <div class="ident">actual</div> <div class="operator">{</div>
 		<div class="ident">t</div><div class="operator">.</div><div class="ident">Errorf</div><div class="operator">(</div><div class="literal">&#34;Expected response code %d. Got %d\n&#34;</div><div class="operator">,</div> <div class="ident">expected</div><div class="operator">,</div> <div class="ident">actual</div><div class="operator">)</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
@@ -183,11 +182,11 @@ limitations under the License.
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>checkServerStart test if the HTTP/HTTPs server can be started properly</p>
+	<td class="doc"><p>TestServerStartHTTP checks if it's possible to start regular HTTP server</p>
 </td>
-	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkServerStart</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">,</div> <div class="ident">https</div> <div class="ident">bool</div><div class="operator">)</div> <div class="operator">{</div>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestServerStartHTTP</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
 	<div class="ident">contentDir</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">RuleContentDirectory</div><div class="operator">{</div><div class="operator">}</div><div class="operator"></div>
-	<div class="ident">helpers</div><div class="operator">.</div><div class="ident">RunTestWithTimeout</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="keyword">func</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">helpers</div><div class="operator">.</div><div class="ident">RunTestWithTimeout</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="keyword">func</div><div class="operator">(</div><div class="ident">t</div> <div class="ident">testing</div><div class="operator">.</div><div class="ident">TB</div><div class="operator">)</div> <div class="operator">{</div>
 		<div class="ident">s</div> <div class="operator">:=</div> <div class="ident">server</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="ident">server</div><div class="operator">.</div><div class="ident">Configuration</div><div class="operator">{</div>
 </code></pre></td>
       </tr>
@@ -198,7 +197,6 @@ limitations under the License.
 	<td class="code"><pre><code>			<div class="ident">Address</div><div class="operator">:</div>   <div class="literal">&#34;:0&#34;</div><div class="operator">,</div>
 			<div class="ident">APIPrefix</div><div class="operator">:</div> <div class="ident">config</div><div class="operator">.</div><div class="ident">APIPrefix</div><div class="operator">,</div>
 			<div class="ident">Debug</div><div class="operator">:</div>     <div class="ident">true</div><div class="operator">,</div>
-			<div class="ident">UseHTTPS</div><div class="operator">:</div>  <div class="ident">https</div><div class="operator">,</div>
 		<div class="operator">}</div><div class="operator">,</div> <div class="ident">nil</div><div class="operator">,</div> <div class="ident">contentDir</div><div class="operator">)</div><div class="operator"></div>
 
 		<div class="keyword">go</div> <div class="keyword">func</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
@@ -237,26 +235,6 @@ limitations under the License.
 			<div class="ident">t</div><div class="operator">.</div><div class="ident">Fatal</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
 		<div class="operator">}</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator">,</div> <div class="literal">5</div><div class="operator">*</div><div class="ident">time</div><div class="operator">.</div><div class="ident">Second</div><div class="operator">)</div><div class="operator"></div>
-<div class="operator">}</div><div class="operator"></div>
-
-</code></pre></td>
-      </tr>
-      
-      <tr class="section">
-	<td class="doc"><p>TestServerStartHTTP checks if it's possible to start regular HTTP server</p>
-</td>
-	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestServerStartHTTP</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
-	<div class="ident">checkServerStart</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">false</div><div class="operator">)</div><div class="operator"></div>
-<div class="operator">}</div><div class="operator"></div>
-
-</code></pre></td>
-      </tr>
-      
-      <tr class="section">
-	<td class="doc"><p>TestServerStartHTTPs checks if it's possible to start HTTPs server</p>
-</td>
-	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestServerStartHTTPs</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
-	<div class="ident">checkServerStart</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">true</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>

@@ -56,11 +56,7 @@ func (server *HTTPServer) Start() error {
 	server.Serv = &http.Server{Addr: address, Handler: router}
 	var err error
 
-	if server.Config.UseHTTPS {
-		err = server.Serv.ListenAndServeTLS("server.crt", "server.key")
-	} else {
-		err = server.Serv.ListenAndServe()
-	}
+	err = server.Serv.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
 		log.Error().Err(err).Msg("Unable to start HTTP/S server")
 		return err

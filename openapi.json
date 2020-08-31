@@ -9,6 +9,7 @@
     "/openapi.json": {
       "get": {
         "summary": "Returns the OpenAPI specification JSON.",
+        "description": "The OpenAPI specification of this REST API service that is represented in formatted and human-readable JSON is available under this endpoint.",
         "operationId": "getOpenApi",
         "responses": {
           "200": {
@@ -50,6 +51,7 @@
     "/groups": {
       "get": {
         "summary": "Returns a list of groups.",
+        "description": "List of all groups represented as an array of objects is returned in a response",
         "operationId": "getGroups",
         "responses": {
           "200": {
@@ -94,6 +96,7 @@
     "/content": {
       "get": {
         "summary": "Returns static content for all rules.",
+        "description": "The static content is taken from the memory cache and send in gob format",
         "operationId": "getContent",
         "responses": {
           "200": {
