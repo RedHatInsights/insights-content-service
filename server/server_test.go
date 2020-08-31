@@ -156,7 +156,7 @@ func TestServeAPISpecFileError(t *testing.T) {
 		Method:   http.MethodGet,
 		Endpoint: config.APISpecFile,
 	}, &helpers.APIResponse{
-		StatusCode: http.StatusOK,
+		StatusCode: http.StatusInternalServerError,
 	})
 }
 
