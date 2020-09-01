@@ -54,19 +54,21 @@ func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http
 }
 
 // getStaticContent returns all the parsed rules' content
-func (server HTTPServer) getStaticContent(writer http.ResponseWriter, request *http.Request) {
-	buffer := new(bytes.Buffer)
-	encoder := gob.NewEncoder(buffer)
+func (server *HTTPServer) getStaticContent(writer http.ResponseWriter, request *http.Request) {
+	if server.encodedContent == nil {
+		buffer := new(bytes.Buffer)
+		encoder := gob.NewEncoder(buffer)
 
-	if err := encoder.Encode(server.Content); err != nil {
-		log.Error().Err(err).Msg("Cannot encode rules static content")
-		handleServerError(err)
-		return
+		if err := encoder.Encode(server.Content); err != nil {
+			log.Error().Err(err).Msg("Cannot encode rules static content")
+			handleServerError(err)
+			return
+		}
+
+		server.encodedContent = buffer.Bytes()
 	}
 
-	encodedContent := buffer.Bytes()
-
-	err := responses.Send(http.StatusOK, writer, encodedContent)
+	err := responses.Send(http.StatusOK, writer, server.encodedContent)
 	if err != nil {
 		log.Error().Err(err)
 		handleServerError(err)
