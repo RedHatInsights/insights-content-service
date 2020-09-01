@@ -39,13 +39,15 @@ func (server *HTTPServer) mainEndpoint(writer http.ResponseWriter, _ *http.Reque
 
 // listOfGroups returns the list of defined groups
 func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http.Request) {
-	groups := make([]groups.Group, 0, len(server.Groups))
+	if server.groupsList == nil {
+		server.groupsList = make([]groups.Group, 0, len(server.Groups))
 
-	for _, group := range server.Groups {
-		groups = append(groups, group)
+		for _, group := range server.Groups {
+			server.groupsList = append(server.groupsList, group)
+		}
 	}
 
-	err := responses.SendOK(writer, responses.BuildOkResponseWithData("groups", groups))
+	err := responses.SendOK(writer, responses.BuildOkResponseWithData("groups", server.groupsList))
 	if err != nil {
 		log.Error().Err(err)
 		handleServerError(err)
