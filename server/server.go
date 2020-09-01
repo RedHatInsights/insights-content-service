@@ -37,6 +37,8 @@ type HTTPServer struct {
 	Groups  map[string]groups.Group
 	Content content.RuleContentDirectory
 	Serv    *http.Server
+
+	encodedContent []byte
 }
 
 // New constructs new implementation of Server interface
