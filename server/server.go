@@ -39,6 +39,7 @@ type HTTPServer struct {
 	Serv    *http.Server
 
 	encodedContent []byte
+	groupsList     []groups.Group
 }
 
 // New constructs new implementation of Server interface
