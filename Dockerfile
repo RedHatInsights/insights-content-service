@@ -20,7 +20,8 @@ ARG GITHUB_API_TOKEN
 
 ENV RULES_CONTENT_DIR=/rules-content \
     RULES_REPO=https://github.com/RedHatInsights/ccx-rules-ocp/ \
-    GIT_ASKPASS=/tmp/git-askpass.sh
+    GIT_ASKPASS=/tmp/git-askpass.sh \
+    CCX_RULES_OCP_VERSION=2020.09.10
 
 USER 0
 
@@ -29,7 +30,7 @@ RUN umask 0022 && \
     mkdir -p $RULES_CONTENT_DIR && \
     echo "echo $GITHUB_API_TOKEN" > $GIT_ASKPASS && \
     chmod +x $GIT_ASKPASS && \
-    git -C $RULES_CONTENT_DIR clone --depth=1 --branch latest-release $RULES_REPO $RULES_CONTENT_DIR && \
+    git -C $RULES_CONTENT_DIR clone --depth=1 --branch $CCX_RULES_OCP_VERSION $RULES_REPO $RULES_CONTENT_DIR && \
     make build && \
     chmod a+x insights-content-service
 
