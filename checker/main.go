@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/RedHatInsights/insights-results-aggregator/logger"
+	"github.com/RedHatInsights/insights-operator-utils/logger"
 	"github.com/rs/zerolog/log"
 
 	"github.com/RedHatInsights/insights-content-service/content"
