@@ -18,8 +18,9 @@ limitations under the License.
 // represents configuration of Content service. This package also contains
 // function named LoadConfiguration that can be used to load configuration from
 // provided configuration file and/or from environment variables. Additionally
-// two specific functions named GetServerConfiguration, GetGroupsConfiguration,
-// and GetContentPathConfiguration are to be used to return specific
+// several specific functions named GetServerConfiguration, GetGroupsConfiguration,
+// GetContentPathConfiguration, GetMetricsConfiguration, GetLoggingConfiguration and
+// GetCloudWatchConfiguration are to be used to return specific
 // configuration options.
 //
 // Generated documentation is available at:
@@ -37,7 +38,7 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
-	"github.com/RedHatInsights/insights-results-aggregator/logger"
+	"github.com/RedHatInsights/insights-operator-utils/logger"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 
@@ -62,8 +63,9 @@ type ConfigStruct struct {
 	Content struct {
 		ContentPath string `mapstructure:"path" toml:"path"`
 	} `mapstructure:"content" toml:"content"`
-	Metrics MetricsConf                 `mapstructure:"metrics" toml:"metrics"`
-	Logging logger.LoggingConfiguration `mapstructure:"logging" toml:"logging"`
+	Metrics    MetricsConf                    `mapstructure:"metrics" toml:"metrics"`
+	Logging    logger.LoggingConfiguration    `mapstructure:"logging" toml:"logging"`
+	CloudWatch logger.CloudWatchConfiguration `mapstructure:"cloudwatch" toml:"cloudwatch"`
 }
 
 // Config has exactly the same structure as *.toml file
@@ -159,6 +161,11 @@ func GetMetricsConfiguration() MetricsConf {
 // GetLoggingConfiguration returns logging configuration
 func GetLoggingConfiguration() logger.LoggingConfiguration {
 	return Config.Logging
+}
+
+// GetCloudWatchConfiguration returns cloudwatch configuration
+func GetCloudWatchConfiguration() logger.CloudWatchConfiguration {
+	return Config.CloudWatch
 }
 
 // checkIfFileExists returns nil if path doesn't exist or isn't a file,
