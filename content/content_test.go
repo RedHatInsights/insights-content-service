@@ -17,13 +17,14 @@ limitations under the License.
 package content_test
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
 
-	"github.com/rs/zerolog"
-	"github.com/stretchr/testify/assert"
-
 	"github.com/RedHatInsights/insights-operator-utils/tests/helpers"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/RedHatInsights/insights-content-service/content"
 )
@@ -80,22 +81,35 @@ func TestContentParseInvalidDir2(t *testing.T) {
 
 // TestContentParseMissingFile checks how missing file(s) in content directory are handled
 func TestContentParseMissingFile(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
 	_, err := content.ParseRuleContentDir("../tests/content/missing/")
 
-	assert.NotNil(t, err)
-	assert.Contains(t, err.Error(), "Missing required file:")
+	assert.Nil(t, err)
+	assert.Contains(t, buf.String(), "Error trying to parse rule in dir")
 }
 
 // TestContentParseBadPluginYAML tests handling bad/incorrect plugin.yaml file
 func TestContentParseBadPluginYAML(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
 	_, err := content.ParseRuleContentDir("../tests/content/bad_plugin/")
-	assert.EqualError(t, err, errYAMLBadToken)
+
+	assert.Nil(t, err)
+	assert.Contains(t, buf.String(), errYAMLBadToken)
 }
 
 // TestContentParseBadMetadataYAML tests handling bad/incorrect metadata.yaml file
 func TestContentParseBadMetadataYAML(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
 	_, err := content.ParseRuleContentDir("../tests/content/bad_metadata/")
-	assert.EqualError(t, err, errYAMLBadToken)
+
+	assert.Nil(t, err)
+	assert.Contains(t, buf.String(), errYAMLBadToken)
 }
 
 // TestContentParseBadMetadataYAML tests handling bad/incorrect metadata.yaml file
