@@ -270,7 +270,8 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 			if pluginYaml, err := os.Stat(path.Join(subdirPath, "plugin.yaml")); err == nil && os.FileMode.IsRegular(pluginYaml.Mode()) {
 				ruleContent, err := parseRuleContent(subdirPath)
 				if err != nil {
-					return err
+					log.Error().Err(err).Msgf("Error trying to parse rule in dir %v", subdirPath)
+					continue
 				}
 
 				err = checkRequiredFields(ruleContent)
@@ -327,16 +328,16 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, error) {
 	// of rules, but they just don't have content yet, so in case the content for them appears.
 	// If we want to parse all of them, the full contentDirPath can be passed to parseRulesInDir without problems
 	externalContentDir := path.Join(contentDirPath, "external")
-	err = parseRulesInDir(externalContentDir, &contentDir.Rules)
 
+	err = parseRulesInDir(externalContentDir, &contentDir.Rules)
 	if err != nil {
 		log.Error().Err(err).Msg("Cannot parse content of external rules")
 		return contentDir, err
 	}
 
 	internalContentDir := path.Join(contentDirPath, "internal")
-	err = parseRulesInDir(internalContentDir, &contentDir.Rules)
 
+	err = parseRulesInDir(internalContentDir, &contentDir.Rules)
 	if err != nil {
 		log.Error().Err(err).Msg("Cannot parse content of internal rules")
 		return contentDir, err

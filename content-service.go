@@ -74,8 +74,8 @@ var (
 func startService() ExitCode {
 	serverCfg := conf.GetServerConfiguration()
 	groupsCfg := conf.GetGroupsConfiguration()
-	groups, err := groups.ParseGroupConfigFile(groupsCfg.ConfigPath)
 
+	parsedGroups, err := groups.ParseGroupConfigFile(groupsCfg.ConfigPath)
 	if err != nil {
 		log.Error().Err(err).Msg("Groups init error")
 		return ExitStatusServerError
@@ -87,14 +87,17 @@ func startService() ExitCode {
 	}
 
 	ruleContentDirPath := conf.GetContentPathConfiguration()
-	contentDir, err := content.ParseRuleContentDir(ruleContentDirPath)
 
+	contentDir, err := content.ParseRuleContentDir(ruleContentDirPath)
 	if osPathError, ok := err.(*os.PathError); ok {
 		log.Error().Err(osPathError).Msg("No rules directory")
 		return ExitStatusReadContentError
+	} else if err != nil {
+		log.Error().Err(err).Msg("error happened during parsing rules content dir")
+		return ExitStatusReadContentError
 	}
 
-	serverInstance = server.New(serverCfg, groups, contentDir)
+	serverInstance = server.New(serverCfg, parsedGroups, contentDir)
 
 	err = serverInstance.Start()
 	if err != nil {
