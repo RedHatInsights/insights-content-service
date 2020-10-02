@@ -46,6 +46,4 @@ remmediations, tags and also groups, that will be consumed primarily by
 * [logger/configuration.go](packages/logger/configuration.html)
 * [logger/logger.go](packages/logger/logger.html)
 * [logger/logger_test.go](packages/logger/logger_test.html)
-* [metrics/metrics_test.go](packages/metrics/metrics_test.html)
-* [metrics/metrics.go](packages/metrics/metrics.html)
 * [checker/main.go](packages/checker/main.html)

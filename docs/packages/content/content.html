@@ -547,8 +547,29 @@ at the moment only checks for Reason field</p>
 		<div class="ident">Rules</div><div class="operator">:</div>  <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">RuleContent</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div>
 	<div class="operator">}</div><div class="operator"></div>
 
-	<div class="ident">externalContentDir</div> <div class="operator">:=</div> <div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">contentDirPath</div><div class="operator">,</div> <div class="literal">&#34;external&#34;</div><div class="operator">)</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>parse external and internal rules separately, because there are currently more categories
+of rules, but they just don't have content yet, so in case the content for them appears.
+If we want to parse all of them, the full contentDirPath can be passed to parseRulesInDir without problems</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">externalContentDir</div> <div class="operator">:=</div> <div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">contentDirPath</div><div class="operator">,</div> <div class="literal">&#34;external&#34;</div><div class="operator">)</div><div class="operator"></div>
 	<div class="ident">err</div> <div class="operator">=</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">externalContentDir</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">contentDir</div><div class="operator">.</div><div class="ident">Rules</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Cannot parse content of external rules&#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">return</div> <div class="ident">contentDir</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="ident">internalContentDir</div> <div class="operator">:=</div> <div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">contentDirPath</div><div class="operator">,</div> <div class="literal">&#34;internal&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">err</div> <div class="operator">=</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">internalContentDir</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">contentDir</div><div class="operator">.</div><div class="ident">Rules</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Cannot parse content of internal rules&#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">return</div> <div class="ident">contentDir</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
 
 	<div class="keyword">return</div> <div class="ident">contentDir</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
