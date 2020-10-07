@@ -21,7 +21,7 @@ ARG GITHUB_API_TOKEN
 ENV RULES_CONTENT_DIR=/rules-content \
     RULES_REPO=https://github.com/RedHatInsights/ccx-rules-ocp/ \
     GIT_ASKPASS=/tmp/git-askpass.sh \
-    CCX_RULES_OCP_VERSION=2020.09.10
+    CCX_RULES_OCP_VERSION=2020.10.07
 
 USER 0
 
