@@ -161,7 +161,7 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 		return nil, &MissingMandatoryFile{FileName: "more_info.md"}
 	}
 
-	ruleContent.MoreInfo = contentRead["more_info.md"]
+	ruleContent.MoreInfo = string(contentRead["more_info.md"])
 
 	if contentRead["plugin.yaml"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "plugin.yaml"}
