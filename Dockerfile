@@ -21,7 +21,7 @@ ARG GITHUB_API_TOKEN
 ENV RULES_CONTENT_DIR=/rules-content \
     RULES_REPO=https://github.com/RedHatInsights/ccx-rules-ocp/ \
     GIT_ASKPASS=/tmp/git-askpass.sh \
-    CCX_RULES_OCP_VERSION=2021.02.03
+    CCX_RULES_OCP_VERSION=2021.02.17
 
 USER 0
 
@@ -44,6 +44,12 @@ COPY --from=builder /rules-content/content/ /rules-content
 # copy tutorial/fake rule to external rules to be hit by all reports
 COPY rules/tutorial/content/ /rules-content/external/rules
 
+RUN curl -L -o /usr/bin/haberdasher \
+https://github.com/RedHatInsights/haberdasher/releases/download/v0.1.3/haberdasher_linux_amd64 && \
+chmod 755 /usr/bin/haberdasher
+
 USER 1001
+
+ENTRYPOINT ["/usr/bin/haberdasher"]
 
 CMD ["/insights-content-service"]
