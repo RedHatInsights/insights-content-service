@@ -45,7 +45,7 @@ COPY --from=builder /rules-content/content/ /rules-content
 COPY rules/tutorial/content/ /rules-content/external/rules
 
 RUN curl -L -o /usr/bin/haberdasher \
-https://github.com/RedHatInsights/haberdasher/releases/latest/download/haberdasher_linux_amd64 && \
+https://github.com/RedHatInsights/haberdasher/releases/download/v0.1.3/haberdasher_linux_amd64 && \
 chmod 755 /usr/bin/haberdasher
 
 USER 1001
