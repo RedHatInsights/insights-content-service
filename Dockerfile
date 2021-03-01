@@ -44,6 +44,12 @@ COPY --from=builder /rules-content/content/ /rules-content
 # copy tutorial/fake rule to external rules to be hit by all reports
 COPY rules/tutorial/content/ /rules-content/external/rules
 
+RUN curl -L -o /usr/bin/haberdasher \
+https://github.com/RedHatInsights/haberdasher/releases/latest/download/haberdasher_linux_amd64 && \
+chmod 755 /usr/bin/haberdasher
+
 USER 1001
+
+ENTRYPOINT ["/usr/bin/haberdasher"]
 
 CMD ["/insights-content-service"]
