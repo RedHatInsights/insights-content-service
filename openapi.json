@@ -5,7 +5,7 @@
     "description": "Insights Content Service",
     "version": "1.0.0"
   },
-  "paths": {
+  "paths": { 
     "/openapi.json": {
       "get": {
         "summary": "Returns the OpenAPI specification JSON.",
@@ -117,6 +117,21 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "summary": "Read all metrics exposed by this service",
+        "description": "Set of metrics provided by insights-operator-utils library providing total number of requests counter, API endpoints response times, and counter of HTTP status code responses. Additionally it is possible to consume all metrics provided by Go runtime. These metrics start with go_ and process_ prefixes.",
+        "operationId": "getMetrics",
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {}
+            },
+            "description": "Default response containing all metrics in semi-structured text format"
           }
         }
       }
