@@ -24,6 +24,16 @@ type MissingMandatoryFile struct {
 	FileName string
 }
 
+// InvalidItem is an error raised when unexpected type is found when parsing
+type InvalidItem struct {
+	FileName string
+	KeyName  string
+}
+
 func (err MissingMandatoryFile) Error() string {
 	return fmt.Sprintf("Missing required file: %s", err.FileName)
+}
+
+func (err InvalidItem) Error() string {
+	return fmt.Sprintf("Invalid item `%s` of file %s", err.KeyName, err.FileName)
 }

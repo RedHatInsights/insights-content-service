@@ -120,7 +120,6 @@ func checkRuleContent(groupCfg groupConfigMap) {
 		if len(ruleContent.ErrorKeys) == 0 {
 			log.Warn().Msgf("rule '%s' contains no error code", ruleName)
 		}
-
 		// For every error code of the rule.
 		for errCode, errContent := range ruleContent.ErrorKeys {
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "condition", errContent.Metadata.Condition)
