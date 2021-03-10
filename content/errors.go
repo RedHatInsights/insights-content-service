@@ -35,5 +35,5 @@ func (err MissingMandatoryFile) Error() string {
 }
 
 func (err InvalidItem) Error() string {
-	return fmt.Sprintf("Invalid item `%s` of file %s", err.KeyName, err.FileName)
+	return fmt.Sprintf("Invalid item `%s` in file %s", err.KeyName, err.FileName)
 }
