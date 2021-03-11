@@ -11,8 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-condition:
- - "a list of conditions"
- - "with two conditions"
-status: "inactive"
-publish_date: "2020-04-03T16:13:30+02:00"
