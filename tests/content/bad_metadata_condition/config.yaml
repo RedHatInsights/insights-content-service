@@ -12,26 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-language: go
-go:
-- 1.14
-
-jobs:
-  include:
-    - stage: style
-      script:
-        - make style
-    - stage: unit tests
-      script:
-        - make test
-        - ./check_coverage.sh
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-    - stage: integration tests
-      script:
-        - make integration_tests
-
-stages:
-  - style
-  - unit tests
-  - integration tests
+impact:
+  One: 1
+  Two: 2
+  Three: 3
+  Four: 4
+  Five: 5
+  Six: 6
+  Seven: 7
+  Eight: 8
+  Nine: 9

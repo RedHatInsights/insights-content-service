@@ -1,4 +1,4 @@
-.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover license before_commit help godoc install_docgo install_addlicense
+.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover license openapi-check before_commit help godoc install_docgo install_addlicense
 
 SOURCES:=$(shell find . -name '*.go')
 BINARY:=insights-content-service
@@ -59,6 +59,9 @@ abcgo: ## Run ABC metrics checker
 	@echo "Run ABC metrics checker"
 	./abcgo.sh
 
+openapi-check:
+	./check_openapi.sh
+
 style: fmt vet lint cyclo shellcheck errcheck goconst gosec ineffassign abcgo ## Run all the formatting related commands (fmt, vet, lint, cyclo) + check shell scripts
 
 run: clean build ## Build the project and executes the binary
@@ -77,7 +80,7 @@ integration_tests: ## Run all integration tests
 license: install_addlicense
 	addlicense -c "Red Hat, Inc" -l "apache" -v ./
 
-before_commit: style test license
+before_commit: style test openapi-check license
 	./check_coverage.sh
 
 help: ## Show this help screen

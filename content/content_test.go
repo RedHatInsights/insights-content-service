@@ -30,6 +30,7 @@ import (
 )
 
 const errYAMLBadToken = "yaml: line 14: found character that cannot start any token"
+const errInvalidCondition = "\"Invalid item `condition` in file metadata.yaml\""
 
 func init() {
 	zerolog.SetGlobalLevel(zerolog.WarnLevel)
@@ -131,4 +132,15 @@ func TestContentParseNoReason(t *testing.T) {
 	noReasonPath := "../tests/content/no_reason"
 	_, err := content.ParseRuleContentDir(noReasonPath)
 	assert.EqualError(t, err, "Missing required file: reason.md")
+}
+
+// TestContentParseBadMetadataCondition tests handling bad/incorrect condition field in metadata.yaml file
+func TestContentParseBadMetadataCondition(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
+	_, err := content.ParseRuleContentDir("../tests/content/bad_metadata_condition/")
+
+	assert.Nil(t, err)
+	assert.Contains(t, buf.String(), errInvalidCondition)
 }

@@ -11,27 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-language: go
-go:
-- 1.14
-
-jobs:
-  include:
-    - stage: style
-      script:
-        - make style
-    - stage: unit tests
-      script:
-        - make test
-        - ./check_coverage.sh
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-    - stage: integration tests
-      script:
-        - make integration_tests
-
-stages:
-  - style
-  - unit tests
-  - integration tests

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Copyright 2020 Red Hat, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,26 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-language: go
-go:
-- 1.14
+echo "Testing OpenAPI specifications file"
+# shellcheck disable=2181
 
-jobs:
-  include:
-    - stage: style
-      script:
-        - make style
-    - stage: unit tests
-      script:
-        - make test
-        - ./check_coverage.sh
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-    - stage: integration tests
-      script:
-        - make integration_tests
-
-stages:
-  - style
-  - unit tests
-  - integration tests
+if docker run --rm -v "${PWD}":/local/:Z openapitools/openapi-generator-cli validate -i ./local/openapi.json; then
+    echo "OpenAPI spec file is OK"
+else
+    echo "OpenAPI spec file validation failed"
+    exit 1
+fi
