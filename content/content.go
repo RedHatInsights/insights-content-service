@@ -79,11 +79,11 @@ func readFilesIntoFileContent(baseDir string, filelist []string) (map[string][]b
 
 // transformMetadataCondition takes content of condition field in metadata.yaml
 // and transforms it into a simple string
-func transformMetadataCondition(parsedCondition *interface{}, errorContent *RuleErrorKeyContent) error {
+func transformMetadataCondition(parsedMetadata *ParsedErrorKeyMetadata, errorContent *RuleErrorKeyContent) error {
+	parsedCondition := &parsedMetadata.Condition
 	switch (*parsedCondition).(type) {
 	case string:
 		errorContent.Metadata.Condition = (*parsedCondition).(string)
-		return nil
 	case []interface{}:
 		parsedSlice := (*parsedCondition).([]interface{})
 		conditions := make([]string, len(parsedSlice))
@@ -95,10 +95,17 @@ func transformMetadataCondition(parsedCondition *interface{}, errorContent *Rule
 			conditions[index] = condition
 		}
 		errorContent.Metadata.Condition = strings.Join(conditions, "; ")
-		return nil
 	default:
 		return &InvalidItem{FileName: "metadata.yaml", KeyName: "condition"}
 	}
+
+	errorContent.Metadata.Description = parsedMetadata.Description
+	errorContent.Metadata.Impact = parsedMetadata.Impact
+	errorContent.Metadata.Likelihood = parsedMetadata.Likelihood
+	errorContent.Metadata.PublishDate = parsedMetadata.PublishDate
+	errorContent.Metadata.Status = parsedMetadata.Status
+	errorContent.Metadata.Tags = parsedMetadata.Tags
+	return nil
 }
 
 // createErrorContents takes a mapping of files into contents and perform
@@ -130,7 +137,7 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 	}
 
 	if parsedMetadata.Condition != nil {
-		err := transformMetadataCondition(&parsedMetadata.Condition, &errorContent)
+		err := transformMetadataCondition(&parsedMetadata, &errorContent)
 		return &errorContent, err
 	}
 	return &errorContent, nil
