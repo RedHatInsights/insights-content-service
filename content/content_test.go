@@ -44,8 +44,11 @@ func TestContentParseOK(t *testing.T) {
 	rule1Content, exists := con.Rules["rule1"]
 	assert.True(t, exists, "'rule1' content is missing")
 
-	_, exists = rule1Content.ErrorKeys["err_key"]
+	errKey, exists := rule1Content.ErrorKeys["err_key"]
 	assert.True(t, exists, "'err_key' error content is missing")
+
+	condition := errKey.Metadata.Condition
+	assert.Equal(t, "a simple condition", condition, "'rule1' condition does not have expected content")
 }
 
 // TestContentParseOKNoContent checks that parsing content when there is no rule
