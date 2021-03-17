@@ -80,25 +80,25 @@ func readFilesIntoFileContent(baseDir string, filelist []string) (map[string][]b
 // transformMetadataCondition takes content of condition field in metadata.yaml
 // and transforms it into a simple string
 func transformMetadataCondition(parsedMetadata *ParsedErrorKeyMetadata, errorContent *RuleErrorKeyContent) error {
-	parsedCondition := &parsedMetadata.Condition
-	switch (*parsedCondition).(type) {
-	case string:
-		errorContent.Metadata.Condition = (*parsedCondition).(string)
-	case []interface{}:
-		parsedSlice := (*parsedCondition).([]interface{})
-		conditions := make([]string, len(parsedSlice))
-		for index, item := range parsedSlice {
-			condition, ok := item.(string)
-			if !ok {
-				return &InvalidItem{FileName: "metadata.yaml", KeyName: "condition"}
+	if parsedCondition := parsedMetadata.Condition; parsedCondition != nil {
+		switch (parsedCondition).(type) {
+		case string:
+			errorContent.Metadata.Condition = (parsedCondition).(string)
+		case []interface{}:
+			parsedSlice := (parsedCondition).([]interface{})
+			conditions := make([]string, len(parsedSlice))
+			for index, item := range parsedSlice {
+				condition, ok := item.(string)
+				if !ok {
+					return &InvalidItem{FileName: "metadata.yaml", KeyName: "condition"}
+				}
+				conditions[index] = condition
 			}
-			conditions[index] = condition
+			errorContent.Metadata.Condition = strings.Join(conditions, "; ")
+		default:
+			return &InvalidItem{FileName: "metadata.yaml", KeyName: "condition"}
 		}
-		errorContent.Metadata.Condition = strings.Join(conditions, "; ")
-	default:
-		return &InvalidItem{FileName: "metadata.yaml", KeyName: "condition"}
 	}
-
 	errorContent.Metadata.Description = parsedMetadata.Description
 	errorContent.Metadata.Impact = parsedMetadata.Impact
 	errorContent.Metadata.Likelihood = parsedMetadata.Likelihood
@@ -136,11 +136,8 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 		return nil, err
 	}
 
-	if parsedMetadata.Condition != nil {
-		err := transformMetadataCondition(&parsedMetadata, &errorContent)
-		return &errorContent, err
-	}
-	return &errorContent, nil
+	err := transformMetadataCondition(&parsedMetadata, &errorContent)
+	return &errorContent, err
 
 }
 
