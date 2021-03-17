@@ -147,3 +147,18 @@ func TestContentParseBadMetadataCondition(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Contains(t, buf.String(), errInvalidCondition)
 }
+
+// TestContentParseMetadataEmptyConditionOK tests handling empty condition field in metadata.yaml file
+func TestContentParseMetadataEmptyConditionOK(t *testing.T) {
+	con, err := content.ParseRuleContentDir("../tests/content/ok_metadata_empty_condition/")
+	helpers.FailOnError(t, err)
+
+	rule1Content, exists := con.Rules["rule1"]
+	assert.True(t, exists, "'rule1' content is missing")
+
+	errKey, exists := rule1Content.ErrorKeys["err_key"]
+	assert.True(t, exists, "'err_key' error content is missing")
+
+	condition := errKey.Metadata.Condition
+	assert.Equal(t, "", condition, "metadata.yaml with empty condition field could not be parsed correctly")
+}
