@@ -99,6 +99,7 @@ func transformMetadataCondition(parsedMetadata *ParsedErrorKeyMetadata, errorCon
 			return &InvalidItem{FileName: "metadata.yaml", KeyName: "condition"}
 		}
 	}
+
 	errorContent.Metadata.Description = parsedMetadata.Description
 	errorContent.Metadata.Impact = parsedMetadata.Impact
 	errorContent.Metadata.Likelihood = parsedMetadata.Likelihood
