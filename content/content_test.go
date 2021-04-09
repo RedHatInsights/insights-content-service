@@ -30,6 +30,7 @@ import (
 )
 
 const errYAMLBadToken = "yaml: line 14: found character that cannot start any token"
+const errInvalidCondition = "\"Invalid item `condition` in file metadata.yaml\""
 
 func init() {
 	zerolog.SetGlobalLevel(zerolog.WarnLevel)
@@ -43,8 +44,11 @@ func TestContentParseOK(t *testing.T) {
 	rule1Content, exists := con.Rules["rule1"]
 	assert.True(t, exists, "'rule1' content is missing")
 
-	_, exists = rule1Content.ErrorKeys["err_key"]
+	errKey, exists := rule1Content.ErrorKeys["err_key"]
 	assert.True(t, exists, "'err_key' error content is missing")
+
+	condition := errKey.Metadata.Condition
+	assert.Equal(t, "a simple condition", condition, "'rule1' condition does not have expected content")
 }
 
 // TestContentParseOKNoContent checks that parsing content when there is no rule
@@ -131,4 +135,30 @@ func TestContentParseNoReason(t *testing.T) {
 	noReasonPath := "../tests/content/no_reason"
 	_, err := content.ParseRuleContentDir(noReasonPath)
 	assert.EqualError(t, err, "Missing required file: reason.md")
+}
+
+// TestContentParseBadMetadataCondition tests handling bad/incorrect condition field in metadata.yaml file
+func TestContentParseBadMetadataCondition(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
+	_, err := content.ParseRuleContentDir("../tests/content/bad_metadata_condition/")
+
+	assert.Nil(t, err)
+	assert.Contains(t, buf.String(), errInvalidCondition)
+}
+
+// TestContentParseMetadataEmptyConditionOK tests handling empty condition field in metadata.yaml file
+func TestContentParseMetadataEmptyConditionOK(t *testing.T) {
+	con, err := content.ParseRuleContentDir("../tests/content/ok_metadata_empty_condition/")
+	helpers.FailOnError(t, err)
+
+	rule1Content, exists := con.Rules["rule1"]
+	assert.True(t, exists, "'rule1' content is missing")
+
+	errKey, exists := rule1Content.ErrorKeys["err_key"]
+	assert.True(t, exists, "'err_key' error content is missing")
+
+	condition := errKey.Metadata.Condition
+	assert.Equal(t, "", condition, "metadata.yaml with empty condition field could not be parsed correctly")
 }
