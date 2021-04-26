@@ -55,6 +55,8 @@ func initLogger() {
 			LoggingToCloudWatchEnabled: false,
 		},
 		logger.CloudWatchConfiguration{},
+		logger.SentryLoggingConfiguration{},
+		logger.KafkaZerologConfiguration{},
 	)
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to initialize zerolog")
