@@ -18,6 +18,7 @@ limitations under the License.
 package content
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -27,6 +28,12 @@ import (
 	"github.com/RedHatInsights/insights-operator-utils/types"
 	"github.com/go-yaml/yaml"
 	"github.com/rs/zerolog/log"
+)
+
+// Logging messages
+const (
+	separator          = "------------------------------------------------------------"
+	directoryAttribute = "directory"
 )
 
 type (
@@ -262,9 +269,11 @@ func parseGlobalContentConfig(configPath string) (GlobalRuleConfig, error) {
 	return conf, err
 }
 
-// parseRulesInDir finds all rules and their content in the specified
+// parseRulesInDir function finds all rules and their content in the specified
 // directory and stores the content in the provided map.
-func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
+// This function also aggregates list of rules with improper content.
+func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent, invalidRules *[]string) error {
+	// read the whole content of specified directory
 	entries, err := ioutil.ReadDir(dirPath)
 	if err != nil {
 		return err
@@ -281,9 +290,14 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 			// should never directly contain any rule content and because the name
 			// of the directory is much easier to access here without an extra call.
 			if pluginYaml, err := os.Stat(path.Join(subdirPath, "plugin.yaml")); err == nil && os.FileMode.IsRegular(pluginYaml.Mode()) {
+				log.Info().Str(directoryAttribute, subdirPath).Msg("plugin.yaml found")
+
+				// let's accumulate error report with context (in which subdir it occured)
 				ruleContent, err := parseRuleContent(subdirPath)
 				if err != nil {
 					log.Error().Err(err).Msgf("Error trying to parse rule in dir %v", subdirPath)
+					message := fmt.Sprintf("Directory: %s, Error: %v", subdirPath, err)
+					*invalidRules = append(*invalidRules, message)
 					continue
 				}
 
@@ -299,7 +313,8 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent) error {
 				(*contentMap)[name] = ruleContent
 			} else {
 				// Otherwise, descend into the sub-directory and see if there is any rule content.
-				if err := parseRulesInDir(subdirPath, contentMap); err != nil {
+				log.Info().Str(directoryAttribute, subdirPath).Msg("descending into sub-directory")
+				if err := parseRulesInDir(subdirPath, contentMap, invalidRules); err != nil {
 					return err
 				}
 			}
@@ -325,6 +340,14 @@ func checkRequiredFields(rule RuleContent) error {
 	return nil
 }
 
+func printInvalidRules(invalidRules []string) {
+	log.Info().Msg(separator)
+	log.Error().Msg("List of invalid rules")
+	for i, rule := range invalidRules {
+		log.Error().Int("#", i+1).Str("Error", rule).Msg("Invalid rule")
+	}
+}
+
 // ParseRuleContentDir finds all rule content in a directory and parses it.
 func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, error) {
 	globalConfig, err := parseGlobalContentConfig(path.Join(contentDirPath, "config.yaml"))
@@ -342,18 +365,37 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, error) {
 	// If we want to parse all of them, the full contentDirPath can be passed to parseRulesInDir without problems
 	externalContentDir := path.Join(contentDirPath, "external")
 
-	err = parseRulesInDir(externalContentDir, &contentDir.Rules)
+	// map used to store invalid rules
+	invalidRules := make([]string, 0)
+
+	err = parseRulesInDir(externalContentDir, &contentDir.Rules, &invalidRules)
 	if err != nil {
 		log.Error().Err(err).Msg("Cannot parse content of external rules")
 		return contentDir, err
 	}
+	log.Info().
+		Int("invalid external rules", len(invalidRules)).
+		Msg("Parsing external rules: done")
+
+	if len(invalidRules) > 0 {
+		printInvalidRules(invalidRules)
+	}
 
 	internalContentDir := path.Join(contentDirPath, "internal")
 
-	err = parseRulesInDir(internalContentDir, &contentDir.Rules)
+	invalidRules = make([]string, 0)
+
+	err = parseRulesInDir(internalContentDir, &contentDir.Rules, &invalidRules)
 	if err != nil {
 		log.Error().Err(err).Msg("Cannot parse content of internal rules")
 		return contentDir, err
+	}
+	log.Info().
+		Int("invalid internal rules", len(invalidRules)).
+		Msg("Parsing internal rules: done")
+
+	if len(invalidRules) > 0 {
+		printInvalidRules(invalidRules)
 	}
 
 	return contentDir, err

@@ -184,6 +184,8 @@ limitations under the License.</p>
 			<div class="ident">LoggingToCloudWatchEnabled</div><div class="operator">:</div> <div class="ident">false</div><div class="operator">,</div>
 		<div class="operator">}</div><div class="operator">,</div>
 		<div class="ident">logger</div><div class="operator">.</div><div class="ident">CloudWatchConfiguration</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div>
+		<div class="ident">logger</div><div class="operator">.</div><div class="ident">SentryLoggingConfiguration</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div>
+		<div class="ident">logger</div><div class="operator">.</div><div class="ident">KafkaZerologConfiguration</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div>
 	<div class="operator">)</div><div class="operator"></div>
 	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 		<div class="ident">log</div><div class="operator">.</div><div class="ident">Fatal</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;unable to initialize zerolog&#34;</div><div class="operator">)</div><div class="operator"></div>

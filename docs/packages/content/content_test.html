@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- Copyright 2020 Red Hat, Inc
+ Copyright 2021 Red Hat, Inc
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -136,18 +136,20 @@ limitations under the License.
 <div class="keyword">package</div> <div class="ident">content_test</div><div class="operator"></div>
 
 <div class="keyword">import</div> <div class="operator">(</div>
+	<div class="literal">&#34;bytes&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;fmt&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;testing&#34;</div><div class="operator"></div>
 
-	<div class="literal">&#34;github.com/rs/zerolog&#34;</div><div class="operator"></div>
-	<div class="literal">&#34;github.com/stretchr/testify/assert&#34;</div><div class="operator"></div>
-
 	<div class="literal">&#34;github.com/RedHatInsights/insights-operator-utils/tests/helpers&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;github.com/rs/zerolog&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;github.com/rs/zerolog/log&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;github.com/stretchr/testify/assert&#34;</div><div class="operator"></div>
 
 	<div class="literal">&#34;github.com/RedHatInsights/insights-content-service/content&#34;</div><div class="operator"></div>
 <div class="operator">)</div><div class="operator"></div>
 
 <div class="keyword">const</div> <div class="ident">errYAMLBadToken</div> <div class="operator">=</div> <div class="literal">&#34;yaml: line 14: found character that cannot start any token&#34;</div><div class="operator"></div>
+<div class="keyword">const</div> <div class="ident">errInvalidCondition</div> <div class="operator">=</div> <div class="literal">&#34;\&#34;Invalid item `condition` in file metadata.yaml\&#34;&#34;</div><div class="operator"></div>
 
 <div class="keyword">func</div> <div class="ident">init</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
 	<div class="ident">zerolog</div><div class="operator">.</div><div class="ident">SetGlobalLevel</div><div class="operator">(</div><div class="ident">zerolog</div><div class="operator">.</div><div class="ident">WarnLevel</div><div class="operator">)</div><div class="operator"></div>
@@ -166,8 +168,11 @@ limitations under the License.
 	<div class="ident">rule1Content</div><div class="operator">,</div> <div class="ident">exists</div> <div class="operator">:=</div> <div class="ident">con</div><div class="operator">.</div><div class="ident">Rules</div><div class="operator">[</div><div class="literal">&#34;rule1&#34;</div><div class="operator">]</div><div class="operator"></div>
 	<div class="ident">assert</div><div class="operator">.</div><div class="ident">True</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">exists</div><div class="operator">,</div> <div class="literal">&#34;&#39;rule1&#39; content is missing&#34;</div><div class="operator">)</div><div class="operator"></div>
 
-	<div class="ident">_</div><div class="operator">,</div> <div class="ident">exists</div> <div class="operator">=</div> <div class="ident">rule1Content</div><div class="operator">.</div><div class="ident">ErrorKeys</div><div class="operator">[</div><div class="literal">&#34;err_key&#34;</div><div class="operator">]</div><div class="operator"></div>
+	<div class="ident">errKey</div><div class="operator">,</div> <div class="ident">exists</div> <div class="operator">:=</div> <div class="ident">rule1Content</div><div class="operator">.</div><div class="ident">ErrorKeys</div><div class="operator">[</div><div class="literal">&#34;err_key&#34;</div><div class="operator">]</div><div class="operator"></div>
 	<div class="ident">assert</div><div class="operator">.</div><div class="ident">True</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">exists</div><div class="operator">,</div> <div class="literal">&#34;&#39;err_key&#39; error content is missing&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">condition</div> <div class="operator">:=</div> <div class="ident">errKey</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Condition</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Equal</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="literal">&#34;a simple condition&#34;</div><div class="operator">,</div> <div class="ident">condition</div><div class="operator">,</div> <div class="literal">&#34;&#39;rule1&#39; condition does not have expected content&#34;</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -239,10 +244,13 @@ content available, but the file structure is otherwise okay, succeeds.</p>
 	<td class="doc"><p>TestContentParseMissingFile checks how missing file(s) in content directory are handled</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestContentParseMissingFile</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">buf</div> <div class="operator">:=</div> <div class="ident">new</div><div class="operator">(</div><div class="ident">bytes</div><div class="operator">.</div><div class="ident">Buffer</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Logger</div> <div class="operator">=</div> <div class="ident">zerolog</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="ident">buf</div><div class="operator">)</div><div class="operator"></div>
+
 	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="literal">&#34;../tests/content/missing/&#34;</div><div class="operator">)</div><div class="operator"></div>
 
-	<div class="ident">assert</div><div class="operator">.</div><div class="ident">NotNil</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
-	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Contains</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">,</div> <div class="literal">&#34;Missing required file:&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Nil</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Contains</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">buf</div><div class="operator">.</div><div class="ident">String</div><div class="operator">(</div><div class="operator">)</div><div class="operator">,</div> <div class="literal">&#34;Error trying to parse rule in dir&#34;</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -252,8 +260,13 @@ content available, but the file structure is otherwise okay, succeeds.</p>
 	<td class="doc"><p>TestContentParseBadPluginYAML tests handling bad/incorrect plugin.yaml file</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestContentParseBadPluginYAML</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">buf</div> <div class="operator">:=</div> <div class="ident">new</div><div class="operator">(</div><div class="ident">bytes</div><div class="operator">.</div><div class="ident">Buffer</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Logger</div> <div class="operator">=</div> <div class="ident">zerolog</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="ident">buf</div><div class="operator">)</div><div class="operator"></div>
+
 	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="literal">&#34;../tests/content/bad_plugin/&#34;</div><div class="operator">)</div><div class="operator"></div>
-	<div class="ident">assert</div><div class="operator">.</div><div class="ident">EqualError</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">,</div> <div class="ident">errYAMLBadToken</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Nil</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Contains</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">buf</div><div class="operator">.</div><div class="ident">String</div><div class="operator">(</div><div class="operator">)</div><div class="operator">,</div> <div class="ident">errYAMLBadToken</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -263,8 +276,13 @@ content available, but the file structure is otherwise okay, succeeds.</p>
 	<td class="doc"><p>TestContentParseBadMetadataYAML tests handling bad/incorrect metadata.yaml file</p>
 </td>
 	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestContentParseBadMetadataYAML</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">buf</div> <div class="operator">:=</div> <div class="ident">new</div><div class="operator">(</div><div class="ident">bytes</div><div class="operator">.</div><div class="ident">Buffer</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Logger</div> <div class="operator">=</div> <div class="ident">zerolog</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="ident">buf</div><div class="operator">)</div><div class="operator"></div>
+
 	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="literal">&#34;../tests/content/bad_metadata/&#34;</div><div class="operator">)</div><div class="operator"></div>
-	<div class="ident">assert</div><div class="operator">.</div><div class="ident">EqualError</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">,</div> <div class="ident">errYAMLBadToken</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Nil</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Contains</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">buf</div><div class="operator">.</div><div class="ident">String</div><div class="operator">(</div><div class="operator">)</div><div class="operator">,</div> <div class="ident">errYAMLBadToken</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -301,6 +319,42 @@ content available, but the file structure is otherwise okay, succeeds.</p>
 	<div class="ident">noReasonPath</div> <div class="operator">:=</div> <div class="literal">&#34;../tests/content/no_reason&#34;</div><div class="operator"></div>
 	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="ident">noReasonPath</div><div class="operator">)</div><div class="operator"></div>
 	<div class="ident">assert</div><div class="operator">.</div><div class="ident">EqualError</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">,</div> <div class="literal">&#34;Missing required file: reason.md&#34;</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>TestContentParseBadMetadataCondition tests handling bad/incorrect condition field in metadata.yaml file</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestContentParseBadMetadataCondition</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">buf</div> <div class="operator">:=</div> <div class="ident">new</div><div class="operator">(</div><div class="ident">bytes</div><div class="operator">.</div><div class="ident">Buffer</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Logger</div> <div class="operator">=</div> <div class="ident">zerolog</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="ident">buf</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">_</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="literal">&#34;../tests/content/bad_metadata_condition/&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Nil</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Contains</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">buf</div><div class="operator">.</div><div class="ident">String</div><div class="operator">(</div><div class="operator">)</div><div class="operator">,</div> <div class="ident">errInvalidCondition</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>TestContentParseMetadataEmptyConditionOK tests handling empty condition field in metadata.yaml file</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">TestContentParseMetadataEmptyConditionOK</div><div class="operator">(</div><div class="ident">t</div> <div class="operator">*</div><div class="ident">testing</div><div class="operator">.</div><div class="ident">T</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">con</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">content</div><div class="operator">.</div><div class="ident">ParseRuleContentDir</div><div class="operator">(</div><div class="literal">&#34;../tests/content/ok_metadata_empty_condition/&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">helpers</div><div class="operator">.</div><div class="ident">FailOnError</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">rule1Content</div><div class="operator">,</div> <div class="ident">exists</div> <div class="operator">:=</div> <div class="ident">con</div><div class="operator">.</div><div class="ident">Rules</div><div class="operator">[</div><div class="literal">&#34;rule1&#34;</div><div class="operator">]</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">True</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">exists</div><div class="operator">,</div> <div class="literal">&#34;&#39;rule1&#39; content is missing&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">errKey</div><div class="operator">,</div> <div class="ident">exists</div> <div class="operator">:=</div> <div class="ident">rule1Content</div><div class="operator">.</div><div class="ident">ErrorKeys</div><div class="operator">[</div><div class="literal">&#34;err_key&#34;</div><div class="operator">]</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">True</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="ident">exists</div><div class="operator">,</div> <div class="literal">&#34;&#39;err_key&#39; error content is missing&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">condition</div> <div class="operator">:=</div> <div class="ident">errKey</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Condition</div><div class="operator"></div>
+	<div class="ident">assert</div><div class="operator">.</div><div class="ident">Equal</div><div class="operator">(</div><div class="ident">t</div><div class="operator">,</div> <div class="literal">&#34;&#34;</div><div class="operator">,</div> <div class="ident">condition</div><div class="operator">,</div> <div class="literal">&#34;metadata.yaml with empty condition field could not be parsed correctly&#34;</div><div class="operator">)</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
