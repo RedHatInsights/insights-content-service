@@ -142,6 +142,7 @@ limitations under the License.
 	<td class="code"><pre><code><div class="keyword">package</div> <div class="ident">content</div><div class="operator"></div>
 
 <div class="keyword">import</div> <div class="operator">(</div>
+	<div class="literal">&#34;fmt&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;io/ioutil&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;os&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;path&#34;</div><div class="operator"></div>
@@ -151,6 +152,17 @@ limitations under the License.
 	<div class="literal">&#34;github.com/RedHatInsights/insights-operator-utils/types&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;github.com/go-yaml/yaml&#34;</div><div class="operator"></div>
 	<div class="literal">&#34;github.com/rs/zerolog/log&#34;</div><div class="operator"></div>
+<div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>Logging messages</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">const</div> <div class="operator">(</div>
+	<div class="ident">separator</div>          <div class="operator">=</div> <div class="literal">&#34;------------------------------------------------------------&#34;</div><div class="operator"></div>
+	<div class="ident">directoryAttribute</div> <div class="operator">=</div> <div class="literal">&#34;directory&#34;</div><div class="operator"></div>
 <div class="operator">)</div><div class="operator"></div>
 
 <div class="keyword">type</div> <div class="operator">(</div>
@@ -248,26 +260,33 @@ in the base directory and saves them via the specified byte slice pointers.</p>
 	<td class="doc"><p>transformMetadataCondition takes content of condition field in metadata.yaml
 and transforms it into a simple string</p>
 </td>
-	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">transformMetadataCondition</div><div class="operator">(</div><div class="ident">parsedCondition</div> <div class="operator">*</div><div class="keyword">interface</div><div class="operator">{</div><div class="operator">}</div><div class="operator">,</div> <div class="ident">errorContent</div> <div class="operator">*</div><div class="ident">RuleErrorKeyContent</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
-	<div class="keyword">switch</div> <div class="operator">(</div><div class="operator">*</div><div class="ident">parsedCondition</div><div class="operator">)</div><div class="operator">.</div><div class="operator">(</div><div class="keyword">type</div><div class="operator">)</div> <div class="operator">{</div>
-	<div class="keyword">case</div> <div class="ident">string</div><div class="operator">:</div>
-		<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Condition</div> <div class="operator">=</div> <div class="operator">(</div><div class="operator">*</div><div class="ident">parsedCondition</div><div class="operator">)</div><div class="operator">.</div><div class="operator">(</div><div class="ident">string</div><div class="operator">)</div><div class="operator"></div>
-		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
-	<div class="keyword">case</div> <div class="operator">[</div><div class="operator">]</div><div class="keyword">interface</div><div class="operator">{</div><div class="operator">}</div><div class="operator">:</div>
-		<div class="ident">parsedSlice</div> <div class="operator">:=</div> <div class="operator">(</div><div class="operator">*</div><div class="ident">parsedCondition</div><div class="operator">)</div><div class="operator">.</div><div class="operator">(</div><div class="operator">[</div><div class="operator">]</div><div class="keyword">interface</div><div class="operator">{</div><div class="operator">}</div><div class="operator">)</div><div class="operator"></div>
-		<div class="ident">conditions</div> <div class="operator">:=</div> <div class="ident">make</div><div class="operator">(</div><div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">,</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">parsedSlice</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
-		<div class="keyword">for</div> <div class="ident">index</div><div class="operator">,</div> <div class="ident">item</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">parsedSlice</div> <div class="operator">{</div>
-			<div class="ident">condition</div><div class="operator">,</div> <div class="ident">ok</div> <div class="operator">:=</div> <div class="ident">item</div><div class="operator">.</div><div class="operator">(</div><div class="ident">string</div><div class="operator">)</div><div class="operator"></div>
-			<div class="keyword">if</div> <div class="operator">!</div><div class="ident">ok</div> <div class="operator">{</div>
-				<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">InvalidItem</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">,</div> <div class="ident">KeyName</div><div class="operator">:</div> <div class="literal">&#34;condition&#34;</div><div class="operator">}</div><div class="operator"></div>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">transformMetadataCondition</div><div class="operator">(</div><div class="ident">parsedMetadata</div> <div class="operator">*</div><div class="ident">ParsedErrorKeyMetadata</div><div class="operator">,</div> <div class="ident">errorContent</div> <div class="operator">*</div><div class="ident">RuleErrorKeyContent</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
+	<div class="keyword">if</div> <div class="ident">parsedCondition</div> <div class="operator">:=</div> <div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">Condition</div><div class="operator">;</div> <div class="ident">parsedCondition</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="keyword">switch</div> <div class="operator">(</div><div class="ident">parsedCondition</div><div class="operator">)</div><div class="operator">.</div><div class="operator">(</div><div class="keyword">type</div><div class="operator">)</div> <div class="operator">{</div>
+		<div class="keyword">case</div> <div class="ident">string</div><div class="operator">:</div>
+			<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Condition</div> <div class="operator">=</div> <div class="operator">(</div><div class="ident">parsedCondition</div><div class="operator">)</div><div class="operator">.</div><div class="operator">(</div><div class="ident">string</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">case</div> <div class="operator">[</div><div class="operator">]</div><div class="keyword">interface</div><div class="operator">{</div><div class="operator">}</div><div class="operator">:</div>
+			<div class="ident">parsedSlice</div> <div class="operator">:=</div> <div class="operator">(</div><div class="ident">parsedCondition</div><div class="operator">)</div><div class="operator">.</div><div class="operator">(</div><div class="operator">[</div><div class="operator">]</div><div class="keyword">interface</div><div class="operator">{</div><div class="operator">}</div><div class="operator">)</div><div class="operator"></div>
+			<div class="ident">conditions</div> <div class="operator">:=</div> <div class="ident">make</div><div class="operator">(</div><div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">,</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">parsedSlice</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+			<div class="keyword">for</div> <div class="ident">index</div><div class="operator">,</div> <div class="ident">item</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">parsedSlice</div> <div class="operator">{</div>
+				<div class="ident">condition</div><div class="operator">,</div> <div class="ident">ok</div> <div class="operator">:=</div> <div class="ident">item</div><div class="operator">.</div><div class="operator">(</div><div class="ident">string</div><div class="operator">)</div><div class="operator"></div>
+				<div class="keyword">if</div> <div class="operator">!</div><div class="ident">ok</div> <div class="operator">{</div>
+					<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">InvalidItem</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">,</div> <div class="ident">KeyName</div><div class="operator">:</div> <div class="literal">&#34;condition&#34;</div><div class="operator">}</div><div class="operator"></div>
+				<div class="operator">}</div><div class="operator"></div>
+				<div class="ident">conditions</div><div class="operator">[</div><div class="ident">index</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">condition</div><div class="operator"></div>
 			<div class="operator">}</div><div class="operator"></div>
-			<div class="ident">conditions</div><div class="operator">[</div><div class="ident">index</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">condition</div><div class="operator"></div>
+			<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Condition</div> <div class="operator">=</div> <div class="ident">strings</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">conditions</div><div class="operator">,</div> <div class="literal">&#34;; &#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">default</div><div class="operator">:</div>
+			<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">InvalidItem</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">,</div> <div class="ident">KeyName</div><div class="operator">:</div> <div class="literal">&#34;condition&#34;</div><div class="operator">}</div><div class="operator"></div>
 		<div class="operator">}</div><div class="operator"></div>
-		<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Condition</div> <div class="operator">=</div> <div class="ident">strings</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">conditions</div><div class="operator">,</div> <div class="literal">&#34;; &#34;</div><div class="operator">)</div><div class="operator"></div>
-		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
-	<div class="keyword">default</div><div class="operator">:</div>
-		<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">InvalidItem</div><div class="operator">{</div><div class="ident">FileName</div><div class="operator">:</div> <div class="literal">&#34;metadata.yaml&#34;</div><div class="operator">,</div> <div class="ident">KeyName</div><div class="operator">:</div> <div class="literal">&#34;condition&#34;</div><div class="operator">}</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
+	<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Description</div> <div class="operator">=</div> <div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">Description</div><div class="operator"></div>
+	<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Impact</div> <div class="operator">=</div> <div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">Impact</div><div class="operator"></div>
+	<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Likelihood</div> <div class="operator">=</div> <div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">Likelihood</div><div class="operator"></div>
+	<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">PublishDate</div> <div class="operator">=</div> <div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">PublishDate</div><div class="operator"></div>
+	<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Status</div> <div class="operator">=</div> <div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">Status</div><div class="operator"></div>
+	<div class="ident">errorContent</div><div class="operator">.</div><div class="ident">Metadata</div><div class="operator">.</div><div class="ident">Tags</div> <div class="operator">=</div> <div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">Tags</div><div class="operator"></div>
+	<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
 </code></pre></td>
@@ -303,11 +322,8 @@ some checks about it</p>
 		<div class="keyword">return</div> <div class="ident">nil</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
 
-	<div class="keyword">if</div> <div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">Condition</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
-		<div class="ident">err</div> <div class="operator">:=</div> <div class="ident">transformMetadataCondition</div><div class="operator">(</div><div class="operator">&amp;</div><div class="ident">parsedMetadata</div><div class="operator">.</div><div class="ident">Condition</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">errorContent</div><div class="operator">)</div><div class="operator"></div>
-		<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">errorContent</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
-	<div class="operator">}</div><div class="operator"></div>
-	<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">errorContent</div><div class="operator">,</div> <div class="ident">nil</div><div class="operator"></div>
+	<div class="ident">err</div> <div class="operator">:=</div> <div class="ident">transformMetadataCondition</div><div class="operator">(</div><div class="operator">&amp;</div><div class="ident">parsedMetadata</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">errorContent</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">return</div> <div class="operator">&amp;</div><div class="ident">errorContent</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 
 <div class="operator">}</div><div class="operator"></div>
 
@@ -461,11 +477,18 @@ metadata used by all rule content, such as impact dictionary.</p>
       </tr>
       
       <tr class="section">
-	<td class="doc"><p>parseRulesInDir finds all rules and their content in the specified
-directory and stores the content in the provided map.</p>
+	<td class="doc"><p>parseRulesInDir function finds all rules and their content in the specified
+directory and stores the content in the provided map.
+This function also aggregates list of rules with improper content.</p>
 </td>
-	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">dirPath</div> <div class="ident">string</div><div class="operator">,</div> <div class="ident">contentMap</div> <div class="operator">*</div><div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">RuleContent</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
-	<div class="ident">entries</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">ioutil</div><div class="operator">.</div><div class="ident">ReadDir</div><div class="operator">(</div><div class="ident">dirPath</div><div class="operator">)</div><div class="operator"></div>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">dirPath</div> <div class="ident">string</div><div class="operator">,</div> <div class="ident">contentMap</div> <div class="operator">*</div><div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">RuleContent</div><div class="operator">,</div> <div class="ident">invalidRules</div> <div class="operator">*</div><div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>read the whole content of specified directory</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">entries</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">ioutil</div><div class="operator">.</div><div class="ident">ReadDir</div><div class="operator">(</div><div class="ident">dirPath</div><div class="operator">)</div><div class="operator"></div>
 	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 		<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
@@ -486,9 +509,19 @@ should never directly contain any rule content and because the name
 of the directory is much easier to access here without an extra call.</p>
 </td>
 	<td class="code"><pre><code>			<div class="keyword">if</div> <div class="ident">pluginYaml</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">os</div><div class="operator">.</div><div class="ident">Stat</div><div class="operator">(</div><div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">subdirPath</div><div class="operator">,</div> <div class="literal">&#34;plugin.yaml&#34;</div><div class="operator">)</div><div class="operator">)</div><div class="operator">;</div> <div class="ident">err</div> <div class="operator">==</div> <div class="ident">nil</div> <div class="operator">&amp;&amp;</div> <div class="ident">os</div><div class="operator">.</div><div class="ident">FileMode</div><div class="operator">.</div><div class="ident">IsRegular</div><div class="operator">(</div><div class="ident">pluginYaml</div><div class="operator">.</div><div class="ident">Mode</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div> <div class="operator">{</div>
-				<div class="ident">ruleContent</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">parseRuleContent</div><div class="operator">(</div><div class="ident">subdirPath</div><div class="operator">)</div><div class="operator"></div>
+				<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Str</div><div class="operator">(</div><div class="ident">directoryAttribute</div><div class="operator">,</div> <div class="ident">subdirPath</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;plugin.yaml found&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>let's accumulate error report with context (in which subdir it occured)</p>
+</td>
+	<td class="code"><pre><code>				<div class="ident">ruleContent</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">parseRuleContent</div><div class="operator">(</div><div class="ident">subdirPath</div><div class="operator">)</div><div class="operator"></div>
 				<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 					<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msgf</div><div class="operator">(</div><div class="literal">&#34;Error trying to parse rule in dir %v&#34;</div><div class="operator">,</div> <div class="ident">subdirPath</div><div class="operator">)</div><div class="operator"></div>
+					<div class="ident">message</div> <div class="operator">:=</div> <div class="ident">fmt</div><div class="operator">.</div><div class="ident">Sprintf</div><div class="operator">(</div><div class="literal">&#34;Directory: %s, Error: %v&#34;</div><div class="operator">,</div> <div class="ident">subdirPath</div><div class="operator">,</div> <div class="ident">err</div><div class="operator">)</div><div class="operator"></div>
+					<div class="operator">*</div><div class="ident">invalidRules</div> <div class="operator">=</div> <div class="ident">append</div><div class="operator">(</div><div class="operator">*</div><div class="ident">invalidRules</div><div class="operator">,</div> <div class="ident">message</div><div class="operator">)</div><div class="operator"></div>
 					<div class="keyword">continue</div><div class="operator"></div>
 				<div class="operator">}</div><div class="operator"></div>
 
@@ -519,7 +552,8 @@ of the directory is much easier to access here without an extra call.</p>
       <tr class="section">
 	<td class="doc"><p>Otherwise, descend into the sub-directory and see if there is any rule content.</p>
 </td>
-	<td class="code"><pre><code>				<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">subdirPath</div><div class="operator">,</div> <div class="ident">contentMap</div><div class="operator">)</div><div class="operator">;</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+	<td class="code"><pre><code>				<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Str</div><div class="operator">(</div><div class="ident">directoryAttribute</div><div class="operator">,</div> <div class="ident">subdirPath</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;descending into sub-directory&#34;</div><div class="operator">)</div><div class="operator"></div>
+				<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">subdirPath</div><div class="operator">,</div> <div class="ident">contentMap</div><div class="operator">,</div> <div class="ident">invalidRules</div><div class="operator">)</div><div class="operator">;</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 					<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
 				<div class="operator">}</div><div class="operator"></div>
 			<div class="operator">}</div><div class="operator"></div>
@@ -550,6 +584,14 @@ at the moment only checks for Reason field</p>
 	<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
 <div class="operator">}</div><div class="operator"></div>
 
+<div class="keyword">func</div> <div class="ident">printInvalidRules</div><div class="operator">(</div><div class="ident">invalidRules</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="ident">separator</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;List of invalid rules&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">for</div> <div class="ident">i</div><div class="operator">,</div> <div class="ident">rule</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">invalidRules</div> <div class="operator">{</div>
+		<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Int</div><div class="operator">(</div><div class="literal">&#34;#&#34;</div><div class="operator">,</div> <div class="ident">i</div><div class="operator">&#43;</div><div class="literal">1</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Str</div><div class="operator">(</div><div class="literal">&#34;Error&#34;</div><div class="operator">,</div> <div class="ident">rule</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Invalid rule&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
 </code></pre></td>
       </tr>
       
@@ -577,18 +619,42 @@ If we want to parse all of them, the full contentDirPath can be passed to parseR
 </td>
 	<td class="code"><pre><code>	<div class="ident">externalContentDir</div> <div class="operator">:=</div> <div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">contentDirPath</div><div class="operator">,</div> <div class="literal">&#34;external&#34;</div><div class="operator">)</div><div class="operator"></div>
 
-	<div class="ident">err</div> <div class="operator">=</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">externalContentDir</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">contentDir</div><div class="operator">.</div><div class="ident">Rules</div><div class="operator">)</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>map used to store invalid rules</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">invalidRules</div> <div class="operator">:=</div> <div class="ident">make</div><div class="operator">(</div><div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">,</div> <div class="literal">0</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">err</div> <div class="operator">=</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">externalContentDir</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">contentDir</div><div class="operator">.</div><div class="ident">Rules</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">invalidRules</div><div class="operator">)</div><div class="operator"></div>
 	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 		<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Cannot parse content of external rules&#34;</div><div class="operator">)</div><div class="operator"></div>
 		<div class="keyword">return</div> <div class="ident">contentDir</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Int</div><div class="operator">(</div><div class="literal">&#34;invalid external rules&#34;</div><div class="operator">,</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">invalidRules</div><div class="operator">)</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Parsing external rules: done&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">invalidRules</div><div class="operator">)</div> <div class="operator">&gt;</div> <div class="literal">0</div> <div class="operator">{</div>
+		<div class="ident">printInvalidRules</div><div class="operator">(</div><div class="ident">invalidRules</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
 
 	<div class="ident">internalContentDir</div> <div class="operator">:=</div> <div class="ident">path</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">contentDirPath</div><div class="operator">,</div> <div class="literal">&#34;internal&#34;</div><div class="operator">)</div><div class="operator"></div>
 
-	<div class="ident">err</div> <div class="operator">=</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">internalContentDir</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">contentDir</div><div class="operator">.</div><div class="ident">Rules</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">invalidRules</div> <div class="operator">=</div> <div class="ident">make</div><div class="operator">(</div><div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">,</div> <div class="literal">0</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">err</div> <div class="operator">=</div> <div class="ident">parseRulesInDir</div><div class="operator">(</div><div class="ident">internalContentDir</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">contentDir</div><div class="operator">.</div><div class="ident">Rules</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">invalidRules</div><div class="operator">)</div><div class="operator"></div>
 	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
 		<div class="ident">log</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Err</div><div class="operator">(</div><div class="ident">err</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Cannot parse content of internal rules&#34;</div><div class="operator">)</div><div class="operator"></div>
 		<div class="keyword">return</div> <div class="ident">contentDir</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Int</div><div class="operator">(</div><div class="literal">&#34;invalid internal rules&#34;</div><div class="operator">,</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">invalidRules</div><div class="operator">)</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;Parsing internal rules: done&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">len</div><div class="operator">(</div><div class="ident">invalidRules</div><div class="operator">)</div> <div class="operator">&gt;</div> <div class="literal">0</div> <div class="operator">{</div>
+		<div class="ident">printInvalidRules</div><div class="operator">(</div><div class="ident">invalidRules</div><div class="operator">)</div><div class="operator"></div>
 	<div class="operator">}</div><div class="operator"></div>
 
 	<div class="keyword">return</div> <div class="ident">contentDir</div><div class="operator">,</div> <div class="ident">err</div><div class="operator"></div>
