@@ -7,7 +7,7 @@ require (
 	github.com/RedHatInsights/insights-operator-utils v1.8.2
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gorilla/mux v1.8.0
-	github.com/prometheus/client_golang v1.7.1
+	github.com/prometheus/client_golang v1.10.0
 	github.com/rs/zerolog v1.20.0
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.6.1
