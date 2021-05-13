@@ -41,7 +41,7 @@ ineffassign: ## Run ineffassign checker
 	./ineffassign.sh
 
 shellcheck: ## Run shellcheck
-	shellcheck $(shell find . -name "*.sh")
+	shellcheck --exclude=SC1090,SC2086,SC2034,SC1091 $(shell find . -name "*.sh")
 
 errcheck: ## Run errcheck
 	@echo "Running errcheck"
