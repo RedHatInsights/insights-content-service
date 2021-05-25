@@ -39,6 +39,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/RedHatInsights/insights-operator-utils/logger"
+	clowder "github.com/redhatinsights/app-common-go/pkg/api/v1"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 
@@ -122,7 +123,23 @@ func LoadConfiguration(defaultConfigFile string) error {
 	viper.SetEnvPrefix(envPrefix)
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_", ".", "__"))
 
-	return viper.Unmarshal(&Config)
+	err = viper.Unmarshal(&Config)
+	if err != nil {
+		return fmt.Errorf("fatal - can not unmarshal configuration: %s", err)
+	}
+
+	if clowder.IsClowderEnabled() {
+		// can not use Zerolog at this moment!
+		fmt.Println("Clowder is enabled")
+
+		// TODO: insert logic to replace SELECTED configuration variables
+	} else {
+		// can not use Zerolog at this moment!
+		fmt.Println("Clowder is disabled")
+	}
+
+	// everything's should be ok
+	return nil
 }
 
 // GetServerConfiguration returns server configuration
