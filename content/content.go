@@ -19,15 +19,13 @@ package content
 
 import (
 	"fmt"
+	"github.com/RedHatInsights/insights-operator-utils/types"
+	"github.com/go-yaml/yaml"
+	"github.com/rs/zerolog/log"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
-
-	"github.com/RedHatInsights/insights-operator-utils/types"
-	"github.com/go-yaml/yaml"
-	"github.com/rs/zerolog/log"
 )
 
 // Logging messages
@@ -47,17 +45,6 @@ type (
 	// ErrorKeyMetadata is a Go representation of the `metadata.yaml`
 	// file inside of an error key content directory.
 	ErrorKeyMetadata = types.ErrorKeyMetadata
-	//ParsedErrorKeyMetadata allows to parse Condition based on the data type
-	ParsedErrorKeyMetadata struct {
-		Condition   interface{} `yaml:"condition" json:"condition"`
-		Description string      `yaml:"description" json:"description"`
-		Impact      string      `yaml:"impact" json:"impact"`
-		Likelihood  int         `yaml:"likelihood" json:"likelihood"`
-		PublishDate string      `yaml:"publish_date" json:"publish_date"`
-		Status      string      `yaml:"status" json:"status"`
-		Tags        []string    `yaml:"tags" json:"tags"`
-	}
-
 	// RuleContentDirectory contains content for all available rules in a directory.
 	RuleContentDirectory = types.RuleContentDirectory
 	// GlobalRuleConfig represents the file that contains
@@ -84,37 +71,6 @@ func readFilesIntoFileContent(baseDir string, filelist []string) (map[string][]b
 	return filesContent, nil
 }
 
-// transformMetadataCondition takes content of condition field in metadata.yaml
-// and transforms it into a simple string
-func transformMetadataCondition(parsedMetadata *ParsedErrorKeyMetadata, errorContent *RuleErrorKeyContent) error {
-	if parsedCondition := parsedMetadata.Condition; parsedCondition != nil {
-		switch (parsedCondition).(type) {
-		case string:
-			errorContent.Metadata.Condition = (parsedCondition).(string)
-		case []interface{}:
-			parsedSlice := (parsedCondition).([]interface{})
-			conditions := make([]string, len(parsedSlice))
-			for index, item := range parsedSlice {
-				condition, ok := item.(string)
-				if !ok {
-					return &InvalidItem{FileName: "metadata.yaml", KeyName: "condition"}
-				}
-				conditions[index] = condition
-			}
-			errorContent.Metadata.Condition = strings.Join(conditions, "; ")
-		default:
-			return &InvalidItem{FileName: "metadata.yaml", KeyName: "condition"}
-		}
-	}
-	errorContent.Metadata.Description = parsedMetadata.Description
-	errorContent.Metadata.Impact = parsedMetadata.Impact
-	errorContent.Metadata.Likelihood = parsedMetadata.Likelihood
-	errorContent.Metadata.PublishDate = parsedMetadata.PublishDate
-	errorContent.Metadata.Status = parsedMetadata.Status
-	errorContent.Metadata.Tags = parsedMetadata.Tags
-	return nil
-}
-
 // createErrorContents takes a mapping of files into contents and perform
 // some checks about it
 func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, error) {
@@ -138,14 +94,11 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 		return nil, &MissingMandatoryFile{FileName: "metadata.yaml"}
 	}
 
-	var parsedMetadata ParsedErrorKeyMetadata
-	if err := yaml.Unmarshal(contentRead["metadata.yaml"], &parsedMetadata); err != nil {
+	if err := yaml.Unmarshal(contentRead["metadata.yaml"], &errorContent.Metadata); err != nil {
 		return nil, err
 	}
 
-	err := transformMetadataCondition(&parsedMetadata, &errorContent)
-	return &errorContent, err
-
+	return &errorContent, nil
 }
 
 // parseErrorContents reads the contents of the specified directory

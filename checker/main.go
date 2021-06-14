@@ -124,7 +124,6 @@ func checkRuleContent(groupCfg groupConfigMap) {
 		}
 		// For every error code of the rule.
 		for errCode, errContent := range ruleContent.ErrorKeys {
-			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "condition", errContent.Metadata.Condition)
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "description", errContent.Metadata.Description)
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "impact", errContent.Metadata.Impact)
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "publish_date", errContent.Metadata.PublishDate)
