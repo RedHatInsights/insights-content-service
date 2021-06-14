@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-condition:
 description: Introducing Insights for Red Hat OpenShift Container Platform
 impact:
 likelihood: 1
