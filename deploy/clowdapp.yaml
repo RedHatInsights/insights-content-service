@@ -1,0 +1,159 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: ccx-insights-content-service
+objects:
+
+- kind: Service
+  apiVersion: v1
+  metadata:
+    annotations:
+      prometheus.io/path: ${ICS_API_PREFIX}metrics
+      prometheus.io/port: "8080"
+      prometheus.io/scheme: http
+      prometheus.io/scrape: "true"
+    name: ccx-insights-content-service
+    labels:
+      app: ccx-insights-content-service
+  spec:
+    ports:
+      - name: web
+        port: 8080
+        protocol: TCP
+        targetPort: 8080
+    selector:
+      app: insights-content-service
+    type: ClusterIP
+
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: ClowdApp
+  metadata:
+    name: insights-content-service
+  spec:
+    envName: ${ENV_NAME}
+    dependencies:
+      - ingress
+    deployments:
+      - name: content-service
+        minReplicas: ${{MIN_REPLICAS}}
+        webServices:
+          public:
+            enabled: true
+          private:
+            enabled: false
+          metrics:
+            enabled: true
+        podSpec:
+          env:
+            - name: INSIGHTS_CONTENT_SERVICE__SERVER__ADDRESS
+              value: ':8080'
+            - name: INSIGHTS_CONTENT_SERVICE__SERVER__API_PREFIX
+              value: ${ICS_API_PREFIX}
+            - name: INSIGHTS_CONTENT_SERVICE__SERVER__API_SPEC_FILE
+              value: /openapi/openapi.json
+            - name: INSIGHTS_CONTENT_SERVICE__GROUPS__PATH
+              value: /groups/groups_config.yaml
+            - name: INSIGHTS_CONTENT_SERVICE__LOGGING__LOGGING_TO_CLOUD_WATCH_ENABLED
+              value: ${LOGGING_TO_CLOUD_WATCH_ENABLED}
+            - name: INSIGHTS_CONTENT_SERVICE__CLOUDWATCH__DEBUG
+              value: ${CLOUDWATCH_DEBUG}
+            - name: INSIGHTS_CONTENT_SERVICE__CLOUDWATCH__STREAM_NAME
+              value: ${ICS_LOG_STREAM}
+            - name: INSIGHTS_CONTENT_SERVICE__CLOUDWATCH__CREATE_STREAM_IF_NOT_EXISTS
+              value: ${CREATE_STREAM_IF_NOT_EXISTS}
+            - name: HABERDASHER_EMITTER
+              value: ${HABERDASHER_EMITTER}
+            - name: HABERDASHER_KAFKA_BOOTSTRAP
+              value: ${HABERDASHER_KAFKA_BOOTSTRAP}
+            - name: HABERDASHER_KAFKA_TOPIC
+              value: ${HABERDASHER_KAFKA_TOPIC}
+            - name: HABERDASHER_LABELS
+              value: ${HABERDASHER_LABELS}
+            - name: HABERDASHER_TAGS
+              value: ${HABERDASHER_TAGS}
+          image: ${IMAGE}:${IMAGE_TAG}
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: ${ICS_API_PREFIX}openapi.json
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          name: ccx-insights-content-service
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: ${ICS_API_PREFIX}openapi.json
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "${CPU_LIMIT}"
+              memory: 400Mi
+            requests:
+              cpu: "${CPU_REQUEST}"
+              memory: 200Mi
+parameters:
+- description: Image name
+  name: IMAGE
+  value: quay.io/cloudservices/ccx-insights-content-service
+- description: Image tag
+  name: IMAGE_TAG
+  required: true
+- description: Determines Clowder deployment
+  name: CLOWDER_ENABLED
+  value: "true"
+- description: ClowdEnv Name
+  name: ENV_NAME
+  required: true
+- description: Minimum number of pods to use when autoscaling is enabled
+  name: MIN_REPLICAS
+  value: '1'
+- description: Minimum number of pods to use when autoscaling is enabled
+  name: MAX_REPLICAS
+  value: '1'
+- name: CPU_REQUEST
+  value: '100m'
+- name: CPU_LIMIT
+  value: '250m'
+- name: ICS_API_PREFIX
+  required: true
+  value: /api/v1/
+- name: LOGGING_TO_CLOUD_WATCH_ENABLED
+  value: "false"
+  required: true
+- name: CLOUDWATCH_DEBUG
+  value: "false"
+  required: true
+- name: ICS_LOG_STREAM
+  value: $HOSTNAME
+- name: CREATE_STREAM_IF_NOT_EXISTS
+  value: "true"
+- name: REPLICAS
+  description: The number of replicas to use in the deployment
+  value: "1"
+- name: HABERDASHER_EMITTER
+  description: Emitter for haberdasher logs [stderr|kafka]
+  value: stderr
+- name: HABERDASHER_KAFKA_BOOTSTRAP
+  description: Bootstrap server for haberdasher kafka emitter
+  value: "mq-kafka:29092"
+- name: HABERDASHER_KAFKA_TOPIC
+  description: Kafka topic for haberdasher kafka emitter
+  value: "platform.logging.logs"
+- name: HABERDASHER_TAGS
+  description: Haberdasher tags for unstrutured logs
+  value: '["ccx"]'
+- name: HABERDASHER_LABELS
+  description: Haberdasher labels for unstructured logs
+  value: '{"app": "ccx-insights-content-service"}'
+
