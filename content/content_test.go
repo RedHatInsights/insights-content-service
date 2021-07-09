@@ -79,11 +79,12 @@ func TestContentParseInvalidDir2(t *testing.T) {
 	assert.EqualError(t, err, fmt.Sprintf("open %s/config.yaml: not a directory", notADirPath))
 }
 
-// TestContentParseMissingFile checks how missing file(s) in content directory are handled
+// TestContentParseMissingFile checks how missing mandatory file(s) in content directory are handled
 func TestContentParseMissingFile(t *testing.T) {
 	buf := new(bytes.Buffer)
 	log.Logger = zerolog.New(buf)
 
+	// has mandatory summary.md missing
 	_, err := content.ParseRuleContentDir("../tests/content/missing/")
 
 	assert.Nil(t, err)
