@@ -143,6 +143,14 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleErrorKeyContent) (*RuleContent, error) {
 	ruleContent := RuleContent{ErrorKeys: errorKeys}
 
+	if contentRead["plugin.yaml"] == nil {
+		return nil, &MissingMandatoryFile{FileName: "plugin.yaml"}
+	}
+
+	if err := yaml.Unmarshal(contentRead["plugin.yaml"], &ruleContent.Plugin); err != nil {
+		return nil, err
+	}
+
 	if contentRead["summary.md"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "summary.md"}
 	}
@@ -150,9 +158,9 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 	ruleContent.Summary = string(contentRead["summary.md"])
 
 	if contentRead["reason.md"] == nil {
-		// check error keys for a reason
 		ruleContent.Reason = ""
 		ruleContent.HasReason = false
+		log.Warn().Msgf("reason for rule [%s] is empty", ruleContent.Plugin.PythonModule)
 	} else {
 		ruleContent.Reason = string(contentRead["reason.md"])
 		ruleContent.HasReason = true
@@ -160,22 +168,16 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 
 	if contentRead["resolution.md"] == nil {
 		ruleContent.Resolution = ""
+		log.Warn().Msgf("resolution for rule [%s] is empty", ruleContent.Plugin.PythonModule)
 	} else {
 		ruleContent.Resolution = string(contentRead["resolution.md"])
 	}
 
 	if contentRead["more_info.md"] == nil {
 		ruleContent.MoreInfo = ""
+		log.Warn().Msgf("more_info for rule [%s] is empty", ruleContent.Plugin.PythonModule)
 	} else {
 		ruleContent.MoreInfo = string(contentRead["more_info.md"])
-	}
-
-	if contentRead["plugin.yaml"] == nil {
-		return nil, &MissingMandatoryFile{FileName: "plugin.yaml"}
-	}
-
-	if err := yaml.Unmarshal(contentRead["plugin.yaml"], &ruleContent.Plugin); err != nil {
-		return nil, err
 	}
 
 	return &ruleContent, nil
