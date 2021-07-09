@@ -19,13 +19,14 @@ package content
 
 import (
 	"fmt"
-	"github.com/RedHatInsights/insights-operator-utils/types"
-	"github.com/go-yaml/yaml"
-	"github.com/rs/zerolog/log"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
+
+	"github.com/RedHatInsights/insights-operator-utils/types"
+	"github.com/go-yaml/yaml"
+	"github.com/rs/zerolog/log"
 )
 
 // Logging messages
@@ -158,16 +159,16 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 	}
 
 	if contentRead["resolution.md"] == nil {
-		return nil, &MissingMandatoryFile{FileName: "resolution.md"}
+		ruleContent.Resolution = ""
+	} else {
+		ruleContent.Resolution = string(contentRead["resolution.md"])
 	}
-
-	ruleContent.Resolution = string(contentRead["resolution.md"])
 
 	if contentRead["more_info.md"] == nil {
-		return nil, &MissingMandatoryFile{FileName: "more_info.md"}
+		ruleContent.MoreInfo = ""
+	} else {
+		ruleContent.MoreInfo = string(contentRead["more_info.md"])
 	}
-
-	ruleContent.MoreInfo = string(contentRead["more_info.md"])
 
 	if contentRead["plugin.yaml"] == nil {
 		return nil, &MissingMandatoryFile{FileName: "plugin.yaml"}
