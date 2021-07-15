@@ -1,0 +1,152 @@
+{"0": {
+    "doc": "Architecture",
+    "title": "Architecture",
+    "content": "Content Service consists of three main parts: . | A rules content parsing that reads the rules metadata from the defined repository, creating data structures. | A group configuration parser that reads a groups configuration file. | HTTP or HTTPS server that exposes REST API endpoints that can be used to read a single rule metadata content, a list of groups and a list of tags that belongs to a group. | . NOTE . Detailed information about the exact format of data exposed via REST API is available at https://redhatinsights.github.io/insights-data-schemas/content_service.html . ",
+    "url": "https://redhatinsights.github.io/insights-content-service/architecture.html",
+    "relUrl": "/architecture.html"
+  },"1": {
+    "doc": "CI",
+    "title": "CI",
+    "content": "Travis CI is configured for this repository. Several tests and checks are started for all pull requests: . | Unit tests that use the standard tool go test. | go fmt tool to check code formatting. That tool is run with -s flag to perform following transformations. | go vet to report likely mistakes in source code, for example suspicious constructs, such as Printf calls whose arguments do not align with the format string. | golint as a linter for all Go sources stored in this repository. | gocyclo to report all functions and methods with too high cyclomatic complexity. The cyclomatic complexity of a function is calculated according to the following rules: 1 is the base complexity of a function +1 for each if, for, case, &amp;&amp; or || Go Report Card warns on functions with cyclomatic complexity &gt; 9. | goconst to find repeated strings that could be replaced by a constant. | gosec to inspect source code for security problems by scanning the Go AST. | ineffassign to detect and print all ineffectual assignments in Go code. | errcheck for checking for all unchecked errors in go programs. | shellcheck to perform static analysis for all shell scripts used in this repository. | abcgo to measure ABC metrics for Go source code and check if the metrics does not exceed specified threshold. | . Please note that all checks mentioned above have to pass for the change to be merged into main branch (the main branch is configured in repository settings on GitHub). History of checks performed by CI is available at RedHatInsights / insights-content-service. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/ci.html",
+    "relUrl": "/ci.html"
+  },"2": {
+    "doc": "Configuration",
+    "title": "Configuration",
+    "content": " ",
+    "url": "https://redhatinsights.github.io/insights-content-service/configuration.html",
+    "relUrl": "/configuration.html"
+  },"3": {
+    "doc": "Configuration",
+    "title": "Table of contents",
+    "content": ". | Server configuration | Groups configuration | Static content configuration | Metrics configuration | Logging configuration | . Content service expects a toml configuration file. Default one is config.toml in working directory, but it can be overwritten by INSIGHTS_CONTENT_SERVICE_CONFIG_FILE env var. Also each key in config can be overwritten by corresponding env var. For example if you have config like . [server] address = \":8080\" api_prefix = \"/api/v1/\" api_spec_file = \"openapi.json\" . and environment variables . INSIGHTS_CONTENT_SERVICE__SERVER__ADDRESS=\":443\" INSIGHTS_CONTENT_SERVICE__SERVER__API_PREFIX=\"/api/v2/\" . the actual server port will be 443 instead of 8080 and the API base endpoint will be /api/v2/ instead of /api/v1/. It’s very useful for deploying docker containers and keeping some of the configuration outside the main configuration, like passwords and secret tokens. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/configuration.html#table-of-contents",
+    "relUrl": "/configuration.html#table-of-contents"
+  },"4": {
+    "doc": "Configuration",
+    "title": "Server configuration",
+    "content": "The HTTP server configuration is in section [server] in the configuration file. [server] address = \":8080\" api_prefix = \"/api/v1/\" api_spec_file = \"openapi.json\" . | address is the host and port which server should listen to | api_prefix is the prefix for the REST API path | api_spec_file is the location of a required OpenAPI specification file | . ",
+    "url": "https://redhatinsights.github.io/insights-content-service/configuration.html#server-configuration",
+    "relUrl": "/configuration.html#server-configuration"
+  },"5": {
+    "doc": "Configuration",
+    "title": "Groups configuration",
+    "content": "The groups are defined in a YAML configuration file. You can find an example in groups_config.yaml. In order to define which groups configuration file is loaded by the service, you should use the [groups] section in the configuration file: . [groups] path = \"groups_config.yaml\" . Where path is the absolute or relative path to the groups configuration file. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/configuration.html#groups-configuration",
+    "relUrl": "/configuration.html#groups-configuration"
+  },"6": {
+    "doc": "Configuration",
+    "title": "Static content configuration",
+    "content": "This service parses the rules static content at startup. For that reason, configuring the directory where the rules content is deployed is mandatory within the configuration. To define the path where the service will look up for rules content, you should define the following: . [content] path = \"rules-content\" . Where path can be the absolute or relative path to the rules content directory. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/configuration.html#static-content-configuration",
+    "relUrl": "/configuration.html#static-content-configuration"
+  },"7": {
+    "doc": "Configuration",
+    "title": "Metrics configuration",
+    "content": "Metrics configuration is in section [metrics] in config file . [metrics] namespace = \"mynamespace\" . | namespace if defined, it is used as Namespace argument when creating all the Prometheus metrics exposed by this service. | . ",
+    "url": "https://redhatinsights.github.io/insights-content-service/configuration.html#metrics-configuration",
+    "relUrl": "/configuration.html#metrics-configuration"
+  },"8": {
+    "doc": "Configuration",
+    "title": "Logging configuration",
+    "content": "Logging configuration is in section [logging] in config file . [logging] debug = false log_level = \"info\" . | debug if set to true, it will make the logs shown in console to be printed in a human readable format instead of JSON. | log_level should be one of the following values: debug, info, warn, warning, error or fatal. | . ",
+    "url": "https://redhatinsights.github.io/insights-content-service/configuration.html#logging-configuration",
+    "relUrl": "/configuration.html#logging-configuration"
+  },"9": {
+    "doc": "Rule content checker",
+    "title": "Rule content checker",
+    "content": "A utility for checking the rule content is currently included. DISCLAIMER: It may be moved elsewhere in the future. It helps to ensure that: . | tags referenced in the rule content are defined in the group configuration | rule content attributes and content files are not empty | every group name is unique | group tags are unique (within the group) | . It is necessary to have the rule content available locally in order to run the tool. Once you have the rule content and the rule group configuration file, you can run the checker tool using the following command. Make sure to replace the placeholders with actual paths. The content directory must be the one containing the config.yaml file and the external directory with content for external rules. Other rules are not being checked by this tool at the moment. go run ./checker/ -config GROUP_CONFIG_YAML_PATH -content CONTENT_DIR_PATH . After running this command, you should see a report for the given group configuration file and rule content directory in the terminal. After checking each error code, a summary is printed containing its tags and a list of groups to which the individual tags belong. Tags that do not belong to any defined group are reported as an error and will not be included in this summary. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/content_checker.html",
+    "relUrl": "/content_checker.html"
+  },"10": {
+    "doc": "Contributing",
+    "title": "Contributing",
+    "content": "Please, check the contribution guidelines in the CONTRIBUTING.md file on the repository. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/contributing.html",
+    "relUrl": "/contributing.html"
+  },"11": {
+    "doc": "Home",
+    "title": "Description",
+    "content": "Insights Content Service is a service that provides metadata information about rules that are being consumed by Openshift Cluster Manager. That metadata information contains rule title, description, remmediations, tags and also groups, that will be consumed primarily by Insights Results Aggregator. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/#description",
+    "relUrl": "/#description"
+  },"12": {
+    "doc": "Home",
+    "title": "Documentation for source files from this repository",
+    "content": ". | server/auth_test.go | server/endpoints.go | server/handlers.go | server/server.go | server/server_test.go | server/configuration.go | server/errors.go | server/errors_test.go | tests/rest/openapi.go | tests/rest/rest.go | tests/rest/common.go | tests/rest/entrypoint.go | tests/rest/groups.go | tests/helpers/helpers.go | tests/helpers/http.go | tests/rest_api_tests.go | conf/export_test.go | conf/configuration_test.go | conf/configuration.go | content/content.go | content/content_test.go | content/errors.go | export_test.go | groups/configuration.go | groups/groups_test.go | groups/groups.go | types/types.go | types/types_test.go | content-service.go | content-service_test.go | logger/configuration.go | logger/logger.go | logger/logger_test.go | checker/main.go | . ",
+    "url": "https://redhatinsights.github.io/insights-content-service/#documentation-for-source-files-from-this-repository",
+    "relUrl": "/#documentation-for-source-files-from-this-repository"
+  },"13": {
+    "doc": "Home",
+    "title": "Home",
+    "content": " ",
+    "url": "https://redhatinsights.github.io/insights-content-service/",
+    "relUrl": "/"
+  },"14": {
+    "doc": "Prometheus API",
+    "title": "Prometheus API",
+    "content": "It is possible to use /api/v1/metrics REST API endpoint to read all metrics exposed to Prometheus or to any tool that is compatible with it. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/prometheus.html",
+    "relUrl": "/prometheus.html"
+  },"15": {
+    "doc": "Prometheus API",
+    "title": "API related metrics",
+    "content": "There are a set of metrics provieded by insights-operator-utils library, all of them related with the API usage. These are the API metrics exposed: . | api_endpoints_requests the total number of requests per endpoint | api_endpoints_response_time API endpoints response time | api_endpoints_status_codes a counter of the HTTP status code responses returned back by the service | . Additionally it is possible to consume all metrics provided by Go runtime. There metrics start with go_ and process_ prefixes. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/prometheus.html#api-related-metrics",
+    "relUrl": "/prometheus.html#api-related-metrics"
+  },"16": {
+    "doc": "Prometheus API",
+    "title": "Metrics namespace",
+    "content": "As explained in the configuration section of this documentation, a namespace can be provided in order to act as a prefix to the metric name. If no namespace is provided in the configuration, the metrics will be exposed as described in this documentation. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/prometheus.html#metrics-namespace",
+    "relUrl": "/prometheus.html#metrics-namespace"
+  },"17": {
+    "doc": "References",
+    "title": "References",
+    "content": ". | Insights Data Schemas | . ",
+    "url": "https://redhatinsights.github.io/insights-content-service/references.html",
+    "relUrl": "/references.html"
+  },"18": {
+    "doc": "REST API",
+    "title": "REST API",
+    "content": "Content service provides information about its REST API scheme via the endpoint api/v1/openapi.json. OpenAPI 3.0 is used to describe the schema; it can be read by human and consumed by computers. For example, if content service is started locally, it is possible to read schema based on OpenAPI 3.0 specification by using the following command: . curl localhost:8080/api/v1/openapi.json . Please note that OpenAPI schema is accessible w/o the need to provide authorization tokens. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/rest_api.html",
+    "relUrl": "/rest_api.html"
+  },"19": {
+    "doc": "Role of the service in the external data pipeline",
+    "title": "Role of the service in the external data pipeline",
+    "content": "The chosen architecture is architecture #3 (architectures), where the insights-content-service will now be called directly from insights-results-smart-proxy, which will send complete information about the rules in one call. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/role.html",
+    "relUrl": "/role.html"
+  },"20": {
+    "doc": "Sequence diagram for Content Service",
+    "title": "Sequence diagram for Content Service",
+    "content": ". ",
+    "url": "https://redhatinsights.github.io/insights-content-service/sequence_diagram.html",
+    "relUrl": "/sequence_diagram.html"
+  },"21": {
+    "doc": "Testing",
+    "title": "Testing",
+    "content": " ",
+    "url": "https://redhatinsights.github.io/insights-content-service/testing.html",
+    "relUrl": "/testing.html"
+  },"22": {
+    "doc": "Testing",
+    "title": "Table of contents",
+    "content": ". | Unit tests | Coverage reports | . tl;dr: make before_commit will run most of the checks by magic. The following tests can be run to test your code in insights-content-service. Detailed information about each type of test is included in the corresponding subsection: . | Unit tests: checks behaviour of all units in source code (methods, functions) | . ",
+    "url": "https://redhatinsights.github.io/insights-content-service/testing.html#table-of-contents",
+    "relUrl": "/testing.html#table-of-contents"
+  },"23": {
+    "doc": "Testing",
+    "title": "Unit tests",
+    "content": "Set of unit tests checks all units of source code. Additionally the code coverage is computed and displayed. Code coverage is stored in a file coverage.out and can be checked by a script named check_coverage.sh. To run unit tests use the following command: . make test . ",
+    "url": "https://redhatinsights.github.io/insights-content-service/testing.html#unit-tests",
+    "relUrl": "/testing.html#unit-tests"
+  },"24": {
+    "doc": "Testing",
+    "title": "Coverage reports",
+    "content": "To make a coverage report you need to start make cover. It will run the unit tests, generate a coverage report and open a web browser that allows to inspect the results of the tests and its coverage. ",
+    "url": "https://redhatinsights.github.io/insights-content-service/testing.html#coverage-reports",
+    "relUrl": "/testing.html#coverage-reports"
+  }
+}
