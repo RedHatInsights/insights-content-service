@@ -84,7 +84,7 @@ func TestContentParseMissingFile(t *testing.T) {
 	buf := new(bytes.Buffer)
 	log.Logger = zerolog.New(buf)
 
-	// has mandatory summary.md missing
+	// has mandatory plugin.yaml missing
 	_, err := content.ParseRuleContentDir("../tests/content/missing/")
 
 	assert.Nil(t, err)
