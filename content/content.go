@@ -151,13 +151,21 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 		return nil, err
 	}
 
+	// The file "summary.md" is used inconsistently by applications. Since
+	// the more accurate description or generic.md fields can be used
+	// instead, summary.md becomes redundant. For consistency reason it's
+	// still loaded, but it's ok if it's missing completely.
+	//
+	// See https://issues.redhat.com/browse/CCXDEV-5052 for context.
 	if contentRead["summary.md"] == nil {
-		return nil, &MissingMandatoryFile{FileName: "summary.md"}
+		log.Info().Msg("File summary.md is missing, using empty string instead")
+		ruleContent.Summary = ""
+	} else {
+		ruleContent.Summary = string(contentRead["summary.md"])
 	}
 
-	ruleContent.Summary = string(contentRead["summary.md"])
-
 	if contentRead["reason.md"] == nil {
+		// check error keys for a reason
 		ruleContent.Reason = ""
 		ruleContent.HasReason = false
 		log.Warn().Msgf("reason for rule [%s] is empty", ruleContent.Plugin.PythonModule)
