@@ -56,6 +56,16 @@ func TestContentParseOKNoContent(t *testing.T) {
 	assert.Empty(t, con.Rules)
 }
 
+// TestContentParseContentWithoutSummaryMD checks that parsing content when
+// there is NOT summary.md file available, but the file structure is otherwise
+// okay, succeeds.
+func TestContentParseContentWithoutSummaryMD(t *testing.T) {
+	con, err := content.ParseRuleContentDir("../tests/content/ok_missing_summary_md/")
+
+	assert.Nil(t, err)
+	assert.NotEmpty(t, con.Rules)
+}
+
 // TestContentParseInvalidDir checks how incorrect (non-existing) directory is handled
 func TestContentParseInvalidDir(t *testing.T) {
 	const invalidDirPath = "../tests/content/not-a-real-dir"
