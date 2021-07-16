@@ -119,7 +119,6 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 			name := e.Name()
 			contentFiles := []string{
 				"generic.md",
-				"reason.md",
 				"metadata.yaml",
 			}
 
@@ -265,14 +264,6 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent, invalid
 					continue
 				}
 
-				err = checkRequiredFields(ruleContent)
-
-				if err != nil {
-					// create an appropriate error and return
-					log.Error().Err(err).Msgf("Some file in dir %s is missing: %s", subdirPath, err.Error())
-					return err
-				}
-
 				// TODO: Add name uniqueness check.
 				(*contentMap)[name] = ruleContent
 			} else {
@@ -282,22 +273,6 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent, invalid
 					return err
 				}
 			}
-		}
-	}
-
-	return nil
-}
-
-// checkRequiredFields search if all the required fields in the RuleContent are ok
-// at the moment only checks for Reason field
-func checkRequiredFields(rule RuleContent) error {
-	if rule.HasReason {
-		return nil
-	}
-
-	for _, errorKeyContent := range rule.ErrorKeys {
-		if !errorKeyContent.HasReason {
-			return &MissingMandatoryFile{FileName: "reason.md"}
 		}
 	}
 

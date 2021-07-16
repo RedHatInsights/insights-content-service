@@ -114,7 +114,6 @@ func checkRuleContent(groupCfg groupConfigMap) {
 		checkRuleAttributeNotEmpty(ruleName, "product_code", ruleContent.Plugin.ProductCode)
 		checkRuleAttributeNotEmpty(ruleName, "python_module", ruleContent.Plugin.PythonModule)
 
-		checkRuleFileNotEmpty(ruleName, "reason.md", ruleContent.Reason)
 		checkRuleFileNotEmpty(ruleName, "summary.md", ruleContent.Summary)
 
 		if len(ruleContent.ErrorKeys) == 0 {
