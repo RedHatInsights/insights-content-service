@@ -35,12 +35,13 @@ COPY --from=rules /content /rules-content
 # copy tutorial/fake rule to external rules to be hit by all reports
 COPY rules/tutorial/content/ /rules-content/external/rules
 
-RUN curl -L -o /usr/bin/haberdasher \
-https://github.com/RedHatInsights/haberdasher/releases/download/v0.1.3/haberdasher_linux_amd64 && \
-chmod 755 /usr/bin/haberdasher
+# temporarily disabled haberdasher because it was duplicating logs (TODO try again later)
+# RUN curl -L -o /usr/bin/haberdasher \
+# https://github.com/RedHatInsights/haberdasher/releases/download/v0.1.3/haberdasher_linux_amd64 && \
+# chmod 755 /usr/bin/haberdasher
 
 USER 1001
 
-ENTRYPOINT ["/usr/bin/haberdasher"]
+# ENTRYPOINT ["/usr/bin/haberdasher"]
 
 CMD ["/insights-content-service"]
