@@ -19,49 +19,26 @@ metadata:
   name: ccx-insights-content-service
 objects:
 
-- kind: Service
-  apiVersion: v1
-  metadata:
-    annotations:
-      prometheus.io/path: ${ICS_API_PREFIX}metrics
-      prometheus.io/port: "8080"
-      prometheus.io/scheme: http
-      prometheus.io/scrape: "true"
-    name: ccx-insights-content-service
-    labels:
-      app: ccx-insights-content-service
-  spec:
-    ports:
-      - name: web
-        port: 8080
-        protocol: TCP
-        targetPort: 8080
-    selector:
-      app: insights-content-service
-    type: ClusterIP
-
 - apiVersion: cloud.redhat.com/v1alpha1
   kind: ClowdApp
   metadata:
-    name: insights-content-service
+    name: ccx-insights-content
   spec:
     envName: ${ENV_NAME}
-    dependencies:
-      - ingress
     deployments:
-      - name: content-service
+      - name: service
         minReplicas: ${{MIN_REPLICAS}}
         webServices:
           public:
-            enabled: true
-          private:
             enabled: false
+          private:
+            enabled: true
           metrics:
             enabled: true
         podSpec:
           env:
             - name: INSIGHTS_CONTENT_SERVICE__SERVER__ADDRESS
-              value: ':8080'
+              value: ':10000'
             - name: INSIGHTS_CONTENT_SERVICE__SERVER__API_PREFIX
               value: ${ICS_API_PREFIX}
             - name: INSIGHTS_CONTENT_SERVICE__SERVER__API_SPEC_FILE
@@ -92,18 +69,17 @@ objects:
             failureThreshold: 3
             httpGet:
               path: ${ICS_API_PREFIX}openapi.json
-              port: 8080
+              port: 10000
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 2
-          name: ccx-insights-content-service
           readinessProbe:
             failureThreshold: 3
             httpGet:
               path: ${ICS_API_PREFIX}openapi.json
-              port: 8080
+              port: 10000
               scheme: HTTP
             initialDelaySeconds: 5
             periodSeconds: 10
@@ -170,4 +146,3 @@ parameters:
 - name: HABERDASHER_LABELS
   description: Haberdasher labels for unstructured logs
   value: '{"app": "ccx-insights-content-service"}'
-
