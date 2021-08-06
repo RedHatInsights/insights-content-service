@@ -255,7 +255,7 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent, invalid
 			if pluginYaml, err := os.Stat(path.Join(subdirPath, "plugin.yaml")); err == nil && os.FileMode.IsRegular(pluginYaml.Mode()) {
 				log.Info().Str(directoryAttribute, subdirPath).Msg("plugin.yaml found")
 
-				// let's accumulate error report with context (in which subdir it occured)
+				// let's accumulate error report with context (in which subdir it occurred)
 				ruleContent, err := parseRuleContent(subdirPath)
 				if err != nil {
 					log.Error().Err(err).Msgf("Error trying to parse rule in dir %v", subdirPath)

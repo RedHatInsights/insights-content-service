@@ -31,7 +31,7 @@ import (
 	"github.com/RedHatInsights/insights-content-service/conf"
 )
 
-// checkStandardOutputStatus tests whether the standard output capturing was succesful
+// checkStandardOutputStatus tests whether the standard output capturing was successful
 func checkStandardOutputStatus(t *testing.T, err error) {
 	if err != nil {
 		t.Fatal("Unable to capture standard output", err)
