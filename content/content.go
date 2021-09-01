@@ -18,6 +18,7 @@ limitations under the License.
 package content
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -33,6 +34,17 @@ import (
 const (
 	separator          = "------------------------------------------------------------"
 	directoryAttribute = "directory"
+
+	// PluginYAML represents the filename of rule's plugin specification
+	PluginYAML = "plugin.yaml"
+	// MetadataYAML represents the filename of rule error key's metadata
+	MetadataYAML = "metadata.yaml"
+
+	GenericMarkdown    = "generic.md"
+	SummaryMarkdown    = "summary.md"
+	ReasonMarkdown     = "reason.md"
+	ResolutionMarkdown = "resolution.md"
+	MoreInfoMarkdown   = "more_info.md"
 )
 
 type (
@@ -51,6 +63,24 @@ type (
 	// GlobalRuleConfig represents the file that contains
 	// metadata globally applicable to any/all rule content.
 	GlobalRuleConfig = types.GlobalRuleConfig
+)
+
+var (
+	// MandatoryRuleWideContentFiles are mandatory files that MUST be on rule plugin or error key level
+	MandatoryRuleWideContentFiles = []string{GenericMarkdown, ReasonMarkdown}
+
+	// SharedContentFiles MAY be on either the plugin level or the error key level
+	SharedContentFiles = []string{GenericMarkdown, ReasonMarkdown, SummaryMarkdown, ResolutionMarkdown, MoreInfoMarkdown}
+
+	// RulePluginMandatoryContentFiles are mandatory on the plugin level
+	RulePluginMandatoryContentFiles = []string{PluginYAML}
+	// RulePluginContentFiles are all files to look for on rule plugin level
+	RulePluginContentFiles = append(SharedContentFiles, RulePluginMandatoryContentFiles...)
+
+	// ErrorKeyMandatoryContentFiles are mandatory on the error key level
+	ErrorKeyMandatoryContentFiles = []string{MetadataYAML}
+	// ErrorKeyContentFiles are all files to look for on error key level
+	ErrorKeyContentFiles = append(SharedContentFiles, ErrorKeyMandatoryContentFiles...)
 )
 
 // readFilesIntoByteArrayPointers reads the contents of the specified files
@@ -72,31 +102,137 @@ func readFilesIntoFileContent(baseDir string, filelist []string) (map[string][]b
 	return filesContent, nil
 }
 
+// checkErrorKeysForMandatoryContent iterates over filenames defined in the mandatory files array; ensures all error keys have the attribute set
+func checkErrorKeysForMandatoryContent(errorKeys map[string]RuleErrorKeyContent) (valid bool) {
+	valid = true
+
+	for _, mandatoryFile := range MandatoryRuleWideContentFiles {
+		for errorKeyName, errorKey := range errorKeys {
+			// all error keys must have these attributes
+			switch mandatoryFile {
+			case GenericMarkdown:
+				if errorKey.Generic == "" {
+					log.Error().Msgf("Error key `%v` is missing mandatory file %v.", errorKeyName, GenericMarkdown)
+					valid = false
+					break
+				}
+			case ReasonMarkdown:
+				if errorKey.Reason == "" {
+					log.Error().Msgf("Error key `%v` is missing mandatory file %v.", errorKeyName, ReasonMarkdown)
+					valid = false
+					break
+				}
+			default:
+				log.Error().Msgf("Behaviour for mandatory file `%v` is not defined.", mandatoryFile)
+				valid = false
+				break
+			}
+		}
+	}
+
+	return
+}
+
+func copyContentToEmptyErrorKeys(
+	filename string,
+	ruleContent RuleContent,
+	errorKeys map[string]RuleErrorKeyContent,
+) {
+	for i, errorKey := range errorKeys {
+		ek := errorKey
+
+		switch filename {
+		case GenericMarkdown:
+			if errorKey.Generic == "" {
+				ek.Generic = ruleContent.Generic
+			}
+		case ReasonMarkdown:
+			if errorKey.Reason == "" {
+				ek.Reason = ruleContent.Reason
+			}
+		case SummaryMarkdown:
+			if errorKey.Summary == "" {
+				ek.Summary = ruleContent.Summary
+			}
+		case ResolutionMarkdown:
+			if errorKey.Resolution == "" {
+				ek.Resolution = ruleContent.Resolution
+			}
+		case MoreInfoMarkdown:
+			if errorKey.MoreInfo == "" {
+				ek.MoreInfo = ruleContent.MoreInfo
+			}
+		default:
+			log.Error().Msgf("Behaviour for copying contents of file `%v` to error keys is not defined.", filename)
+			break
+		}
+
+		errorKeys[i] = ek
+	}
+
+}
+
+func isPluginFileMandatory(fname string) bool {
+	for _, v := range RulePluginMandatoryContentFiles {
+		if fname == v {
+			return true
+		}
+	}
+	return false
+}
+
+func isErrorKeyFileMandatory(fname string) bool {
+	for _, v := range ErrorKeyMandatoryContentFiles {
+		if fname == v {
+			return true
+		}
+	}
+	return false
+}
+
 // createErrorContents takes a mapping of files into contents and perform
 // some checks about it
 func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, error) {
 	errorContent := RuleErrorKeyContent{}
 
-	if contentRead["generic.md"] == nil {
-		return nil, &MissingMandatoryFile{FileName: "generic.md"}
-	}
+	for _, filename := range ErrorKeyContentFiles {
+		if contentRead[filename] == nil {
+			if mandatory := isErrorKeyFileMandatory(filename); mandatory {
+				return nil, &MissingMandatoryFile{FileName: filename}
+			}
 
-	errorContent.Generic = string(contentRead["generic.md"])
+			log.Info().Msgf("File %v is missing on error key level, using empty string instead", filename)
+		}
 
-	if contentRead["reason.md"] == nil {
-		errorContent.Reason = ""
-		errorContent.HasReason = false
-	} else {
-		errorContent.Reason = string(contentRead["reason.md"])
-		errorContent.HasReason = true
-	}
+		if filename == MetadataYAML {
+			if err := yaml.Unmarshal(contentRead[MetadataYAML], &errorContent.Metadata); err != nil {
+				return nil, err
+			}
 
-	if contentRead["metadata.yaml"] == nil {
-		return nil, &MissingMandatoryFile{FileName: "metadata.yaml"}
-	}
+			continue
+		}
 
-	if err := yaml.Unmarshal(contentRead["metadata.yaml"], &errorContent.Metadata); err != nil {
-		return nil, err
+		val := string(contentRead[filename])
+
+		switch filename {
+		case GenericMarkdown:
+			errorContent.Generic = val
+		case ReasonMarkdown:
+			if val == "" {
+				errorContent.HasReason = false
+			}
+			errorContent.HasReason = true
+			errorContent.Reason = val
+		case SummaryMarkdown:
+			errorContent.Summary = val
+		case ResolutionMarkdown:
+			errorContent.Resolution = val
+		case MoreInfoMarkdown:
+			errorContent.MoreInfo = val
+		default:
+			log.Error().Msgf("Behaviour for handling of error key file `%v` is not defined.", filename)
+			break
+		}
 	}
 
 	return &errorContent, nil
@@ -117,12 +253,8 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 	for _, e := range entries {
 		if e.IsDir() {
 			name := e.Name()
-			contentFiles := []string{
-				"generic.md",
-				"metadata.yaml",
-			}
 
-			readContents, err := readFilesIntoFileContent(path.Join(ruleDirPath, name), contentFiles)
+			readContents, err := readFilesIntoFileContent(path.Join(ruleDirPath, name), ErrorKeyContentFiles)
 			if err != nil {
 				return errorContents, err
 			}
@@ -138,53 +270,56 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 	return errorContents, nil
 }
 
-// createRuleContent
 func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleErrorKeyContent) (*RuleContent, error) {
-	ruleContent := RuleContent{ErrorKeys: errorKeys}
+	ruleContent := RuleContent{}
 
-	if contentRead["plugin.yaml"] == nil {
-		return nil, &MissingMandatoryFile{FileName: "plugin.yaml"}
+	for _, filename := range RulePluginContentFiles {
+		if contentRead[filename] == nil {
+			if mandatory := isPluginFileMandatory(filename); mandatory {
+				return nil, &MissingMandatoryFile{FileName: filename}
+			}
+
+			log.Info().Msgf("File %v is missing on plugin level, using empty string instead", filename)
+		}
+
+		if filename == PluginYAML {
+			if err := yaml.Unmarshal(contentRead[PluginYAML], &ruleContent.Plugin); err != nil {
+				return nil, err
+			}
+
+			continue
+		}
+
+		val := string(contentRead[filename])
+
+		switch filename {
+		case GenericMarkdown:
+			ruleContent.Generic = val
+		case ReasonMarkdown:
+			if val == "" {
+				ruleContent.HasReason = false
+			}
+			ruleContent.HasReason = true
+			ruleContent.Reason = val
+		case SummaryMarkdown:
+			ruleContent.Summary = val
+		case ResolutionMarkdown:
+			ruleContent.Resolution = val
+		case MoreInfoMarkdown:
+			ruleContent.MoreInfo = val
+		default:
+			log.Error().Msgf("Behaviour for handling of plugin file `%v` is not defined.", filename)
+			break
+		}
+
+		copyContentToEmptyErrorKeys(filename, ruleContent, errorKeys)
 	}
 
-	if err := yaml.Unmarshal(contentRead["plugin.yaml"], &ruleContent.Plugin); err != nil {
-		return nil, err
-	}
+	ruleContent.ErrorKeys = errorKeys
 
-	// The file "summary.md" is used inconsistently by applications. Since
-	// the more accurate description or generic.md fields can be used
-	// instead, summary.md becomes redundant. For consistency reason it's
-	// still loaded, but it's ok if it's missing completely.
-	//
-	// See https://issues.redhat.com/browse/CCXDEV-5052 for context.
-	if contentRead["summary.md"] == nil {
-		log.Info().Msg("File summary.md is missing, using empty string instead")
-		ruleContent.Summary = ""
-	} else {
-		ruleContent.Summary = string(contentRead["summary.md"])
-	}
-
-	if contentRead["reason.md"] == nil {
-		// check error keys for a reason
-		ruleContent.Reason = ""
-		ruleContent.HasReason = false
-		log.Warn().Msgf("reason for rule [%s] is empty", ruleContent.Plugin.PythonModule)
-	} else {
-		ruleContent.Reason = string(contentRead["reason.md"])
-		ruleContent.HasReason = true
-	}
-
-	if contentRead["resolution.md"] == nil {
-		ruleContent.Resolution = ""
-		log.Warn().Msgf("resolution for rule [%s] is empty", ruleContent.Plugin.PythonModule)
-	} else {
-		ruleContent.Resolution = string(contentRead["resolution.md"])
-	}
-
-	if contentRead["more_info.md"] == nil {
-		ruleContent.MoreInfo = ""
-		log.Warn().Msgf("more_info for rule [%s] is empty", ruleContent.Plugin.PythonModule)
-	} else {
-		ruleContent.MoreInfo = string(contentRead["more_info.md"])
+	valid := checkErrorKeysForMandatoryContent(ruleContent.ErrorKeys)
+	if !valid {
+		return nil, errors.New("Some of the error keys are missing mandatory attributes")
 	}
 
 	return &ruleContent, nil
@@ -198,15 +333,7 @@ func parseRuleContent(ruleDirPath string) (RuleContent, error) {
 		return RuleContent{}, err
 	}
 
-	contentFiles := []string{
-		"summary.md",
-		"reason.md",
-		"resolution.md",
-		"more_info.md",
-		"plugin.yaml",
-	}
-
-	readContent, err := readFilesIntoFileContent(ruleDirPath, contentFiles)
+	readContent, err := readFilesIntoFileContent(ruleDirPath, RulePluginContentFiles)
 	if err != nil {
 		return RuleContent{}, err
 	}
@@ -252,8 +379,8 @@ func parseRulesInDir(dirPath string, contentMap *map[string]RuleContent, invalid
 			// upon which this function is called because the very top level directory
 			// should never directly contain any rule content and because the name
 			// of the directory is much easier to access here without an extra call.
-			if pluginYaml, err := os.Stat(path.Join(subdirPath, "plugin.yaml")); err == nil && os.FileMode.IsRegular(pluginYaml.Mode()) {
-				log.Info().Str(directoryAttribute, subdirPath).Msg("plugin.yaml found")
+			if pluginYaml, err := os.Stat(path.Join(subdirPath, PluginYAML)); err == nil && os.FileMode.IsRegular(pluginYaml.Mode()) {
+				log.Info().Str(directoryAttribute, subdirPath).Msgf("%v found", PluginYAML)
 
 				// let's accumulate error report with context (in which subdir it occurred)
 				ruleContent, err := parseRuleContent(subdirPath)
