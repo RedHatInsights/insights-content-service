@@ -25,6 +25,7 @@ import (
 	"path"
 	"path/filepath"
 
+	"github.com/RedHatInsights/insights-operator-utils/collections"
 	"github.com/RedHatInsights/insights-operator-utils/types"
 	"github.com/go-yaml/yaml"
 	"github.com/rs/zerolog/log"
@@ -34,17 +35,20 @@ import (
 const (
 	separator          = "------------------------------------------------------------"
 	directoryAttribute = "directory"
-
 	// PluginYAML represents the filename of rule's plugin specification
 	PluginYAML = "plugin.yaml"
 	// MetadataYAML represents the filename of rule error key's metadata
 	MetadataYAML = "metadata.yaml"
-
-	GenericMarkdown    = "generic.md"
-	SummaryMarkdown    = "summary.md"
-	ReasonMarkdown     = "reason.md"
+	// GenericMarkdown contains a generic message that should briefly describe the recommendation
+	GenericMarkdown = "generic.md"
+	// SummaryMarkdown contains more descriptive information about the recommendation
+	SummaryMarkdown = "summary.md"
+	// ReasonMarkdown contains the reason why this recommendation was triggered
+	ReasonMarkdown = "reason.md"
+	// ResolutionMarkdown contains resolution steps to the given recommendation/issue
 	ResolutionMarkdown = "resolution.md"
-	MoreInfoMarkdown   = "more_info.md"
+	// MoreInfoMarkdown contains additional information that further describe the recommendation
+	MoreInfoMarkdown = "more_info.md"
 )
 
 type (
@@ -74,11 +78,13 @@ var (
 
 	// RulePluginMandatoryContentFiles are mandatory on the plugin level
 	RulePluginMandatoryContentFiles = []string{PluginYAML}
+
 	// RulePluginContentFiles are all files to look for on rule plugin level
 	RulePluginContentFiles = append(SharedContentFiles, RulePluginMandatoryContentFiles...)
 
 	// ErrorKeyMandatoryContentFiles are mandatory on the error key level
 	ErrorKeyMandatoryContentFiles = []string{MetadataYAML}
+
 	// ErrorKeyContentFiles are all files to look for on error key level
 	ErrorKeyContentFiles = append(SharedContentFiles, ErrorKeyMandatoryContentFiles...)
 )
@@ -172,24 +178,6 @@ func copyContentToEmptyErrorKeys(
 
 }
 
-func isPluginFileMandatory(fname string) bool {
-	for _, v := range RulePluginMandatoryContentFiles {
-		if fname == v {
-			return true
-		}
-	}
-	return false
-}
-
-func isErrorKeyFileMandatory(fname string) bool {
-	for _, v := range ErrorKeyMandatoryContentFiles {
-		if fname == v {
-			return true
-		}
-	}
-	return false
-}
-
 // createErrorContents takes a mapping of files into contents and perform
 // some checks about it
 func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, error) {
@@ -197,7 +185,7 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 
 	for _, filename := range ErrorKeyContentFiles {
 		if contentRead[filename] == nil {
-			if mandatory := isErrorKeyFileMandatory(filename); mandatory {
+			if mandatory := collections.StringInSlice(filename, ErrorKeyMandatoryContentFiles); mandatory {
 				return nil, &MissingMandatoryFile{FileName: filename}
 			}
 
@@ -275,7 +263,7 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 
 	for _, filename := range RulePluginContentFiles {
 		if contentRead[filename] == nil {
-			if mandatory := isPluginFileMandatory(filename); mandatory {
+			if mandatory := collections.StringInSlice(filename, RulePluginMandatoryContentFiles); mandatory {
 				return nil, &MissingMandatoryFile{FileName: filename}
 			}
 
