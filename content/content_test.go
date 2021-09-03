@@ -41,10 +41,10 @@ func TestContentParseOK(t *testing.T) {
 	helpers.FailOnError(t, err)
 
 	rule1Content, exists := con.Rules["rule1"]
-	assert.True(t, exists, "'rule1' content is missing")
+	assert.True(t, exists, "'rule1' content is present")
 
 	_, exists = rule1Content.ErrorKeys["err_key"]
-	assert.True(t, exists, "'err_key' error content is missing")
+	assert.True(t, exists, "'err_key' error content is present")
 }
 
 // TestContentParseOKNoContent checks that parsing content when there is no rule
@@ -64,6 +64,30 @@ func TestContentParseContentWithoutSummaryMD(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotEmpty(t, con.Rules)
+}
+
+// TestContentParseOK checks whether reading from directory where the mandatory files are only on plugin level
+func TestContentParseOKOnlyPluginLevel(t *testing.T) {
+	con, err := content.ParseRuleContentDir("../tests/content/ok_only_plugin_level/")
+	helpers.FailOnError(t, err)
+
+	rule1Content, exists := con.Rules["rule1"]
+	assert.True(t, exists, "'rule1' content is present")
+
+	_, exists = rule1Content.ErrorKeys["err_key"]
+	assert.True(t, exists, "'err_key' error content is present")
+}
+
+// TestContentParseOK checks whether reading from directory where the mandatory files are only on error key level
+func TestContentParseOKOnlyErrorKeyLevel(t *testing.T) {
+	con, err := content.ParseRuleContentDir("../tests/content/ok_only_ek_level/")
+	helpers.FailOnError(t, err)
+
+	rule1Content, exists := con.Rules["rule1"]
+	assert.True(t, exists, "'rule1' content is present")
+
+	_, exists = rule1Content.ErrorKeys["err_key"]
+	assert.True(t, exists, "'err_key' error content is present")
 }
 
 // TestContentParseInvalidDir checks how incorrect (non-existing) directory is handled
@@ -96,6 +120,30 @@ func TestContentParseMissingFile(t *testing.T) {
 
 	// has mandatory plugin.yaml missing
 	_, err := content.ParseRuleContentDir("../tests/content/missing/")
+
+	assert.Nil(t, err)
+	assert.Contains(t, buf.String(), "Error trying to parse rule in dir")
+}
+
+// TestContentParseMissingReason checks how missing mandatory file(s) in content directory are handled
+func TestContentParseMissingReason(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
+	// has mandatory plugin.yaml missing
+	_, err := content.ParseRuleContentDir("../tests/content/no_reason/")
+
+	assert.Nil(t, err)
+	assert.Contains(t, buf.String(), "Error trying to parse rule in dir")
+}
+
+// TestContentParseMissingGeneric checks how missing mandatory file(s) in content directory are handled
+func TestContentParseMissingGeneric(t *testing.T) {
+	buf := new(bytes.Buffer)
+	log.Logger = zerolog.New(buf)
+
+	// has mandatory plugin.yaml missing
+	_, err := content.ParseRuleContentDir("../tests/content/no_generic/")
 
 	assert.Nil(t, err)
 	assert.Contains(t, buf.String(), "Error trying to parse rule in dir")
