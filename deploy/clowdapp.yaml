@@ -92,6 +92,28 @@ objects:
             requests:
               cpu: "${CPU_REQUEST}"
               memory: 200Mi
+
+- kind: Service
+  apiVersion: v1
+  metadata:
+    annotations:
+      prometheus.io/path: ${ICS_API_PREFIX}metrics
+      prometheus.io/port: "10000"
+      prometheus.io/scheme: http
+      prometheus.io/scrape: "true"
+    name: ccx-insights-content-service-prometheus-exporter
+    labels:
+      app: ccx-insights-content-service
+  spec:
+    ports:
+      - name: web
+        port: 10000
+        protocol: TCP
+        targetPort: 10000
+    selector:
+      app: ccx-insights-content
+    type: ClusterIP
+
 parameters:
 - description: Image name
   name: IMAGE
