@@ -18,6 +18,11 @@ limitations under the License.
 // used elsewhere in the aggregator code.
 package types
 
+import (
+	"github.com/RedHatInsights/insights-operator-utils/types"
+	"github.com/rs/zerolog/log"
+)
+
 // OrgID represents organization ID
 type OrgID uint32
 
@@ -30,3 +35,31 @@ type Timestamp string
 
 // UserID represents type for user id
 type UserID string
+
+// ReceivedErrorKeyMetadata is ErrorKeyMetadata as received from
+// the metadata.yaml file
+type ReceivedErrorKeyMetadata struct {
+	Description string   `yaml:"description" json:"description"`
+	Impact      string   `yaml:"impact" json:"impact"`
+	Likelihood  int      `yaml:"likelihood" json:"likelihood"`
+	PublishDate string   `yaml:"publish_date" json:"publish_date"`
+	Status      string   `yaml:"status" json:"status"`
+	Tags        []string `yaml:"tags" json:"tags"`
+}
+
+// ToErrorKeyMetadata converts ReceivedErrorKeyMetadata to the type actually
+// used by the pipeline, calculating impact with impactDict
+func (r ReceivedErrorKeyMetadata) ToErrorKeyMetadata(impactDict map[string]int) types.ErrorKeyMetadata {
+	returnVal := types.ErrorKeyMetadata{}
+	returnVal.Description = r.Description
+	impact, found := impactDict[r.Impact]
+	if !found {
+		log.Error().Msgf(`impact "%v" doesn't have integer representation' (skipping)`, r.Impact)
+	}
+	returnVal.Impact = impact
+	returnVal.Likelihood = r.Likelihood
+	returnVal.PublishDate = r.PublishDate
+	returnVal.Status = r.Status
+	returnVal.Tags = r.Tags
+	return returnVal
+}
