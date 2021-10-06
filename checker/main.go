@@ -17,6 +17,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/RedHatInsights/insights-operator-utils/logger"
@@ -30,8 +31,8 @@ import (
 type groupConfigMap map[string]groups.Group
 
 var (
-	groupConfigPath string = "./groups_config.yaml"
-	contentDirPath  string = "./content/"
+	groupConfigPath = "./groups_config.yaml"
+	contentDirPath  = "./content/"
 )
 
 func init() {
@@ -122,7 +123,7 @@ func checkRuleContent(groupCfg groupConfigMap) {
 		// For every error code of the rule.
 		for errCode, errContent := range ruleContent.ErrorKeys {
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "description", errContent.Metadata.Description)
-			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "impact", errContent.Metadata.Impact)
+			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "impact", strconv.Itoa(errContent.Metadata.Impact))
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "publish_date", errContent.Metadata.PublishDate)
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "status", errContent.Metadata.Status)
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "likelihood", fmt.Sprint(errContent.Metadata.Likelihood))

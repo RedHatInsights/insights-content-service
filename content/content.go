@@ -25,6 +25,7 @@ import (
 	"path"
 	"path/filepath"
 
+	internal_types "github.com/RedHatInsights/insights-content-service/types"
 	"github.com/RedHatInsights/insights-operator-utils/collections"
 	"github.com/RedHatInsights/insights-operator-utils/types"
 	"github.com/go-yaml/yaml"
@@ -87,6 +88,9 @@ var (
 
 	// ErrorKeyContentFiles are all files to look for on error key level
 	ErrorKeyContentFiles = append(SharedContentFiles, ErrorKeyMandatoryContentFiles...)
+
+	// GlobalConfig represents configrations globally applicable to any/all rule
+	GlobalConfig GlobalRuleConfig
 )
 
 // readFilesIntoByteArrayPointers reads the contents of the specified files
@@ -120,18 +124,15 @@ func checkErrorKeysForMandatoryContent(errorKeys map[string]RuleErrorKeyContent)
 				if errorKey.Generic == "" {
 					log.Error().Msgf("Error key `%v` is missing mandatory file %v.", errorKeyName, GenericMarkdown)
 					valid = false
-					break
 				}
 			case ReasonMarkdown:
 				if errorKey.Reason == "" {
 					log.Error().Msgf("Error key `%v` is missing mandatory file %v.", errorKeyName, ReasonMarkdown)
 					valid = false
-					break
 				}
 			default:
 				log.Error().Msgf("Behaviour for mandatory file `%v` is not defined.", mandatoryFile)
 				valid = false
-				break
 			}
 		}
 	}
@@ -170,7 +171,6 @@ func copyContentToEmptyErrorKeys(
 			}
 		default:
 			log.Error().Msgf("Behaviour for copying contents of file `%v` to error keys is not defined.", filename)
-			break
 		}
 
 		errorKeys[i] = ek
@@ -182,6 +182,7 @@ func copyContentToEmptyErrorKeys(
 // some checks about it
 func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, error) {
 	errorContent := RuleErrorKeyContent{}
+	errorContentMetadata := internal_types.ReceivedErrorKeyMetadata{}
 
 	for _, filename := range ErrorKeyContentFiles {
 		if contentRead[filename] == nil {
@@ -193,9 +194,11 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 		}
 
 		if filename == MetadataYAML {
-			if err := yaml.Unmarshal(contentRead[MetadataYAML], &errorContent.Metadata); err != nil {
+			if err := yaml.Unmarshal(contentRead[MetadataYAML], &errorContentMetadata); err != nil {
 				return nil, err
 			}
+
+			errorContent.Metadata = errorContentMetadata.ToErrorKeyMetadata(GlobalConfig.Impact)
 
 			continue
 		}
@@ -219,7 +222,6 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 			errorContent.MoreInfo = val
 		default:
 			log.Error().Msgf("Behaviour for handling of error key file `%v` is not defined.", filename)
-			break
 		}
 	}
 
@@ -274,7 +276,6 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 			if err := yaml.Unmarshal(contentRead[PluginYAML], &ruleContent.Plugin); err != nil {
 				return nil, err
 			}
-
 			continue
 		}
 
@@ -297,7 +298,6 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 			ruleContent.MoreInfo = val
 		default:
 			log.Error().Msgf("Behaviour for handling of plugin file `%v` is not defined.", filename)
-			break
 		}
 
 		copyContentToEmptyErrorKeys(filename, ruleContent, errorKeys)
@@ -307,7 +307,7 @@ func createRuleContent(contentRead map[string][]byte, errorKeys map[string]RuleE
 
 	valid := checkErrorKeysForMandatoryContent(ruleContent.ErrorKeys)
 	if !valid {
-		return nil, errors.New("Some of the error keys are missing mandatory attributes")
+		return nil, errors.New("some of the error keys are missing mandatory attributes")
 	}
 
 	return &ruleContent, nil
@@ -344,6 +344,12 @@ func parseGlobalContentConfig(configPath string) (GlobalRuleConfig, error) {
 
 	conf := GlobalRuleConfig{}
 	err = yaml.Unmarshal(configBytes, &conf)
+	if err != nil {
+		log.Error().Err(err).Msgf("Can't apply global rule configurations")
+	} else {
+		GlobalConfig = conf
+	}
+
 	return conf, err
 }
 
