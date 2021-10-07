@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/RedHatInsights/insights-operator-utils v1.19.2
+	github.com/RedHatInsights/insights-operator-utils v1.21.1
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/prometheus/client_golang v1.10.0
