@@ -11,3 +11,6 @@ path = "rules-content"
 
 [metrics]
 namespace = "insights_content_service"
+
+[logging]
+debug = true
