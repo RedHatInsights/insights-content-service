@@ -88,7 +88,7 @@ func startService() ExitCode {
 
 	ruleContentDirPath := conf.GetContentPathConfiguration()
 
-	contentDir, err := content.ParseRuleContentDir(ruleContentDirPath)
+	contentDir, _, err := content.ParseRuleContentDir(ruleContentDirPath)
 	if osPathError, ok := err.(*os.PathError); ok {
 		log.Error().Err(osPathError).Msg("No rules directory")
 		return ExitStatusReadContentError
@@ -136,7 +136,7 @@ func printGroups() ExitCode {
 func printRules() ExitCode {
 	log.Info().Msg("Printing rules")
 	contentPath := conf.GetContentPathConfiguration()
-	contentDir, err := content.ParseRuleContentDir(contentPath)
+	contentDir, _, err := content.ParseRuleContentDir(contentPath)
 
 	if err != nil {
 		log.Error().Err(err).Msg("Error parsing the content")
@@ -147,6 +147,28 @@ func printRules() ExitCode {
 	encoder := json.NewEncoder(buffer)
 
 	if err := encoder.Encode(contentDir); err == nil {
+		fmt.Println(buffer)
+		return ExitStatusOK
+	}
+
+	return ExitStatusOther
+
+}
+
+func printParseStatus() ExitCode {
+	log.Info().Msg("Printing parse status")
+	contentPath := conf.GetContentPathConfiguration()
+	_, parseStatus, err := content.ParseRuleContentDir(contentPath)
+
+	if err != nil {
+		log.Error().Err(err).Msg("Error parsing the content")
+		return ExitStatusReadContentError
+	}
+
+	buffer := new(bytes.Buffer)
+	encoder := json.NewEncoder(buffer)
+
+	if err := encoder.Encode(parseStatus); err == nil {
 		fmt.Println(buffer)
 		return ExitStatusOK
 	}
@@ -182,6 +204,7 @@ The commands are:
     print-config        prints current configuration set by files & env variables
     print-groups        prints current groups configuration
     print-rules         prints current parsed rules
+    print-parse-status  prints information about all rules that have been parsed
     print-version-info  prints version info
 
 `
@@ -249,6 +272,8 @@ func handleCommand(command string) ExitCode {
 		return printGroups()
 	case "print-rules":
 		return printRules()
+	case "print-parse-status":
+		return printParseStatus()
 	default:
 		fmt.Printf("\nCommand '%v' not found\n", command)
 		return printHelp()
