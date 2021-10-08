@@ -37,7 +37,7 @@ func init() {
 
 // TestContentParseOK checks whether reading from directory of correct content works as expected
 func TestContentParseOK(t *testing.T) {
-	con, err := content.ParseRuleContentDir("../tests/content/ok/")
+	con, m, err := content.ParseRuleContentDir("../tests/content/ok/")
 	helpers.FailOnError(t, err)
 
 	rule1Content, exists := con.Rules["rule1"]
@@ -45,30 +45,53 @@ func TestContentParseOK(t *testing.T) {
 
 	_, exists = rule1Content.ErrorKeys["err_key"]
 	assert.True(t, exists, "'err_key' error content is present")
+
+	// check the rule content parsing map
+	assert.Equal(t, 2, len(m), "invalid number of entries in rule content status")
+
+	r, exists := m["rule1"]
+	assert.True(t, exists, "'rule1' rule parsing content is present")
+	assert.True(t, r.Loaded, "'rule1' rule parsing content attribute")
+
+	r, exists = m["rule2"]
+	assert.True(t, exists, "'rule2' rule parsing content is present")
+	assert.True(t, r.Loaded, "'rule1' rule parsing content attribute")
 }
 
 // TestContentParseOKNoContent checks that parsing content when there is no rule
 // content available, but the file structure is otherwise okay, succeeds.
 func TestContentParseOKNoContent(t *testing.T) {
-	con, err := content.ParseRuleContentDir("../tests/content/ok_no_content/")
+	con, m, err := content.ParseRuleContentDir("../tests/content/ok_no_content/")
 	helpers.FailOnError(t, err)
 
 	assert.Empty(t, con.Rules)
+
+	assert.Equal(t, 0, len(m), "invalid number of entries in rule content status")
 }
 
 // TestContentParseContentWithoutSummaryMD checks that parsing content when
 // there is NOT summary.md file available, but the file structure is otherwise
 // okay, succeeds.
 func TestContentParseContentWithoutSummaryMD(t *testing.T) {
-	con, err := content.ParseRuleContentDir("../tests/content/ok_missing_summary_md/")
+	con, m, err := content.ParseRuleContentDir("../tests/content/ok_missing_summary_md/")
 
 	assert.Nil(t, err)
 	assert.NotEmpty(t, con.Rules)
+
+	assert.Equal(t, 2, len(m), "invalid number of entries in rule content status")
+
+	r, exists := m["rule1"]
+	assert.True(t, exists, "'rule1' rule parsing content is present")
+	assert.True(t, r.Loaded, "'rule1' rule parsing content attribute")
+
+	r, exists = m["rule2"]
+	assert.True(t, exists, "'rule2' rule parsing content is present")
+	assert.True(t, r.Loaded, "'rule1' rule parsing content attribute")
 }
 
 // TestContentParseOK checks whether reading from directory where the mandatory files are only on plugin level
 func TestContentParseOKOnlyPluginLevel(t *testing.T) {
-	con, err := content.ParseRuleContentDir("../tests/content/ok_only_plugin_level/")
+	con, m, err := content.ParseRuleContentDir("../tests/content/ok_only_plugin_level/")
 	helpers.FailOnError(t, err)
 
 	rule1Content, exists := con.Rules["rule1"]
@@ -76,11 +99,21 @@ func TestContentParseOKOnlyPluginLevel(t *testing.T) {
 
 	_, exists = rule1Content.ErrorKeys["err_key"]
 	assert.True(t, exists, "'err_key' error content is present")
+
+	assert.Equal(t, 2, len(m), "invalid number of entries in rule content status")
+
+	r, exists := m["rule1"]
+	assert.True(t, exists, "'rule1' rule parsing content is present")
+	assert.True(t, r.Loaded, "'rule1' rule parsing content attribute")
+
+	r, exists = m["rule2"]
+	assert.True(t, exists, "'rule2' rule parsing content is present")
+	assert.True(t, r.Loaded, "'rule1' rule parsing content attribute")
 }
 
 // TestContentParseOK checks whether reading from directory where the mandatory files are only on error key level
 func TestContentParseOKOnlyErrorKeyLevel(t *testing.T) {
-	con, err := content.ParseRuleContentDir("../tests/content/ok_only_ek_level/")
+	con, m, err := content.ParseRuleContentDir("../tests/content/ok_only_ek_level/")
 	helpers.FailOnError(t, err)
 
 	rule1Content, exists := con.Rules["rule1"]
@@ -88,12 +121,22 @@ func TestContentParseOKOnlyErrorKeyLevel(t *testing.T) {
 
 	_, exists = rule1Content.ErrorKeys["err_key"]
 	assert.True(t, exists, "'err_key' error content is present")
+
+	assert.Equal(t, 2, len(m), "invalid number of entries in rule content status")
+
+	r, exists := m["rule1"]
+	assert.True(t, exists, "'rule1' rule parsing content is present")
+	assert.True(t, r.Loaded, "'rule1' rule parsing content attribute")
+
+	r, exists = m["rule2"]
+	assert.True(t, exists, "'rule2' rule parsing content is present")
+	assert.True(t, r.Loaded, "'rule1' rule parsing content attribute")
 }
 
 // TestContentParseInvalidDir checks how incorrect (non-existing) directory is handled
 func TestContentParseInvalidDir(t *testing.T) {
 	const invalidDirPath = "../tests/content/not-a-real-dir"
-	_, err := content.ParseRuleContentDir(invalidDirPath)
+	_, _, err := content.ParseRuleContentDir(invalidDirPath)
 	assert.EqualError(t, err, fmt.Sprintf("open %s/config.yaml: no such file or directory", invalidDirPath))
 }
 
@@ -101,7 +144,7 @@ func TestContentParseInvalidDir(t *testing.T) {
 func TestContentParseNotDirectory1(t *testing.T) {
 	// this is not a proper directory
 	const notADirPath = "../tests/tests.toml"
-	_, err := content.ParseRuleContentDir(notADirPath)
+	_, _, err := content.ParseRuleContentDir(notADirPath)
 	assert.EqualError(t, err, fmt.Sprintf("open %s/config.yaml: not a directory", notADirPath))
 }
 
@@ -109,7 +152,7 @@ func TestContentParseNotDirectory1(t *testing.T) {
 func TestContentParseInvalidDir2(t *testing.T) {
 	// this is not a proper directory
 	const notADirPath = "/dev/null"
-	_, err := content.ParseRuleContentDir(notADirPath)
+	_, _, err := content.ParseRuleContentDir(notADirPath)
 	assert.EqualError(t, err, fmt.Sprintf("open %s/config.yaml: not a directory", notADirPath))
 }
 
@@ -119,7 +162,7 @@ func TestContentParseMissingFile(t *testing.T) {
 	log.Logger = zerolog.New(buf)
 
 	// has mandatory plugin.yaml missing
-	_, err := content.ParseRuleContentDir("../tests/content/missing/")
+	_, _, err := content.ParseRuleContentDir("../tests/content/missing/")
 
 	assert.Nil(t, err)
 	assert.Contains(t, buf.String(), "Error trying to parse rule in dir")
@@ -131,10 +174,16 @@ func TestContentParseMissingReason(t *testing.T) {
 	log.Logger = zerolog.New(buf)
 
 	// has mandatory plugin.yaml missing
-	_, err := content.ParseRuleContentDir("../tests/content/no_reason/")
+	_, m, err := content.ParseRuleContentDir("../tests/content/no_reason/")
 
 	assert.Nil(t, err)
 	assert.Contains(t, buf.String(), "Error trying to parse rule in dir")
+
+	assert.Equal(t, 1, len(m), "invalid number of entries in rule content status")
+
+	r, exists := m["rule1"]
+	assert.True(t, exists, "'rule1' rule parsing content is present")
+	assert.False(t, r.Loaded, "'rule1' rule parsing content attribute")
 }
 
 // TestContentParseMissingGeneric checks how missing mandatory file(s) in content directory are handled
@@ -143,7 +192,7 @@ func TestContentParseMissingGeneric(t *testing.T) {
 	log.Logger = zerolog.New(buf)
 
 	// has mandatory plugin.yaml missing
-	_, err := content.ParseRuleContentDir("../tests/content/no_generic/")
+	_, _, err := content.ParseRuleContentDir("../tests/content/no_generic/")
 
 	assert.Nil(t, err)
 	assert.Contains(t, buf.String(), "Error trying to parse rule in dir")
@@ -154,7 +203,7 @@ func TestContentParseBadPluginYAML(t *testing.T) {
 	buf := new(bytes.Buffer)
 	log.Logger = zerolog.New(buf)
 
-	_, err := content.ParseRuleContentDir("../tests/content/bad_plugin/")
+	_, _, err := content.ParseRuleContentDir("../tests/content/bad_plugin/")
 
 	assert.Nil(t, err)
 	assert.Contains(t, buf.String(), errYAMLBadToken)
@@ -165,22 +214,32 @@ func TestContentParseBadMetadataYAML(t *testing.T) {
 	buf := new(bytes.Buffer)
 	log.Logger = zerolog.New(buf)
 
-	_, err := content.ParseRuleContentDir("../tests/content/bad_metadata/")
+	_, m, err := content.ParseRuleContentDir("../tests/content/bad_metadata/")
 
 	assert.Nil(t, err)
 	assert.Contains(t, buf.String(), errYAMLBadToken)
+
+	assert.Equal(t, 2, len(m), "invalid number of entries in rule content status")
+
+	r, exists := m["rule1"]
+	assert.True(t, exists, "'rule1' rule parsing content is present")
+	assert.False(t, r.Loaded, "'rule1' rule parsing content attribute")
+
+	r, exists = m["rule2"]
+	assert.True(t, exists, "'rule2' rule parsing content is present")
+	assert.False(t, r.Loaded, "'rule1' rule parsing content attribute")
 }
 
 // TestContentParseBadMetadataYAML tests handling bad/incorrect metadata.yaml file
 func TestContentParseNoExternal(t *testing.T) {
 	noExternalPath := "../tests/content/no_external"
-	_, err := content.ParseRuleContentDir(noExternalPath)
+	_, _, err := content.ParseRuleContentDir(noExternalPath)
 	assert.EqualError(t, err, fmt.Sprintf("open %s/external: no such file or directory", noExternalPath))
 }
 
 // TestContentParseNoInternal tests case where there is no folder for internal rules
 func TestContentParseNoInternal(t *testing.T) {
 	noInternalPath := "../tests/content/no_internal"
-	_, err := content.ParseRuleContentDir(noInternalPath)
+	_, _, err := content.ParseRuleContentDir(noInternalPath)
 	assert.EqualError(t, err, fmt.Sprintf("open %s/internal: no such file or directory", noInternalPath))
 }

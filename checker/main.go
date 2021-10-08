@@ -103,7 +103,7 @@ func checkGroupConfig() groupConfigMap {
 // checkRuleContent checks if rule content files are not empty
 // and if the tags assigned to all error codes really exist.
 func checkRuleContent(groupCfg groupConfigMap) {
-	ruleContentDir, err := content.ParseRuleContentDir(contentDirPath)
+	ruleContentDir, _, err := content.ParseRuleContentDir(contentDirPath)
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to rule content directory")
 	}

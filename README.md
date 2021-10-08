@@ -22,6 +22,26 @@ remmediations, tags and also groups, that will be consumed primarily by
 Documentation is hosted on Github Pages <https://redhatinsights.github.io/insights-content-service/>.
 Sources are located in [docs](https://github.com/RedHatInsights/insights-content-service/tree/master/docs).
 
+## Usage
+
+```
+Usage:
+
+    ./content-service [command]
+
+The commands are:
+
+    <EMPTY>             starts content service
+    start-service       starts content service
+    help                prints help
+    print-help          prints help
+    print-config        prints current configuration set by files & env variables
+    print-groups        prints current groups configuration
+    print-rules         prints current parsed rules
+    print-version-info  prints version info
+
+```
+
 ## Contribution
 
 Please look into document [CONTRIBUTING.md](CONTRIBUTING.md) that contains all information about how to
