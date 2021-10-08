@@ -50,6 +50,12 @@ const (
 	ResolutionMarkdown = "resolution.md"
 	// MoreInfoMarkdown contains additional information that further describe the recommendation
 	MoreInfoMarkdown = "more_info.md"
+
+	// InternalRulesGroup is a name for a group with all internal rules
+	InternalRulesGroup = "internal"
+
+	// ExternalRulesGroup is a name for a group with all external rules
+	ExternalRulesGroup = "external"
 )
 
 type (
@@ -423,7 +429,7 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, error) {
 	// parse external and internal rules separately, because there are currently more categories
 	// of rules, but they just don't have content yet, so in case the content for them appears.
 	// If we want to parse all of them, the full contentDirPath can be passed to parseRulesInDir without problems
-	externalContentDir := path.Join(contentDirPath, "external")
+	externalContentDir := path.Join(contentDirPath, ExternalRulesGroup)
 
 	// map used to store invalid rules
 	invalidRules := make([]string, 0)
@@ -441,7 +447,7 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, error) {
 		printInvalidRules(invalidRules)
 	}
 
-	internalContentDir := path.Join(contentDirPath, "internal")
+	internalContentDir := path.Join(contentDirPath, InternalRulesGroup)
 
 	invalidRules = make([]string, 0)
 
