@@ -38,6 +38,7 @@ The commands are:
     print-config        prints current configuration set by files & env variables
     print-groups        prints current groups configuration
     print-rules         prints current parsed rules
+    print-parse-status  prints information about all rules that have been parsed
     print-version-info  prints version info
 
 ```

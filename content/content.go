@@ -361,7 +361,7 @@ func parseGlobalContentConfig(configPath string) (GlobalRuleConfig, error) {
 
 // updateRuleContentStatus function updates a map containing results of parsing
 // all rules, external and internal ones
-func updateRuleContentStatus(ruleContentStates map[string]types.RuleContentStatus,
+func updateRuleContentStatus(ruleContentStatusMap map[string]types.RuleContentStatus,
 	ruleType types.RuleType, name string, loaded bool, err error) {
 	// fill-in value to be used in Error attribute
 	var parsingError = types.RuleParsingError("")
@@ -377,13 +377,13 @@ func updateRuleContentStatus(ruleContentStates map[string]types.RuleContentStatu
 	}
 
 	// check for a name collision
-	_, found := ruleContentStates[name]
+	_, found := ruleContentStatusMap[name]
 	if found {
 		log.Error().Str("rule name", name).Msg("Duplicate rule name found")
 	}
 
 	// update map
-	ruleContentStates[name] = ruleContentStatus
+	ruleContentStatusMap[name] = ruleContentStatus
 }
 
 // parseRulesInDir function finds all rules and their content in the specified
@@ -391,7 +391,7 @@ func updateRuleContentStatus(ruleContentStates map[string]types.RuleContentStatu
 // This function also aggregates list of rules with improper content.
 func parseRulesInDir(dirPath string, ruleType types.RuleType,
 	contentMap *map[string]RuleContent, invalidRules *[]string,
-	ruleContentStates map[string]types.RuleContentStatus) error {
+	ruleContentStatusMap map[string]types.RuleContentStatus) error {
 	// read the whole content of specified directory
 	entries, err := ioutil.ReadDir(dirPath)
 	if err != nil {
@@ -418,18 +418,18 @@ func parseRulesInDir(dirPath string, ruleType types.RuleType,
 					message := fmt.Sprintf("Directory: %s, Error: %v", subdirPath, err)
 					*invalidRules = append(*invalidRules, message)
 
-					updateRuleContentStatus(ruleContentStates, ruleType, name, false, err)
+					updateRuleContentStatus(ruleContentStatusMap, ruleType, name, false, err)
 					continue
 				}
 
 				// TODO: Add name uniqueness check.
 				(*contentMap)[name] = ruleContent
 
-				updateRuleContentStatus(ruleContentStates, ruleType, name, true, nil)
+				updateRuleContentStatus(ruleContentStatusMap, ruleType, name, true, nil)
 			} else {
 				// Otherwise, descend into the sub-directory and see if there is any rule content.
 				log.Info().Str(directoryAttribute, subdirPath).Msg("descending into sub-directory")
-				if err := parseRulesInDir(subdirPath, ruleType, contentMap, invalidRules, ruleContentStates); err != nil {
+				if err := parseRulesInDir(subdirPath, ruleType, contentMap, invalidRules, ruleContentStatusMap); err != nil {
 					return err
 				}
 			}
@@ -450,11 +450,11 @@ func printInvalidRules(invalidRules []string) {
 // ParseRuleContentDir finds all rule content in a directory and parses it.
 func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, map[string]types.RuleContentStatus, error) {
 	// we don't know in advance how many rules we have, so let's use nil slice there
-	var ruleContentStates map[string]types.RuleContentStatus = make(map[string]types.RuleContentStatus)
+	var ruleContentStatusMap map[string]types.RuleContentStatus = make(map[string]types.RuleContentStatus)
 
 	globalConfig, err := parseGlobalContentConfig(path.Join(contentDirPath, "config.yaml"))
 	if err != nil {
-		return RuleContentDirectory{}, ruleContentStates, err
+		return RuleContentDirectory{}, ruleContentStatusMap, err
 	}
 
 	contentDir := RuleContentDirectory{
@@ -471,10 +471,10 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, map[strin
 	invalidRules := make([]string, 0)
 
 	err = parseRulesInDir(externalContentDir, ExternalRulesGroup,
-		&contentDir.Rules, &invalidRules, ruleContentStates)
+		&contentDir.Rules, &invalidRules, ruleContentStatusMap)
 	if err != nil {
 		log.Error().Err(err).Msg("Cannot parse content of external rules")
-		return contentDir, ruleContentStates, err
+		return contentDir, ruleContentStatusMap, err
 	}
 	log.Info().
 		Int("invalid external rules", len(invalidRules)).
@@ -489,10 +489,10 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, map[strin
 	invalidRules = make([]string, 0)
 
 	err = parseRulesInDir(internalContentDir, InternalRulesGroup,
-		&contentDir.Rules, &invalidRules, ruleContentStates)
+		&contentDir.Rules, &invalidRules, ruleContentStatusMap)
 	if err != nil {
 		log.Error().Err(err).Msg("Cannot parse content of internal rules")
-		return contentDir, ruleContentStates, err
+		return contentDir, ruleContentStatusMap, err
 	}
 	log.Info().
 		Int("invalid internal rules", len(invalidRules)).
@@ -502,5 +502,5 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, map[strin
 		printInvalidRules(invalidRules)
 	}
 
-	return contentDir, ruleContentStates, err
+	return contentDir, ruleContentStatusMap, err
 }
