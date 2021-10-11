@@ -88,7 +88,7 @@ func startService() ExitCode {
 
 	ruleContentDirPath := conf.GetContentPathConfiguration()
 
-	contentDir, _, err := content.ParseRuleContentDir(ruleContentDirPath)
+	contentDir, ruleContentStatusMap, err := content.ParseRuleContentDir(ruleContentDirPath)
 	if osPathError, ok := err.(*os.PathError); ok {
 		log.Error().Err(osPathError).Msg("No rules directory")
 		return ExitStatusReadContentError
@@ -97,7 +97,9 @@ func startService() ExitCode {
 		return ExitStatusReadContentError
 	}
 
-	serverInstance = server.New(serverCfg, parsedGroups, contentDir)
+	// start the HTTP server on specified port
+	serverInstance = server.New(serverCfg, parsedGroups, contentDir,
+		ruleContentStatusMap)
 
 	err = serverInstance.Start()
 	if err != nil {

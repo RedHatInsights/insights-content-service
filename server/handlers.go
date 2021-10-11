@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,6 +48,16 @@ func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http
 	}
 
 	err := responses.SendOK(writer, responses.BuildOkResponseWithData("groups", server.groupsList))
+	if err != nil {
+		log.Error().Err(err)
+		handleServerError(err)
+		return
+	}
+}
+
+// ruleContentStates returns status of all rules that have been read and parsed
+func (server *HTTPServer) ruleContentStates(writer http.ResponseWriter, request *http.Request) {
+	err := responses.SendOK(writer, responses.BuildOkResponseWithData("rules", server.ruleContentStatusMap))
 	if err != nil {
 		log.Error().Err(err)
 		handleServerError(err)

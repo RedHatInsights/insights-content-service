@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ func TestServerStartHTTP(t *testing.T) {
 			Address:   ":0",
 			APIPrefix: config.APIPrefix,
 			Debug:     true,
-		}, nil, contentDir)
+		}, nil, contentDir, nil)
 
 		go func() {
 			for {
@@ -99,7 +99,7 @@ func TestServerStartError(t *testing.T) {
 	testServer := server.New(server.Configuration{
 		Address:   "localhost:99999",
 		APIPrefix: "",
-	}, nil, contentDir)
+	}, nil, contentDir, nil)
 
 	err := testServer.Start()
 	if err == nil {
@@ -185,6 +185,17 @@ func TestServeListOfGroupsOptionsMethod(t *testing.T) {
 	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
 		Method:   http.MethodOptions,
 		Endpoint: "groups",
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
+	})
+}
+
+// TestServeRuleContentStates checks the REST API server behaviour for rule
+// content states
+func TestServeRulecontentStates(t *testing.T) {
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodOptions,
+		Endpoint: "status",
 	}, &helpers.APIResponse{
 		StatusCode: http.StatusOK,
 	})
