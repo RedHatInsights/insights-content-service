@@ -48,6 +48,45 @@
         }
       }
     },
+    "/status": {
+      "get": {
+        "summary": "Returns a map of rule content states for all rules that has been read and parsed.",
+        "description": "Map of all rule content states",
+        "operationId": "getStatus",
+        "responses": {
+          "200": {
+            "description": "A JSON map of rule content states.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rules": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": {
+                                "type": "string"
+                        },
+                        "loaded": {
+                                "type": "boolean"
+                        },
+                        "error": {
+                                "type": "string"
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/groups": {
       "get": {
         "summary": "Returns a list of groups.",
