@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/RedHatInsights/insights-operator-utils/tests/helpers"
+	"github.com/RedHatInsights/insights-operator-utils/types"
 
 	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"
@@ -65,7 +66,35 @@ func AssertAPIRequest(
 		Tags:        []string{"tag3", "tag4"},
 	}
 	contentDir := content.RuleContentDirectory{}
-	testServer := server.New(*serverConfig, groupsData, contentDir)
+
+	// TODO: it should be configurable
+	// TODO: add into data repository soon
+	ruleContentStatusMap := make(map[string]types.RuleContentStatus)
+	ruleContentStatusMap["rule1"] = types.RuleContentStatus{
+		RuleType: types.RuleType("internal"),
+		Loaded:   true,
+		Error:    "",
+	}
+
+	ruleContentStatusMap["rule2"] = types.RuleContentStatus{
+		RuleType: types.RuleType("external"),
+		Loaded:   true,
+		Error:    "",
+	}
+
+	ruleContentStatusMap["rule3"] = types.RuleContentStatus{
+		RuleType: types.RuleType("internal"),
+		Loaded:   false,
+		Error:    "internal rule3 parsing error",
+	}
+
+	ruleContentStatusMap["rule4"] = types.RuleContentStatus{
+		RuleType: types.RuleType("external"),
+		Loaded:   false,
+		Error:    "external rule4 parsing error",
+	}
+
+	testServer := server.New(*serverConfig, groupsData, contentDir, ruleContentStatusMap)
 
 	helpers.AssertAPIRequest(t, testServer, serverConfig.APIPrefix, request, expectedResponse)
 }
