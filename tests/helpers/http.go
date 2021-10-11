@@ -39,6 +39,11 @@ var DefaultServerConfig = server.Configuration{
 	Debug:       true,
 }
 
+const (
+	externalRuleType = "external"
+	internalRuleType = "internal"
+)
+
 // AssertAPIRequest creates new server
 // (which you can keep nil so it will be created automatically)
 // and provided serverConfig(you can leave it empty to use the default one)
@@ -71,25 +76,25 @@ func AssertAPIRequest(
 	// TODO: add into data repository soon
 	ruleContentStatusMap := make(map[string]types.RuleContentStatus)
 	ruleContentStatusMap["rule1"] = types.RuleContentStatus{
-		RuleType: types.RuleType("internal"),
+		RuleType: types.RuleType(internalRuleType),
 		Loaded:   true,
 		Error:    "",
 	}
 
 	ruleContentStatusMap["rule2"] = types.RuleContentStatus{
-		RuleType: types.RuleType("external"),
+		RuleType: types.RuleType(externalRuleType),
 		Loaded:   true,
 		Error:    "",
 	}
 
 	ruleContentStatusMap["rule3"] = types.RuleContentStatus{
-		RuleType: types.RuleType("internal"),
+		RuleType: types.RuleType(internalRuleType),
 		Loaded:   false,
 		Error:    "internal rule3 parsing error",
 	}
 
 	ruleContentStatusMap["rule4"] = types.RuleContentStatus{
-		RuleType: types.RuleType("external"),
+		RuleType: types.RuleType(externalRuleType),
 		Loaded:   false,
 		Error:    "external rule4 parsing error",
 	}
