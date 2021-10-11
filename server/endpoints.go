@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,6 +34,9 @@ const (
 	AllContentEndpoint = "content"
 	// MetricsEndpoint returns prometheus metrics
 	MetricsEndpoint = "metrics"
+	// StatusEndpoint returns status of all rules that have been read and
+	// parsed
+	StatusEndpoint = "status"
 )
 
 func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
@@ -44,6 +47,7 @@ func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 	router.HandleFunc(apiPrefix+MainEndpoint, server.mainEndpoint).Methods(http.MethodGet)
 	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
 	router.HandleFunc(apiPrefix+AllContentEndpoint, server.getStaticContent).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc(apiPrefix+StatusEndpoint, server.ruleContentStates).Methods(http.MethodGet, http.MethodOptions)
 
 	// Prometheus metrics
 	router.Handle(apiPrefix+MetricsEndpoint, promhttp.Handler()).Methods(http.MethodGet)
