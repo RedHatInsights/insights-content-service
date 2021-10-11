@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ import (
 
 	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"
+
+	"github.com/RedHatInsights/insights-operator-utils/types"
 )
 
 // HTTPServer in an implementation of Server interface
@@ -38,16 +40,20 @@ type HTTPServer struct {
 	Content content.RuleContentDirectory
 	Serv    *http.Server
 
-	encodedContent []byte
-	groupsList     []groups.Group
+	encodedContent       []byte
+	groupsList           []groups.Group
+	ruleContentStatusMap map[string]types.RuleContentStatus
 }
 
 // New constructs new implementation of Server interface
-func New(config Configuration, groups map[string]groups.Group, contentDir content.RuleContentDirectory) *HTTPServer {
+func New(config Configuration, groups map[string]groups.Group,
+	contentDir content.RuleContentDirectory,
+	ruleContentStatusMap map[string]types.RuleContentStatus) *HTTPServer {
 	return &HTTPServer{
-		Config:  config,
-		Groups:  groups,
-		Content: contentDir,
+		Config:               config,
+		Groups:               groups,
+		Content:              contentDir,
+		ruleContentStatusMap: ruleContentStatusMap,
 	}
 }
 
