@@ -57,7 +57,7 @@ func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http
 
 // ruleContentStates returns status of all rules that have been read and parsed
 func (server *HTTPServer) ruleContentStates(writer http.ResponseWriter, request *http.Request) {
-	err := responses.SendOK(writer, responses.BuildOkResponseWithData("status", server.ruleContentStatusMap))
+	err := responses.SendOK(writer, responses.BuildOkResponseWithData("rules", server.ruleContentStatusMap))
 	if err != nil {
 		log.Error().Err(err)
 		handleServerError(err)
