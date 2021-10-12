@@ -53,6 +53,35 @@
         "summary": "Returns a map of rule content states for all rules that has been read and parsed.",
         "description": "Map of all rule content states",
         "operationId": "getStatus",
+        "parameters": [
+          {
+            "name": "internal",
+            "description": "Turn-on filtering + select all internal rules",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "external",
+            "description": "Turn-on filtering + select all external rules",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rule",
+            "description": "Turn-on filtering + select rule specified by its name. Might be specified several times to select multiple rules.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "A JSON map of rule content states.",
