@@ -1,4 +1,4 @@
-.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo style run test cover license openapi-check before_commit help godoc install_docgo install_addlicense
+.PHONY: default clean build fmt lint vet cyclo ineffassign shellcheck errcheck goconst gosec abcgo json-check style run test cover license openapi-check before_commit help godoc install_docgo install_addlicense
 
 SOURCES:=$(shell find . -name '*.go')
 BINARY:=insights-content-service
@@ -58,6 +58,10 @@ gosec: ## Run gosec checker
 abcgo: ## Run ABC metrics checker
 	@echo "Run ABC metrics checker"
 	./abcgo.sh
+
+json-check: ## Check all JSONs for basic syntax
+	@echo "Run JSON checker"
+	python3 utils/json_check.py
 
 openapi-check:
 	./check_openapi.sh
