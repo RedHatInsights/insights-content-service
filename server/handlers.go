@@ -19,6 +19,7 @@ package server
 import (
 	"bytes"
 	"encoding/gob"
+	"errors"
 	"net/http"
 
 	"github.com/RedHatInsights/insights-operator-utils/responses"
@@ -57,7 +58,25 @@ func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http
 
 // ruleContentStates returns status of all rules that have been read and parsed
 func (server *HTTPServer) ruleContentStates(writer http.ResponseWriter, request *http.Request) {
-	err := responses.SendOK(writer, responses.BuildOkResponseWithData("rules", server.ruleContentStatusMap))
+	query := request.URL.Query()
+	if query == nil {
+		err := errors.New("Unable to retrieve Query object (should not happen)")
+		log.Error().Err(err).Msg(responseDataError)
+		handleServerError(err)
+		return
+	}
+
+	// apply filters if specified on command line
+	ruleContentStatusMap := filterStatusMap(server.ruleContentStatusMap, query)
+
+	// log basic info about filtering results
+	log.Info().
+		Int("All rule states", len(server.ruleContentStatusMap)).
+		Int("Filtered rule states", len(ruleContentStatusMap)).
+		Msg("Rule content states filtering results")
+
+	// try to send response with filtered rule states to client
+	err := responses.SendOK(writer, responses.BuildOkResponseWithData("rules", ruleContentStatusMap))
 	if err != nil {
 		log.Error().Err(err)
 		handleServerError(err)
