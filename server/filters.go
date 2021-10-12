@@ -28,11 +28,18 @@ import (
 // states
 func filterStatusMap(states map[string]types.RuleContentStatus, query map[string][]string) map[string]types.RuleContentStatus {
 	// retrieve all possible filters
+
+	// we are just interested about the presence of these two parameters,
+	// not their values
 	_, externalRuleFilter := query["external"]
 	_, internalRuleFilter := query["internal"]
+
+	// this parameter can be specified multiple times to allow client to
+	// select multiple rules
 	ruleNames, ruleNameFilter := query["rule"]
 
-	// rule names can be specified multiple times
+	// rule names can be specified multiple times, but for logging we need
+	// just one slice of names
 	ruleNamesStr := strings.Join(ruleNames, ",")
 
 	log.Info().
