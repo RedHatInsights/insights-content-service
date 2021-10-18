@@ -141,10 +141,10 @@ parameters:
   required: true
   value: /api/v1/
 - name: LOGGING_TO_CLOUD_WATCH_ENABLED
-  value: "false"
+  value: "true"
   required: true
 - name: CLOUDWATCH_DEBUG
-  value: "false"
+  value: "true"
   required: true
 - name: ICS_LOG_STREAM
   value: $HOSTNAME
