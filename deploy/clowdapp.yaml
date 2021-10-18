@@ -53,6 +53,30 @@ objects:
               value: ${ICS_LOG_STREAM}
             - name: INSIGHTS_CONTENT_SERVICE__CLOUDWATCH__CREATE_STREAM_IF_NOT_EXISTS
               value: ${CREATE_STREAM_IF_NOT_EXISTS}
+            - name: INSIGHTS_CONTENT_SERVICE__CLOUDWATCH__AWS_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: cloudwatch
+                  key: aws_region
+                  optional: true
+            - name: INSIGHTS_CONTENT_SERVICE__CLOUDWATCH__LOG_GROUP
+              valueFrom:
+                secretKeyRef:
+                  name: cloudwatch
+                  key: log_group_name
+                  optional: true
+            - name: INSIGHTS_CONTENT_SERVICE__CLOUDWATCH__AWS_ACCESS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: cloudwatch
+                  key: aws_access_key_id
+                  optional: true
+            - name: INSIGHTS_CONTENT_SERVICE__CLOUDWATCH__AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cloudwatch
+                  key: aws_secret_access_key
+                  optional: true
             - name: HABERDASHER_EMITTER
               value: ${HABERDASHER_EMITTER}
             - name: HABERDASHER_KAFKA_BOOTSTRAP
