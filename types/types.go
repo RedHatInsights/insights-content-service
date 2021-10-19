@@ -52,11 +52,12 @@ type ReceivedErrorKeyMetadata struct {
 func (r ReceivedErrorKeyMetadata) ToErrorKeyMetadata(impactDict map[string]int) types.ErrorKeyMetadata {
 	returnVal := types.ErrorKeyMetadata{}
 	returnVal.Description = r.Description
-	impact, found := impactDict[r.Impact]
+	impactNumber, found := impactDict[r.Impact]
 	if !found {
 		log.Error().Msgf(`impact "%v" doesn't have integer representation' (skipping)`, r.Impact)
 	}
-	returnVal.Impact = impact
+	returnVal.Impact.Impact = impactNumber
+	returnVal.Impact.Name = r.Impact
 	returnVal.Likelihood = r.Likelihood
 	returnVal.PublishDate = r.PublishDate
 	returnVal.Status = r.Status

@@ -39,7 +39,7 @@ func TestToErrorKeyMetadata(t *testing.T) {
 
 	testResult := receivedErroKey.ToErrorKeyMetadata(testImpactDict)
 	assert.Equal(t, "test description", testResult.Description)
-	assert.Equal(t, 5, testResult.Impact)
+	assert.Equal(t, 5, testResult.Impact.Impact)
 	assert.Equal(t, 2, testResult.Likelihood)
 	assert.Equal(t, "12/08/1988", testResult.PublishDate)
 	assert.Equal(t, "test status", testResult.Status)
