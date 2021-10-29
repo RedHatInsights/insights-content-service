@@ -68,6 +68,10 @@ var (
 
 	// BuildCommit contains Git commit used to build this application
 	BuildCommit = "*not set*"
+
+	// UtilsVersion contains currently used version of
+	// github.com/RedHatInsights/insights-operator-utils package
+	UtilsVersion = "*not set*"
 )
 
 // startService starts service and returns error code
@@ -119,6 +123,7 @@ func printVersionInfo() ExitCode {
 	printInfo("Build time:", BuildTime)
 	printInfo("Branch:", BuildBranch)
 	printInfo("Commit:", BuildCommit)
+	printInfo("Utils version:", UtilsVersion)
 	return ExitStatusOK
 }
 
@@ -188,6 +193,7 @@ func logVersionInfo() {
 	initInfoLog("Build time: " + BuildTime)
 	initInfoLog("Branch: " + BuildBranch)
 	initInfoLog("Commit: " + BuildCommit)
+	initInfoLog("Utils version:" + UtilsVersion)
 }
 
 const helpMessageTemplate = `
