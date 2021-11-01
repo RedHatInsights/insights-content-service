@@ -35,10 +35,11 @@ import (
 
 // HTTPServer in an implementation of Server interface
 type HTTPServer struct {
-	Config  Configuration
-	Groups  map[string]groups.Group
-	Content content.RuleContentDirectory
-	Serv    *http.Server
+	Config     Configuration
+	InfoParams map[string]string
+	Groups     map[string]groups.Group
+	Content    content.RuleContentDirectory
+	Serv       *http.Server
 
 	encodedContent       []byte
 	groupsList           []groups.Group
@@ -54,6 +55,7 @@ func New(config Configuration, groups map[string]groups.Group,
 		Groups:               groups,
 		Content:              contentDir,
 		ruleContentStatusMap: ruleContentStatusMap,
+		InfoParams:           make(map[string]string),
 	}
 }
 

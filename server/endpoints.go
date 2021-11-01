@@ -37,6 +37,9 @@ const (
 	// StatusEndpoint returns status of all rules that have been read and
 	// parsed
 	StatusEndpoint = "status"
+	// InfoEndpoint returns basic information about content service
+	// version, utils repository version, commit hash etc.
+	InfoEndpoint = "info"
 )
 
 func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
@@ -48,6 +51,7 @@ func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 	router.HandleFunc(apiPrefix+GroupsEndpoint, server.listOfGroups).Methods(http.MethodGet, http.MethodOptions)
 	router.HandleFunc(apiPrefix+AllContentEndpoint, server.getStaticContent).Methods(http.MethodGet, http.MethodOptions)
 	router.HandleFunc(apiPrefix+StatusEndpoint, server.ruleContentStates).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc(apiPrefix+InfoEndpoint, server.infoMap).Methods(http.MethodGet, http.MethodOptions)
 
 	// Prometheus metrics
 	router.Handle(apiPrefix+MetricsEndpoint, promhttp.Handler()).Methods(http.MethodGet)
