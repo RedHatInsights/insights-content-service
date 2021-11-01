@@ -37,4 +37,5 @@ var (
 	LogVersionInfo   = logVersionInfo
 	PrintGroups      = printGroups
 	PrintRules       = printRules
+	FillInInfoParams = fillInInfoParams
 )
