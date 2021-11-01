@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -105,6 +105,9 @@ func startService() ExitCode {
 	serverInstance = server.New(serverCfg, parsedGroups, contentDir,
 		ruleContentStatusMap)
 
+	// fill-in additional info used by /info endpoint handler
+	fillInInfoParams(serverInstance.InfoParams)
+
 	err = serverInstance.Start()
 	if err != nil {
 		log.Error().Err(err).Msg("HTTP(s) start error")
@@ -112,6 +115,16 @@ func startService() ExitCode {
 	}
 
 	return ExitStatusOK
+}
+
+// fillInInfoParams function fills-in additional info used by /info endpoint
+// handler
+func fillInInfoParams(params map[string]string) {
+	params["BuildVersion"] = BuildVersion
+	params["BuildTime"] = BuildTime
+	params["BuildBranch"] = BuildBranch
+	params["BuildCommit"] = BuildCommit
+	params["UtilsVersion"] = UtilsVersion
 }
 
 func printInfo(msg string, val string) {
