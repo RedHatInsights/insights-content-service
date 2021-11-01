@@ -56,6 +56,23 @@ func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http
 	}
 }
 
+// infoMap returns map of additional information about this service
+func (server *HTTPServer) infoMap(writer http.ResponseWriter, request *http.Request) {
+	if server.InfoParams == nil {
+		err := errors.New("InfoParams is empty")
+		log.Error().Err(err)
+		handleServerError(err)
+		return
+	}
+
+	err := responses.SendOK(writer, responses.BuildOkResponseWithData("info", server.InfoParams))
+	if err != nil {
+		log.Error().Err(err)
+		handleServerError(err)
+		return
+	}
+}
+
 // ruleContentStates returns status of all rules that have been read and parsed
 func (server *HTTPServer) ruleContentStates(writer http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query()

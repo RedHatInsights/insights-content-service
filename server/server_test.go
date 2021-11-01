@@ -170,6 +170,16 @@ func TestServeAPIWrongEndpoint(t *testing.T) {
 	})
 }
 
+// TestServeInfoMap checks the REST API server behaviour for info endpoint
+func TestServeInfoMap(t *testing.T) {
+	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
+		Method:   http.MethodGet,
+		Endpoint: "info",
+	}, &helpers.APIResponse{
+		StatusCode: http.StatusOK,
+	})
+}
+
 // TestServeListOfGroups checks the REST API server behaviour for group listing endpoint
 func TestServeListOfGroups(t *testing.T) {
 	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{
