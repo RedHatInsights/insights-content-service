@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -165,7 +165,7 @@ func GetGroupsConfiguration() groups.Configuration {
 // GetContentPathConfiguration get the path to the content files from the
 // configuration
 func GetContentPathConfiguration() string {
-	if len(Config.Content.ContentPath) == 0 {
+	if Config.Content.ContentPath == "" {
 		Config.Content.ContentPath = defaultContentPath
 	}
 
@@ -200,7 +200,7 @@ func GetKafkaZerologConfiguration() logger.KafkaZerologConfiguration {
 // checkIfFileExists returns nil if path doesn't exist or isn't a file,
 // otherwise it returns corresponding error
 func checkIfFileExists(path string) error {
-	if len(path) == 0 {
+	if path == "" {
 		return fmt.Errorf("Empty path provided")
 	}
 	fileInfo, err := os.Stat(path)
