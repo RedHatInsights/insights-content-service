@@ -75,7 +75,7 @@ func TestServerStartHTTP(t *testing.T) {
 			}
 
 			// doing some request to be sure server started successfully
-			req, err := http.NewRequest(http.MethodGet, config.APIPrefix, nil)
+			req, err := http.NewRequest(http.MethodGet, config.APIPrefix, http.NoBody)
 			helpers.FailOnError(t, err)
 
 			response := helpers.ExecuteRequest(s, req).Result()
