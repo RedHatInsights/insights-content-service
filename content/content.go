@@ -408,7 +408,7 @@ func parseRulesInDir(dirPath string, ruleType types.RuleType,
 			// upon which this function is called because the very top level directory
 			// should never directly contain any rule content and because the name
 			// of the directory is much easier to access here without an extra call.
-			if pluginYaml, err := os.Stat(path.Join(subdirPath, PluginYAML)); err == nil && os.FileMode.IsRegular(pluginYaml.Mode()) {
+			if pluginYaml, err := os.Stat(path.Join(subdirPath, PluginYAML)); err == nil && pluginYaml.Mode().IsRegular() {
 				log.Info().Str(directoryAttribute, subdirPath).Msgf("%v found", PluginYAML)
 
 				// let's accumulate error report with context (in which subdir it occurred)
