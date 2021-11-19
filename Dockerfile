@@ -14,7 +14,7 @@
 
 FROM quay.io/cloudservices/ccx-rules-ocp:2021.11.16 AS rules
 
-FROM registry.redhat.io/rhel8/go-toolset:1.14 AS builder
+FROM registry.redhat.io/rhel8/go-toolset:1.16 AS builder
 
 COPY . .
 
