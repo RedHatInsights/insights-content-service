@@ -20,9 +20,8 @@ import (
 	"encoding/json"
 	"errors"
 
+	types "github.com/RedHatInsights/insights-results-types"
 	"github.com/verdverm/frisby"
-
-	"github.com/RedHatInsights/insights-operator-utils/types"
 )
 
 // URL to endpoint being tested there

@@ -20,7 +20,7 @@ import (
 	"strings"
 
 	"github.com/RedHatInsights/insights-operator-utils/collections"
-	"github.com/RedHatInsights/insights-operator-utils/types"
+	types "github.com/RedHatInsights/insights-results-types"
 	"github.com/rs/zerolog/log"
 )
 

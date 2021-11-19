@@ -18,7 +18,7 @@ import (
 	"testing"
 
 	"github.com/RedHatInsights/insights-operator-utils/tests/helpers"
-	"github.com/RedHatInsights/insights-operator-utils/types"
+	types "github.com/RedHatInsights/insights-results-types"
 
 	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"

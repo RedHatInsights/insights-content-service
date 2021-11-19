@@ -24,13 +24,12 @@ import (
 	"net/http"
 
 	httputils "github.com/RedHatInsights/insights-operator-utils/http"
+	types "github.com/RedHatInsights/insights-results-types"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 
 	"github.com/RedHatInsights/insights-content-service/content"
 	"github.com/RedHatInsights/insights-content-service/groups"
-
-	"github.com/RedHatInsights/insights-operator-utils/types"
 )
 
 // HTTPServer in an implementation of Server interface
