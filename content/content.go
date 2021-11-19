@@ -25,11 +25,12 @@ import (
 	"path"
 	"path/filepath"
 
-	internal_types "github.com/RedHatInsights/insights-content-service/types"
 	"github.com/RedHatInsights/insights-operator-utils/collections"
-	"github.com/RedHatInsights/insights-operator-utils/types"
+	ctypes "github.com/RedHatInsights/insights-results-types"
 	"github.com/go-yaml/yaml"
 	"github.com/rs/zerolog/log"
+
+	"github.com/RedHatInsights/insights-content-service/types"
 )
 
 // Logging messages
@@ -60,20 +61,20 @@ const (
 
 type (
 	// RuleContent wraps all the content available for a rule into a single structure.
-	RuleContent = types.RuleContent
+	RuleContent = ctypes.RuleContent
 	// RulePluginInfo is a Go representation of the `plugin.yaml`
 	// file inside of the rule content directory.
-	RulePluginInfo = types.RulePluginInfo
+	RulePluginInfo = ctypes.RulePluginInfo
 	// RuleErrorKeyContent wraps content of a single error key.
-	RuleErrorKeyContent = types.RuleErrorKeyContent
+	RuleErrorKeyContent = ctypes.RuleErrorKeyContent
 	// ErrorKeyMetadata is a Go representation of the `metadata.yaml`
 	// file inside of an error key content directory.
-	ErrorKeyMetadata = types.ErrorKeyMetadata
+	ErrorKeyMetadata = ctypes.ErrorKeyMetadata
 	// RuleContentDirectory contains content for all available rules in a directory.
-	RuleContentDirectory = types.RuleContentDirectory
+	RuleContentDirectory = ctypes.RuleContentDirectory
 	// GlobalRuleConfig represents the file that contains
 	// metadata globally applicable to any/all rule content.
-	GlobalRuleConfig = types.GlobalRuleConfig
+	GlobalRuleConfig = ctypes.GlobalRuleConfig
 )
 
 var (
@@ -188,7 +189,7 @@ func copyContentToEmptyErrorKeys(
 // some checks about it
 func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, error) {
 	errorContent := RuleErrorKeyContent{}
-	errorContentMetadata := internal_types.ReceivedErrorKeyMetadata{}
+	errorContentMetadata := types.ReceivedErrorKeyMetadata{}
 
 	for _, filename := range ErrorKeyContentFiles {
 		if contentRead[filename] == nil {
@@ -361,16 +362,16 @@ func parseGlobalContentConfig(configPath string) (GlobalRuleConfig, error) {
 
 // updateRuleContentStatus function updates a map containing results of parsing
 // all rules, external and internal ones
-func updateRuleContentStatus(ruleContentStatusMap map[string]types.RuleContentStatus,
-	ruleType types.RuleType, name string, loaded bool, err error) {
+func updateRuleContentStatus(ruleContentStatusMap map[string]ctypes.RuleContentStatus,
+	ruleType ctypes.RuleType, name string, loaded bool, err error) {
 	// fill-in value to be used in Error attribute
-	var parsingError = types.RuleParsingError("")
+	var parsingError = ctypes.RuleParsingError("")
 	if err != nil {
-		parsingError = types.RuleParsingError(err.Error())
+		parsingError = ctypes.RuleParsingError(err.Error())
 	}
 
 	// new entry to a map
-	ruleContentStatus := types.RuleContentStatus{
+	ruleContentStatus := ctypes.RuleContentStatus{
 		RuleType: ruleType,
 		Loaded:   loaded,
 		Error:    parsingError,
@@ -389,9 +390,9 @@ func updateRuleContentStatus(ruleContentStatusMap map[string]types.RuleContentSt
 // parseRulesInDir function finds all rules and their content in the specified
 // directory and stores the content in the provided map.
 // This function also aggregates list of rules with improper content.
-func parseRulesInDir(dirPath string, ruleType types.RuleType,
+func parseRulesInDir(dirPath string, ruleType ctypes.RuleType,
 	contentMap *map[string]RuleContent, invalidRules *[]string,
-	ruleContentStatusMap map[string]types.RuleContentStatus) error {
+	ruleContentStatusMap map[string]ctypes.RuleContentStatus) error {
 	// read the whole content of specified directory
 	entries, err := ioutil.ReadDir(dirPath)
 	if err != nil {
@@ -448,9 +449,9 @@ func printInvalidRules(invalidRules []string) {
 }
 
 // ParseRuleContentDir finds all rule content in a directory and parses it.
-func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, map[string]types.RuleContentStatus, error) {
+func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, map[string]ctypes.RuleContentStatus, error) {
 	// we don't know in advance how many rules we have, so let's use nil slice there
-	var ruleContentStatusMap map[string]types.RuleContentStatus = make(map[string]types.RuleContentStatus)
+	var ruleContentStatusMap map[string]ctypes.RuleContentStatus = make(map[string]ctypes.RuleContentStatus)
 
 	globalConfig, err := parseGlobalContentConfig(path.Join(contentDirPath, "config.yaml"))
 	if err != nil {

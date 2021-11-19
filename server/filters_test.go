@@ -19,8 +19,9 @@ package server_test
 import (
 	"testing"
 
+	types "github.com/RedHatInsights/insights-results-types"
+
 	"github.com/RedHatInsights/insights-content-service/server"
-	"github.com/RedHatInsights/insights-operator-utils/types"
 )
 
 // prepareStatusMap is a helper function to prepare map containing variour rule
