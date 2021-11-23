@@ -15,7 +15,6 @@
 
 # Updates the ./rules-content directory with the latest rules to test with
 
-
 function clean_up() {
     rm -rf "$CLONE_TEMP_DIR"
 }
@@ -58,8 +57,8 @@ if [ $# -ne 0 ]
 then
     if [[ "$*" == *-include-test-rules* ]]
     then
-	echo "Including test rules in served content"
-	cp -a "${TEST_RULE_CONTENT_DIR}/." "${CONTENT_DIR}/external/rules/"
+        echo "Including test rules in served content"
+        cp -a "${TEST_RULE_CONTENT_DIR}/." "${CONTENT_DIR}/external/rules/"
     fi
 fi
 
