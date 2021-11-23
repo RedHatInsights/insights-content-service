@@ -15,6 +15,7 @@
 
 # Updates the ./rules-content directory with the latest rules to test with
 
+
 function clean_up() {
     rm -rf "$CLONE_TEMP_DIR"
 }
@@ -24,6 +25,7 @@ RULES_REPO="https://gitlab.cee.redhat.com/ccx/ccx-rules-ocp.git"
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 CONTENT_DIR="${SCRIPT_DIR}/rules-content"
 TUTORIAL_RULE_CONTENT_DIR="${SCRIPT_DIR}/rules/tutorial/content"
+TEST_RULE_CONTENT_DIR="${SCRIPT_DIR}/rules/test/content"
 
 CLONE_TEMP_DIR="${SCRIPT_DIR}/.tmp"
 RULES_CONTENT="${CLONE_TEMP_DIR}/content/"
@@ -51,6 +53,15 @@ fi
 rm -rf "${CLONE_TEMP_DIR}"
 
 cp -a "${TUTORIAL_RULE_CONTENT_DIR}/." "${CONTENT_DIR}/external/rules/"
+
+if [ $# -ne 0 ]
+then
+    if [[ "$*" == *-include-test-rules* ]]
+    then
+	echo "Including test rules in served content"
+	cp -a "${TEST_RULE_CONTENT_DIR}/." "${CONTENT_DIR}/external/rules/"
+    fi
+fi
 
 echo "${CONTENT_DIR} updated with latest rules"
 exit 0
