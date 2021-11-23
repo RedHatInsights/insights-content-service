@@ -13,7 +13,7 @@
 # limitations under the License.
 
 description: A test rule for E2E tests that depend on this service
-impact:  Application Failure
+impact: Application Failure
 likelihood: 2
 publish_date: '2020-04-08 00:42:00'
 status: active

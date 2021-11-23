@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Introducing Insights for Red Hat OpenShift Container Platform
-node_id:
+name: Rule for testing purposes
+node_id: null
 product_code: OCP4
 python_module: ccx_rules_ocm.test_rule
