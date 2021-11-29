@@ -92,15 +92,16 @@
                   "properties": {
                     "rules": {
                       "type": "object",
-                      "additionalProperties": {
+                      "required": [],
+                      "properties": {
                         "type": {
-                                "type": "string"
+                          "type": "string"
                         },
                         "loaded": {
-                                "type": "boolean"
+                          "type": "boolean"
                         },
                         "error": {
-                                "type": "string"
+                          "type": "string"
                         }
                       }
                     },
