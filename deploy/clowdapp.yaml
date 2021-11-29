@@ -25,6 +25,8 @@ objects:
     name: ccx-insights-content
   spec:
     envName: ${ENV_NAME}
+    testing:
+      iqePlugin: ccx
     deployments:
       - name: service
         minReplicas: ${{MIN_REPLICAS}}
