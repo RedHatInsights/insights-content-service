@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021, 2022 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -107,7 +107,7 @@ func checkGroupsResponseContent(payload []byte) error {
 // checkTextAttribute is a rudimentary check for text attributes
 func checkTextAttribute(text string, what string) error {
 	// check for empty string
-	if len(text) == 0 {
+	if text == "" {
 		return errors.New("empty " + what + " detected in a group")
 	}
 

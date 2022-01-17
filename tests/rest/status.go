@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 Red Hat, Inc.
+Copyright © 2021, 2022 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ func checkStatusResponseContent(payload []byte) error {
 	}
 	for name, value := range response.RuleContentStatusMap {
 		// rudimentary check for rule name
-		if len(name) == 0 {
+		if name == "" {
 			return errors.New("wrong rule name")
 		}
 		// RuleType should be either "internal" or "external", nothing else
