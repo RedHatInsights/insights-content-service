@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021, 2022 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ func checkStandardOutputStatus(t *testing.T, err error) {
 
 // checkStandardOutputNotEmpty tests if standard output capturing captured at least some text
 func checkStandardOutputNotEmpty(t *testing.T, captured string) {
-	if len(captured) == 0 {
+	if captured == "" {
 		t.Fatal("Output is empty")
 	}
 }
