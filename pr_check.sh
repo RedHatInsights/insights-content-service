@@ -21,7 +21,7 @@ set -exv
 # --------------------------------------------
 APP_NAME="ccx-data-pipeline"  # name of app-sre "application" folder this component lives in
 COMPONENT_NAME="insights-content-service"  # name of app-sre "resourceTemplate" in deploy.yaml for this component
-IMAGE="quay.io/cloudservices/insights-content-service"
+IMAGE="quay.io/cloudservices/ccx-insights-content-service"
 COMPONENTS="ccx-data-pipeline ccx-insights-results insights-content-service insights-results-smart-proxy"  # space-separated list of components to laod
 COMPONENTS_W_RESOURCES="insights-content-service"  # component to keep
 CACHE_FROM_LATEST_IMAGE="true"
@@ -44,7 +44,7 @@ function deploy_ephemeral() {
 
 function run_smoke_tests() {
     # component name needs to be re-export to match ClowdApp name (as bonfire requires for this)
-    export COMPONENT_NAME="ccx-smart-proxy"
+    export COMPONENT_NAME="ccx-insights-content"
     source $CICD_ROOT/cji_smoke_test.sh
 }
 
