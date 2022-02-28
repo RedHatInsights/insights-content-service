@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021, 2022 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,11 +49,6 @@ func mustSetEnv(t *testing.T, key, val string) {
 func loadProperConfigFile(t *testing.T) {
 	os.Clearenv()
 	mustLoadConfiguration(t, "tests/config")
-}
-
-func loadConfigFileWithWrongFiles(t *testing.T) {
-	os.Clearenv()
-	mustLoadConfiguration(t, "tests/config_wrong_files")
 }
 
 // TestLoadConfiguration loads a configuration file for testing
