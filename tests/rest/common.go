@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2021, 2022 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package tests
 
 import (
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 
 	"github.com/verdverm/frisby"
@@ -26,9 +25,8 @@ import (
 
 // common constants used by REST API tests
 const (
-	apiURL              = "http://localhost:8080/api/v1/"
-	contentTypeHeader   = "Content-Type"
-	contentLengthHeader = "Content-Length"
+	apiURL            = "http://localhost:8080/api/v1/"
+	contentTypeHeader = "Content-Type"
 
 	authHeaderName = "x-rh-identity"
 
@@ -54,21 +52,6 @@ func setAuthHeaderForOrganization(f *frisby.Frisby, orgID int) {
 // setAuthHeader set authorization header to request for organization 1
 func setAuthHeader(f *frisby.Frisby) {
 	setAuthHeaderForOrganization(f, 1)
-}
-
-// readStatusFromResponse reads and parses status from response body
-func readStatusFromResponse(f *frisby.Frisby) StatusOnlyResponse {
-	response := StatusOnlyResponse{}
-	text, err := f.Resp.Content()
-	if err != nil {
-		f.AddError(err.Error())
-	} else {
-		err := json.Unmarshal(text, &response)
-		if err != nil {
-			f.AddError(err.Error())
-		}
-	}
-	return response
 }
 
 // sendAndExpectStatus sends the request to the server and checks whether expected HTTP code (status) is returned

@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 Red Hat, Inc.
+Copyright © 2021, 2022 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ func prepareQuery(includeInternal bool, includeExternal bool, ruleNames []string
 	}
 
 	// add flag to filter rules by their name(s)
-	if ruleNames != nil && len(ruleNames) >= 1 {
+	if len(ruleNames) >= 1 {
 		query["rule"] = ruleNames
 	}
 	return query
