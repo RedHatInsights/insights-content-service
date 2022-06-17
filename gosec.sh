@@ -20,7 +20,7 @@ NC=$(tput sgr0) # No Color
 
 GO_SEC_ARGS=""
 
-if [[ $* != *verbose* ]]; then
+if [[ $* != *verbose* ]] && [[ -z "${VERBOSE}" ]]; then
     GO_SEC_ARGS="-quiet"
 fi
 
@@ -31,7 +31,7 @@ echo -e "${BLUE}Security issues detection${NC}"
 if ! [ -x "$(command -v gosec)" ]
 then
     echo -e "${BLUE}Installing ${NC}"
-    curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b "$(go env GOPATH)/bin"
+    curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b "$(go env GOPATH)/bin" v2.8.1
     # shellcheck disable=SC2181
     if [ $? -eq 0 ]
     then
