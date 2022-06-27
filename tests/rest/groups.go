@@ -105,7 +105,7 @@ func checkGroupsResponseContent(payload []byte) error {
 }
 
 // checkTextAttribute is a rudimentary check for text attributes
-func checkTextAttribute(text string, what string) error {
+func checkTextAttribute(text, what string) error {
 	// check for empty string
 	if text == "" {
 		return errors.New("empty " + what + " detected in a group")
