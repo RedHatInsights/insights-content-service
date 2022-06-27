@@ -26,7 +26,7 @@ import (
 
 // prepareStatusMap is a helper function to prepare map containing variour rule
 // content states
-func prepareStatusMap(includeInternal bool, includeExternal bool, includeErrorStates bool) map[string]types.RuleContentStatus {
+func prepareStatusMap(includeInternal, includeExternal, includeErrorStates bool) map[string]types.RuleContentStatus {
 	const externalRuleType = "external"
 	const internalRuleType = "internal"
 
@@ -68,7 +68,7 @@ func prepareStatusMap(includeInternal bool, includeExternal bool, includeErrorSt
 }
 
 // prepareQuery is a helper function to prepare map containing query parameters
-func prepareQuery(includeInternal bool, includeExternal bool, ruleNames []string) map[string][]string {
+func prepareQuery(includeInternal, includeExternal bool, ruleNames []string) map[string][]string {
 	query := make(map[string][]string)
 	// add flag to filter internal rules
 	if includeInternal {
