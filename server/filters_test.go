@@ -26,7 +26,7 @@ import (
 
 // prepareStatusMap is a helper function to prepare map containing variour rule
 // content states
-func prepareStatusMap(includeInternal bool, includeExternal bool, includeErrorStates bool) map[string]types.RuleContentStatus {
+func prepareStatusMap(includeInternal, includeExternal, includeErrorStates bool) map[string]types.RuleContentStatus {
 	const externalRuleType = "external"
 	const internalRuleType = "internal"
 
