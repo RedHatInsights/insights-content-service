@@ -112,7 +112,7 @@ func TestServerStartError(t *testing.T) {
 
 // TestServeAPISpecFileOK checks whether it is possible to access openapi.json via REST API server
 func TestServeAPISpecFileOK(t *testing.T) {
-	fileData, err := ioutil.ReadFile(config.APISpecFile)
+	fileData, err := os.ReadFile(config.APISpecFile)
 	helpers.FailOnError(t, err)
 
 	helpers.AssertAPIRequest(t, &config, &helpers.APIRequest{

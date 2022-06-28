@@ -20,7 +20,6 @@ package content
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -107,7 +106,7 @@ func readFilesIntoFileContent(baseDir string, filelist []string) (map[string][]b
 	for _, name := range filelist {
 		log.Info().Msgf("Parsing %s/%s", baseDir, name)
 		var err error
-		rawBytes, err := ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
+		rawBytes, err := os.ReadFile(filepath.Clean(path.Join(baseDir, name)))
 		if err != nil {
 			filesContent[name] = nil
 			log.Error().Err(err)
@@ -240,7 +239,7 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 // This implicitly checks that the directory exists,
 // so it is not necessary to ever check that elsewhere.
 func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, error) {
-	entries, err := ioutil.ReadDir(ruleDirPath)
+	entries, err := os.ReadDir(ruleDirPath)
 	if err != nil {
 		return nil, err
 	}
@@ -344,7 +343,7 @@ func parseRuleContent(ruleDirPath string) (RuleContent, error) {
 // parseGlobalContentConfig reads the configuration file used to store
 // metadata used by all rule content, such as impact dictionary.
 func parseGlobalContentConfig(configPath string) (GlobalRuleConfig, error) {
-	configBytes, err := ioutil.ReadFile(filepath.Clean(configPath))
+	configBytes, err := os.ReadFile(filepath.Clean(configPath))
 	if err != nil {
 		return GlobalRuleConfig{}, err
 	}
@@ -394,7 +393,7 @@ func parseRulesInDir(dirPath string, ruleType ctypes.RuleType,
 	contentMap *map[string]RuleContent, invalidRules *[]string,
 	ruleContentStatusMap map[string]ctypes.RuleContentStatus) error {
 	// read the whole content of specified directory
-	entries, err := ioutil.ReadDir(dirPath)
+	entries, err := os.ReadDir(dirPath)
 	if err != nil {
 		return err
 	}
