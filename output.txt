@@ -1,0 +1,2 @@
+branch 'juandspy-test' set up to track 'upstream/juandspy-test'.
+https://github.com/RedHatInsights/insights-content-service/pull/382
