@@ -1,3 +1,5 @@
+this is a test
+
 # Insights Content Service
 
 [![GoDoc](https://godoc.org/github.com/RedHatInsights/insights-content-service?status.svg)](https://godoc.org/github.com/RedHatInsights/insights-content-service)
