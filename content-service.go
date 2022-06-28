@@ -142,14 +142,14 @@ func printVersionInfo() ExitCode {
 
 func printGroups() ExitCode {
 	groupsConfig := conf.GetGroupsConfiguration()
-	groups, err := groups.ParseGroupConfigFile(groupsConfig.ConfigPath)
+	groupsMap, err := groups.ParseGroupConfigFile(groupsConfig.ConfigPath)
 
 	if err != nil {
-		log.Error().Err(err).Msg("Groups init error")
+		log.Error().Err(err).Msg("Groups parsing error")
 		return ExitStatusServerError
 	}
 
-	fmt.Println(groups)
+	fmt.Println(groupsMap)
 	return ExitStatusOK
 }
 

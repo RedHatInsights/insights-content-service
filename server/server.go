@@ -46,12 +46,12 @@ type HTTPServer struct {
 }
 
 // New constructs new implementation of Server interface
-func New(config Configuration, groups map[string]groups.Group,
+func New(config Configuration, groupsMap map[string]groups.Group,
 	contentDir content.RuleContentDirectory,
 	ruleContentStatusMap map[string]types.RuleContentStatus) *HTTPServer {
 	return &HTTPServer{
 		Config:               config,
-		Groups:               groups,
+		Groups:               groupsMap,
 		Content:              contentDir,
 		ruleContentStatusMap: ruleContentStatusMap,
 		InfoParams:           make(map[string]string),
