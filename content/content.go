@@ -107,7 +107,7 @@ func readFilesIntoFileContent(baseDir string, filelist []string) (map[string][]b
 	for _, name := range filelist {
 		log.Info().Msgf("Parsing %s/%s", baseDir, name)
 		var err error
-		rawBytes, err := ioutil.ReadFile(filepath.Clean(path.Join(baseDir, name)))
+		rawBytes, err := os.ReadFile(filepath.Clean(path.Join(baseDir, name)))
 		if err != nil {
 			filesContent[name] = nil
 			log.Error().Err(err)
