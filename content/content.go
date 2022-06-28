@@ -344,7 +344,7 @@ func parseRuleContent(ruleDirPath string) (RuleContent, error) {
 // parseGlobalContentConfig reads the configuration file used to store
 // metadata used by all rule content, such as impact dictionary.
 func parseGlobalContentConfig(configPath string) (GlobalRuleConfig, error) {
-	configBytes, err := ioutil.ReadFile(filepath.Clean(configPath))
+	configBytes, err := os.ReadFile(filepath.Clean(configPath))
 	if err != nil {
 		return GlobalRuleConfig{}, err
 	}
