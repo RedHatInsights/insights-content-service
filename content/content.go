@@ -240,7 +240,7 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 // This implicitly checks that the directory exists,
 // so it is not necessary to ever check that elsewhere.
 func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, error) {
-	entries, err := ioutil.ReadDir(ruleDirPath)
+	entries, err := os.ReadDir(ruleDirPath)
 	if err != nil {
 		return nil, err
 	}
