@@ -172,7 +172,7 @@ func checkErrorCodeTags(groupCfg groupConfigMap, ruleName, errCode string, errCo
 
 // Base rule content checks.
 
-func checkRuleFileNotEmpty(ruleName, fileName string, value string) {
+func checkRuleFileNotEmpty(ruleName, fileName, value string) {
 	checkStringNotEmpty(
 		fmt.Sprintf("content file '%s' of rule '%s'", fileName, ruleName),
 		value,
