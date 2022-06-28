@@ -394,7 +394,7 @@ func parseRulesInDir(dirPath string, ruleType ctypes.RuleType,
 	contentMap *map[string]RuleContent, invalidRules *[]string,
 	ruleContentStatusMap map[string]ctypes.RuleContentStatus) error {
 	// read the whole content of specified directory
-	entries, err := ioutil.ReadDir(dirPath)
+	entries, err := os.ReadDir(dirPath)
 	if err != nil {
 		return err
 	}
