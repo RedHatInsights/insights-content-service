@@ -17,6 +17,7 @@ limitations under the License.
 package groups
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/go-yaml/yaml"
