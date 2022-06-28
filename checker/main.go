@@ -136,7 +136,7 @@ func checkRuleContent(groupCfg groupConfigMap) {
 
 // checkErrorCodeTags checks that the tags referenced by the error code are valid.
 // At the end, all assigned tags (and the groups they belong to) are printed in the form of a map.
-func checkErrorCodeTags(groupCfg groupConfigMap, ruleName string, errCode string, errContent content.RuleErrorKeyContent) {
+func checkErrorCodeTags(groupCfg groupConfigMap, ruleName, errCode string, errContent content.RuleErrorKeyContent) {
 	errGroups := map[string][]string{}
 
 	// For every tag of that error code.
@@ -172,7 +172,7 @@ func checkErrorCodeTags(groupCfg groupConfigMap, ruleName string, errCode string
 
 // Base rule content checks.
 
-func checkRuleFileNotEmpty(ruleName, fileName string, value string) {
+func checkRuleFileNotEmpty(ruleName, fileName, value string) {
 	checkStringNotEmpty(
 		fmt.Sprintf("content file '%s' of rule '%s'", fileName, ruleName),
 		value,
@@ -188,7 +188,7 @@ func checkRuleAttributeNotEmpty(ruleName, attribName, value string) {
 
 // Error code content checks.
 
-func checkErrorCodeFileNotEmpty(ruleName, errorCode, fileName string, value string) {
+func checkErrorCodeFileNotEmpty(ruleName, errorCode, fileName, value string) {
 	checkStringNotEmpty(
 		fmt.Sprintf("content file '%s' of error code '%s|%s'", fileName, ruleName, errorCode),
 		value,

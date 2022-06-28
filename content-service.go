@@ -127,7 +127,7 @@ func fillInInfoParams(params map[string]string) {
 	params["UtilsVersion"] = UtilsVersion
 }
 
-func printInfo(msg string, val string) {
+func printInfo(msg, val string) {
 	fmt.Printf("%s\t%s\n", msg, val)
 }
 
