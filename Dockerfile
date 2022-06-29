@@ -45,5 +45,3 @@ USER 1001
 # ENTRYPOINT ["/usr/bin/haberdasher"]
 
 CMD ["/insights-content-service"]
-
-# test commment 2
