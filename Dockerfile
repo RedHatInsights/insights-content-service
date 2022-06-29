@@ -45,3 +45,4 @@ USER 1001
 # ENTRYPOINT ["/usr/bin/haberdasher"]
 
 CMD ["/insights-content-service"]
+#31565
