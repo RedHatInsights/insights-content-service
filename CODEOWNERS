@@ -1,5 +1,5 @@
-# Version bump pull requests
-Dockerfile @matysek
+# Version bump pull requests do not require approva - owned by everyone.
+Dockerfile
 
 # CCX Processing team members are the default owners of the repository
 * @tisnik @Bee-lee @JoseLSegura @dpensi @lobziik @matysek @epapbak @JiriPapousek @juandspy
