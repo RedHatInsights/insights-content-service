@@ -64,3 +64,5 @@ contribute to this project.
 ## Package manifest
 
 Package manifest is available at [docs/manifest.txt](docs/manifest.txt).
+
+# add test comment
