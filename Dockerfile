@@ -46,3 +46,4 @@ USER 1001
 
 CMD ["/insights-content-service"]
 
+#23939
