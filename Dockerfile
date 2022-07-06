@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/cloudservices/ccx-rules-ocp:2022.06.22.post3 AS rules
+FROM quay.io/cloudservices/ccx-rules-ocp:2022.07.06 AS rules
 
 FROM registry.redhat.io/rhel8/go-toolset:1.16 AS builder
 
