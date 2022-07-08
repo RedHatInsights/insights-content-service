@@ -22,5 +22,7 @@ commit=$(git rev-parse HEAD)
 
 utils_version=$(go list -m github.com/RedHatInsights/insights-operator-utils | awk '{print $2}')
 
-go build -ldflags="-X 'main.BuildTime=$buildtime' -X 'main.BuildVersion=$version' -X 'main.BuildBranch=$branch' -X 'main.BuildCommit=$commit' -X 'main.UtilsVersion=$utils_version'"
+ocp_rules_version=$(grep "^FROM quay.io\/cloudservices\/.* AS rules$" Dockerfile | awk -F'FROM quay.io/cloudservices/|AS rules' '{print $2}')
+
+go build -ldflags="-X 'main.BuildTime=$buildtime' -X 'main.BuildVersion=$version' -X 'main.BuildBranch=$branch' -X 'main.BuildCommit=$commit' -X 'main.UtilsVersion=$utils_version' -X 'main.OCPRulesVersion=$ocp_rules_version'"
 exit $?

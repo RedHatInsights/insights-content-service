@@ -72,6 +72,10 @@ var (
 	// UtilsVersion contains currently used version of
 	// github.com/RedHatInsights/insights-operator-utils package
 	UtilsVersion = "*not set*"
+
+	// OCPRulesVersion contains currently used version of
+	// https://gitlab.cee.redhat.com/ccx/ccx-rules-ocp package
+	OCPRulesVersion = "*not set*"
 )
 
 // startService starts service and returns error code
@@ -125,6 +129,7 @@ func fillInInfoParams(params map[string]string) {
 	params["BuildBranch"] = BuildBranch
 	params["BuildCommit"] = BuildCommit
 	params["UtilsVersion"] = UtilsVersion
+	params["OCPRulesVersion"] = OCPRulesVersion
 }
 
 func printInfo(msg, val string) {
@@ -137,6 +142,7 @@ func printVersionInfo() ExitCode {
 	printInfo("Branch:", BuildBranch)
 	printInfo("Commit:", BuildCommit)
 	printInfo("Utils version:", UtilsVersion)
+	printInfo("OCP rules version:", OCPRulesVersion)
 	return ExitStatusOK
 }
 
@@ -207,6 +213,7 @@ func logVersionInfo() {
 	initInfoLog("Branch: " + BuildBranch)
 	initInfoLog("Commit: " + BuildCommit)
 	initInfoLog("Utils version:" + UtilsVersion)
+	initInfoLog("OCP rules version:" + OCPRulesVersion)
 }
 
 const helpMessageTemplate = `
