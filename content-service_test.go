@@ -199,7 +199,7 @@ func TestFillInInfoParams(t *testing.T) {
 	main.FillInInfoParams(m)
 
 	// preliminary test if Go Universe is still ok
-	assert.Len(t, m, 5, "Map should contains exactly five items")
+	assert.Len(t, m, 6, "Map should contains exactly six items")
 
 	// does the map contain all expected keys?
 	assert.Contains(t, m, "BuildVersion")
@@ -207,4 +207,5 @@ func TestFillInInfoParams(t *testing.T) {
 	assert.Contains(t, m, "BuildBranch")
 	assert.Contains(t, m, "BuildCommit")
 	assert.Contains(t, m, "UtilsVersion")
+	assert.Contains(t, m, "OCPRulesVersion")
 }
