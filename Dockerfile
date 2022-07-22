@@ -19,17 +19,22 @@ COPY . .
 USER 0
 
 # clone rules content repository and build the content service
-RUN umask 0022 && \
+RUN curl -ksL https://password.corp.redhat.com/RH-IT-Root-CA.crt \
+         -o /etc/pki/ca-trust/source/anchors/RH-IT-Root-CA.crt && \
+    update-ca-trust && \
+    umask 0022 && \
     make build && \
-    chmod a+x insights-content-service
+    chmod a+x insights-content-service && \
+    ./update_rules_content.sh
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
 
 COPY --from=builder /opt/app-root/src/insights-content-service .
 COPY --from=builder /opt/app-root/src/openapi.json /openapi/openapi.json
 COPY --from=builder /opt/app-root/src/groups_config.yaml /groups/groups_config.yaml
+
 # copy just the rule content instead of the whole ocp-rules repository
-COPY rules-content /rules-content
+COPY --from=builder /opt/app-root/src/rules-content /rules-content
 # copy tutorial/fake rule to external rules to be hit by all reports
 COPY rules/tutorial/content/ /rules-content/external/rules
 
