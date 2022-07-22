@@ -39,19 +39,19 @@ echo "Attempting to clone repository into ${CLONE_TEMP_DIR}"
 if ! git clone --depth=1 --branch "${CCX_RULES_OCP_TAG}" "${RULES_REPO}" "${CLONE_TEMP_DIR}"
 then
     echo "Couldn't clone rules repository"
-    exit 1
+    exit $?
 fi
 
 if ! rm -rf "${CONTENT_DIR}"
 then
     echo "Couldn't remove previous content"
-    exit 1
+    exit $?
 fi
 
 if ! mv "${RULES_CONTENT}" "${CONTENT_DIR}"
 then
     echo "Couldn't move rules content from cloned repository"
-    exit 1
+    exit $?
 fi
 
 rm -rf "${CLONE_TEMP_DIR}"
