@@ -13,11 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 set -exv
 
 IMAGE="quay.io/cloudservices/ccx-insights-content-service"
 IMAGE_TAG=$(git rev-parse --short=7 HEAD)
+
+# Update ccx-rules-ocp
+./update_rules_content.sh
 
 if [[ -z "$QUAY_USER" || -z "$QUAY_TOKEN" ]]; then
     echo "QUAY_USER and QUAY_TOKEN must be set"
