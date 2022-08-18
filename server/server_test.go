@@ -18,7 +18,6 @@ package server_test
 
 import (
 	"context"
-	"io"
 	"net/http"
 	"os"
 	"testing"
@@ -143,7 +142,7 @@ func TestServeAPISpecOptionsMethod(t *testing.T) {
 // TestServeAPISpecFileError checks the error tests in REST API server handler
 func TestServeAPISpecFileError(t *testing.T) {
 	// openapi.json is really not there
-	dirName, err := io.TempDir("/tmp/", "")
+	dirName, err := os.TempDir("/tmp/", "")
 	helpers.FailOnError(t, err)
 
 	err = os.Chdir(dirName)
