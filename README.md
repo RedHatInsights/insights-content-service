@@ -56,6 +56,30 @@ The commands are:
 
 ```
 
+## Makefile targets
+
+```
+clean                Run go clean
+fmt                  Run go fmt -w for all sources
+lint                 Run golint
+vet                  Run go vet. Report likely mistakes in source code
+cyclo                Run gocyclo
+ineffassign          Run ineffassign checker
+shellcheck           Run shellcheck
+errcheck             Run errcheck
+goconst              Run goconst checker
+gosec                Run gosec checker
+abcgo                Run ABC metrics checker
+json-check           Check all JSONs for basic syntax
+style                Run all the formatting related commands (fmt, vet, lint, cyclo) + check shell scripts
+run                  Build the project and executes the binary
+test                 Run the unit tests
+cover                Generate HTML pages with code coverage
+coverage             Display code coverage on terminal
+integration_tests    Run all integration tests
+help                 Show this help screen
+```
+
 ## Contribution
 
 Please look into document [CONTRIBUTING.md](CONTRIBUTING.md) that contains all information about how to
