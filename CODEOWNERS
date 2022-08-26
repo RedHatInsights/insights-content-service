@@ -1,2 +1,6 @@
+
 # CCX Processing team members are the default owners of the repository
 * @tisnik @Bee-lee @JoseLSegura @dpensi @lobziik @matysek @epapbak @JiriPapousek @juandspy
+
+# Version bump pull requests do not require approva - owned by everyone.
+update_rules_content.sh
