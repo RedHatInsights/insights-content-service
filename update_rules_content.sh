@@ -23,7 +23,7 @@ function clean_up() {
 trap clean_up EXIT
 
 # Updated with every new ccx-rules-opc release.
-CCX_RULES_OCP_TAG="2022.08.31"
+CCX_RULES_OCP_TAG="2022.09.14"
 
 RULES_REPO="https://gitlab.cee.redhat.com/ccx/ccx-rules-ocp.git"
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
