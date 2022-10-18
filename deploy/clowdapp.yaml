@@ -23,6 +23,8 @@ objects:
   kind: ClowdApp
   metadata:
     name: ccx-insights-content
+    annotations:
+      ignore-check.kube-linter.io/minimum-replicas: "This app doesn't have that much traffic"
   spec:
     envName: ${ENV_NAME}
     testing:
