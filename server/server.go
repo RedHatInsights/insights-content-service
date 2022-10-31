@@ -22,6 +22,7 @@ package server
 import (
 	"context"
 	"net/http"
+	"time"
 
 	httputils "github.com/RedHatInsights/insights-operator-utils/http"
 	types "github.com/RedHatInsights/insights-results-types"
@@ -63,7 +64,13 @@ func (server *HTTPServer) Start() error {
 	address := server.Config.Address
 	log.Info().Msgf("Starting HTTP server at '%s'", address)
 	router := server.Initialize()
-	server.Serv = &http.Server{Addr: address, Handler: router}
+	server.Serv = &http.Server{
+		Addr:              address,
+		Handler:           router,
+		ReadTimeout:       1 * time.Minute,
+		ReadHeaderTimeout: 5 * time.Second,
+		WriteTimeout:      30 * time.Second,
+	}
 
 	err := server.Serv.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
