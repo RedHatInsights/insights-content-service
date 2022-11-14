@@ -61,6 +61,7 @@ The commands are:
 
 ```
 clean                Run go clean
+build                Build binary containing service executable
 fmt                  Run go fmt -w for all sources
 lint                 Run golint
 vet                  Run go vet. Report likely mistakes in source code
