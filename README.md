@@ -16,6 +16,7 @@ Content service for Insights rules groups, tags, and content.
 * [Description](#description)
 * [Documentation](#documentation)
 * [Usage](#usage)
+* [Makefile targets](#makefile-targets)
 * [Contribution](#contribution)
 * [Package manifest](#package-manifest)
 
@@ -78,6 +79,7 @@ cover                Generate HTML pages with code coverage
 coverage             Display code coverage on terminal
 integration_tests    Run all integration tests
 help                 Show this help screen
+function_list        List all functions in generated binary file
 ```
 
 ## Contribution
