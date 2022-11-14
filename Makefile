@@ -10,7 +10,7 @@ clean: ## Run go clean
 	@go clean
 	rm -f rest-api-tests
 
-build: ${BINARY}
+build: ${BINARY} ## Build binary containing service executable
 
 ${BINARY}: ${SOURCES}
 	./build.sh
