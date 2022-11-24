@@ -28,6 +28,7 @@ all pull requests:
   repository.
 * `abcgo` to measure ABC metrics for Go source code and check if the metrics
   does not exceed specified threshold.
+* `golangci-lint` as Go linters aggregator with lot of linters enabled: https://golangci-lint.run/usage/linters/
 
 Please note that all checks mentioned above have to pass for the change to be merged into main branch (the main branch is configured in repository settings on GitHub).
 
