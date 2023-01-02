@@ -165,7 +165,7 @@
     "/content": {
       "get": {
         "summary": "Returns static content for all rules.",
-        "description": "The static content is taken from the memory cache and send in gob format",
+        "description": "The static content is taken from the memory cache, encoded in encoding/gob format and sent.",
         "operationId": "getContent",
         "responses": {
           "200": {
