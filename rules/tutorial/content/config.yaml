@@ -172,79 +172,28 @@ impact:
     Low Density Node: 1
 
 resolution_risk:
-    Activate SELinux: 4
-    Adjust Service Status: 1
-    Adjust Time: 3
-    Apply kpatch for Kernel: 3
-    Apply kmod: 3
-    BIOS Parameter Adjustment: 2
-    Ceph Parameter Tuning: 2
-    Change AWS Instance: 2
-    Change Package Version: 3
-    Clean Database: 4
-    Clean Disk Space: 3
-    Configure SELinux: 2
-    Configure Audit: 2
-    Configure fstab: 3
-    Configure Users or Groups: 3
-    Contact Red Hat Support: 1
-    Docker Parameter Tuning: 2
-    Eliminate Orphaned Semaphores: 2
-    Hardware Vendor Analysis: 1
-    Hardware Vendor Firmware Update: 3
-    Inspect Hardware: 1
-    Install Package: 1
-    Limits Tuning: 2
-    Migrate Filesystem: 2
-    Network Parameter Tuning: 2
-    OpenStack Parameter Tuning: 2
-    Openshift Parameter Tuning: 2
-    Openshift Configuration Tuning: 2
-    Pacemaker Parameter Tuning: 2
-    RHV Storage Tuning: 3
-    Rebuild RPM Database: 3
-    Rebuild Initramfs: 3
-    Reinstall Kernel: 2
-    Reinstall Package: 1
-    Remount Filesystem: 4
-    Remove Package: 3
-    Restart Container: 2
-    Restart libvirtd: 3
-    Software Vendor Analysis: 1
-    Storage Parameter Tuning: 2
-    Sysctl Parameter Tuning: 2
-    Systemd Daemon Reload: 3
-    Update Ceph Configuration: 2
-    Update Ceph Deployment: 4
-    Update Certificate: 1
-    Update Cluster Configuration: 2
-    Update Commonly Used Library: 4
-    Update Database Configuration: 2
-    Update File Permission: 4
-    Update Firewall: 3
-    Update Grub Configuration: 4
-    Update IPMIlan Configuration: 2
-    Update JBoss Configuration: 2
-    Update LVM Configuration: 4
-    Update Module Parameter: 2
-    Update Network Configuration: 3
-    Update OpenStack Configuration: 2
-    Update Openshift Configuration: 2
-    Update Package: 1
-    Update RHV Configuration: 2
-    Update Registration Info: 1
-    Update Service Configuration: 3
-    Update Storage Configuration: 3
-    Update Third-party Software: 2
-    Update Kernel Boot Options: 3
-    Upgrade Kernel: 3
-    Upgrade Openshift: 2
-    Upgrade RHV Hypervisor: 2
-    Upgrade RHV Manager: 3
-    Upgrade Satellite: 3
-    Upgrade RHEL: 3
-    Use Unprivileged User: 4
-    null: 1  # Default for when no risk is set
+    API Changes: 3
+    Application Configuration: 1
+    Cluster Node Restart: 2
+    Configuration Migration: 3
+    Control Plane Node Replacement: 3
+    Manual Node Fix: 2
+    Network Configuration Tuning: 3
+    No Change: 1
+    Node Configuration Tuning: 2
+    OCP Re-installation: 4
+    OCP Upgrade: 2
+    Persistent Volume Configuration: 3
+    Pod Placement Tuning: 2
+    Pod Restart: 2
+
+    # To be used for changes like setting memory and CPU requests. Such changes may imply voluntary disruptions,
+    # but should be harmless otherwise.
+    Workload Configuration Tuning: 2
+
+    # To be used for changes like setting minimum replicas to 3.
+    # Such changes may require rather big design changes for legacy workloads.
+    Workload Design Changes: 3
 
 tags:
     ceph:

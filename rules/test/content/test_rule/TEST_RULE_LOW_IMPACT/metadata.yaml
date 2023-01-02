@@ -17,6 +17,7 @@ impact: Hardening
 likelihood: 1
 publish_date: '2020-04-08 00:42:00'
 status: active
+resolution_risk: Application Configuration
 tags:
 - openshift
 - service_availability
