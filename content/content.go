@@ -204,7 +204,7 @@ func createErrorContents(contentRead map[string][]byte) (*RuleErrorKeyContent, e
 				return nil, err
 			}
 
-			errorContent.Metadata = errorContentMetadata.ToErrorKeyMetadata(GlobalConfig.Impact)
+			errorContent.Metadata = errorContentMetadata.ToErrorKeyMetadata(GlobalConfig.Impact, GlobalConfig.ResolutionRisk)
 
 			continue
 		}
