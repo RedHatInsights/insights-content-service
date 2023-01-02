@@ -22,3 +22,8 @@ impact:
   Seven: 7
   Eight: 8
   Nine: 9
+
+resolution_risk:
+  API Changes: 3
+  Application Configuration: 1
+  Cluster Node Restart: 2
