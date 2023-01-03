@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/RedHatInsights/insights-operator-utils v1.22.0
-	github.com/RedHatInsights/insights-results-types v1.2.0
+	github.com/RedHatInsights/insights-results-types v1.3.21
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gorilla/mux v1.8.0
