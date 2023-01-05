@@ -101,6 +101,10 @@ func checkGroupConfig() groupConfigMap {
 
 // checkRuleContent checks if rule content files are not empty
 // and if the tags assigned to all error codes really exist.
+// Proper checking of the rule content is done in the ccx-ocp-rules repo itself,
+// we are trusting the tests and checks in that repo, most of these warnings are
+// triggered by internal rules and are only here in case something went wrong in those tests.
+// We could add separate checks for internal/external but it's better to do it in the ocp-rules repo.
 func checkRuleContent(groupCfg groupConfigMap) {
 	ruleContentDir, _, err := content.ParseRuleContentDir(contentDirPath)
 	if err != nil {
@@ -123,9 +127,10 @@ func checkRuleContent(groupCfg groupConfigMap) {
 		for errCode, errContent := range ruleContent.ErrorKeys {
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "description", errContent.Metadata.Description)
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "impact", errContent.Metadata.Impact.Name)
+			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "likelihood", fmt.Sprint(errContent.Metadata.Likelihood))
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "publish_date", errContent.Metadata.PublishDate)
 			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "status", errContent.Metadata.Status)
-			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "likelihood", fmt.Sprint(errContent.Metadata.Likelihood))
+			checkErrorCodeAttributeNotEmpty(ruleName, errCode, "resolution_risk", errContent.Metadata.Status)
 
 			checkErrorCodeFileNotEmpty(ruleName, errCode, "generic.md", errContent.Generic)
 

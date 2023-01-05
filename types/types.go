@@ -39,25 +39,35 @@ type UserID string
 // ReceivedErrorKeyMetadata is ErrorKeyMetadata as received from
 // the metadata.yaml file
 type ReceivedErrorKeyMetadata struct {
-	Description string   `yaml:"description" json:"description"`
-	Impact      string   `yaml:"impact" json:"impact"`
-	Likelihood  int      `yaml:"likelihood" json:"likelihood"`
-	PublishDate string   `yaml:"publish_date" json:"publish_date"`
-	Status      string   `yaml:"status" json:"status"`
-	Tags        []string `yaml:"tags" json:"tags"`
+	Description    string   `yaml:"description" json:"description"`
+	Impact         string   `yaml:"impact" json:"impact"`
+	Likelihood     int      `yaml:"likelihood" json:"likelihood"`
+	PublishDate    string   `yaml:"publish_date" json:"publish_date"`
+	ResolutionRisk string   `yaml:"resolution_risk" json:"resolution_risk"`
+	Status         string   `yaml:"status" json:"status"`
+	Tags           []string `yaml:"tags" json:"tags"`
 }
 
 // ToErrorKeyMetadata converts ReceivedErrorKeyMetadata to the type actually
-// used by the pipeline, calculating impact with impactDict
-func (r ReceivedErrorKeyMetadata) ToErrorKeyMetadata(impactDict map[string]int) types.ErrorKeyMetadata {
+// used by the pipeline, calculating impact with impactDict and resolution_risk
+// with resolutionRiskDict
+func (r ReceivedErrorKeyMetadata) ToErrorKeyMetadata(
+	impactDict map[string]int,
+	resolutionRiskDict map[string]int,
+) types.ErrorKeyMetadata {
 	returnVal := types.ErrorKeyMetadata{}
 	returnVal.Description = r.Description
-	impactNumber, found := impactDict[r.Impact]
+	impactValue, found := impactDict[r.Impact]
 	if !found {
-		log.Error().Msgf(`impact "%v" doesn't have integer representation' (skipping)`, r.Impact)
+		log.Warn().Msgf(`impact "%v" doesn't have integer representation`, r.Impact)
 	}
-	returnVal.Impact.Impact = impactNumber
+	returnVal.Impact.Impact = impactValue
 	returnVal.Impact.Name = r.Impact
+	resolutionRiskValue, found := resolutionRiskDict[r.ResolutionRisk]
+	if !found {
+		log.Warn().Msgf(`resolution_risk "%v" doesn't have integer representation`, r.ResolutionRisk)
+	}
+	returnVal.ResolutionRisk = resolutionRiskValue
 	returnVal.Likelihood = r.Likelihood
 	returnVal.PublishDate = r.PublishDate
 	returnVal.Status = r.Status
