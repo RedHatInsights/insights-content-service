@@ -56,9 +56,6 @@ const (
 
 	// ExternalRulesGroup is a name for a group with all external rules
 	ExternalRulesGroup = "external"
-
-	// OcsRulesGroup is a name for a group with all ocs rules
-	OcsRulesGroup = "ocs"
 )
 
 type (
@@ -500,24 +497,6 @@ func ParseRuleContentDir(contentDirPath string) (RuleContentDirectory, map[strin
 	log.Info().
 		Int("invalid internal rules", len(invalidRules)).
 		Msg("Parsing internal rules: done")
-
-	if len(invalidRules) > 0 {
-		printInvalidRules(invalidRules)
-	}
-
-	ocsContentDir := path.Join(contentDirPath, OcsRulesGroup)
-
-	invalidRules = make([]string, 0)
-
-	err = parseRulesInDir(ocsContentDir, OcsRulesGroup,
-		&contentDir.Rules, &invalidRules, ruleContentStatusMap)
-	if err != nil {
-		log.Error().Err(err).Msg("Cannot parse content of ocs rules")
-		return contentDir, ruleContentStatusMap, err
-	}
-	log.Info().
-		Int("invalid ocs rules", len(invalidRules)).
-		Msg("Parsing ocs rules: done")
 
 	if len(invalidRules) > 0 {
 		printInvalidRules(invalidRules)
