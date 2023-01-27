@@ -23,7 +23,6 @@ Content service for Insights rules groups, tags, and content.
 <!-- vim-markdown-toc -->
 
 
-
 ## Description
 
 Insights Content Service is a service that provides metadata information about rules that are being
