@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 # Updates the ./rules-content directory with the latest rules to test with
 
 set -exv
