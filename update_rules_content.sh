@@ -36,8 +36,19 @@ TEST_RULE_CONTENT_DIR="${SCRIPT_DIR}/rules/test/content"
 CLONE_TEMP_DIR="${SCRIPT_DIR}/.tmp"
 RULES_CONTENT="${CLONE_TEMP_DIR}/content/"
 
-echo "Attempting to clone repository into ${CLONE_TEMP_DIR}"
+if [ $# -ne 0 ]
+then
+    if [[ "$*" == *-test-rules-only* ]]
+    then
+        echo "Creating content dir with tutorial and test rules"
+        mkdir -p "${CONTENT_DIR}/external/"
+        cp -R "${SCRIPT_DIR}/rules" "${CONTENT_DIR}/external/."
+        cp "${TUTORIAL_RULE_CONTENT_DIR}/config.yaml" "${CONTENT_DIR}/."
+        exit 0
+   fi
+fi
 
+echo "Attempting to clone repository into ${CLONE_TEMP_DIR}"
 if ! git clone --depth=1 --branch "${CCX_RULES_OCP_TAG}" "${RULES_REPO}" "${CLONE_TEMP_DIR}"
 then
     echo "Couldn't clone rules repository"
