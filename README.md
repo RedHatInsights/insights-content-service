@@ -89,9 +89,10 @@ Behaviour tests for this service are included in [Insights Behavioral
 Spec](https://github.com/RedHatInsights/insights-behavioral-spec) repository.
 In order to run these tests, the following steps need to be made:
 
+1. Build this service using `./build.sh --test-rules-only`
 1. clone the [Insights Behavioral Spec](https://github.com/RedHatInsights/insights-behavioral-spec) repository
-1. go into the cloned subdirectory `insights-behavioral-spec`
-1. run the `aggregator_tests.sh` from this subdirectory
+1. copy this directory with the `insights-content-service` executable into the `insights-behavioral-spec` subdirectory
+1. run the `insights_content_service_test.sh` from the `insights-behavioral-spec` subdirectory
 
 List of all test scenarios prepared for this service is available at
 <https://redhatinsights.github.io/insights-behavioral-spec/feature_list.html#insights-content-service>
