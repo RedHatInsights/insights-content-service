@@ -42,6 +42,8 @@ then
     then
         echo "Creating content dir with tutorial and test rules"
         mkdir -p "${CONTENT_DIR}/external/"
+        mkdir -p "${CONTENT_DIR}/internal/"
+        mkdir -p "${CONTENT_DIR}/ocs/"
         cp -R "${SCRIPT_DIR}/rules" "${CONTENT_DIR}/external/."
         cp "${TUTORIAL_RULE_CONTENT_DIR}/config.yaml" "${CONTENT_DIR}/."
         exit 0
