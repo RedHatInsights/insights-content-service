@@ -37,6 +37,21 @@ export IQE_TEST_IMPORTANCE=""
 export IQE_CJI_TIMEOUT="30m"
 
 
+changes_including_ocp_rules_version() {
+    git log -1 HEAD . | grep "Bumped ccx-rules-ocp version"
+}
+
+create_junit_dummy_result() {
+    mkdir -p 'artifacts'
+
+    cat <<- EOF > 'artifacts/junit-dummy.xml'
+	<?xml version="1.0" encoding="UTF-8"?>
+	<testsuite tests="1">
+	    <testcase classname="dummy" name="dummy-empty-test"/>
+	</testsuite>
+	EOF
+}
+
 function build_image() {
     source $CICD_ROOT/build.sh
 }
@@ -52,6 +67,13 @@ function run_smoke_tests() {
     source $CICD_ROOT/post_test_results.sh  # publish results in Ibutsu
 }
 
+
+# for ccx-rules-ocp version bump PRs skip pr_check.sh tests.
+if changes_including_ocp_rules_version; then
+    echo "Only ccx-rules-ocp version bump, exiting"
+    create_junit_dummy_result
+    exit 0
+fi
 
 # Install bonfire repo/initialize
 CICD_URL=https://raw.githubusercontent.com/RedHatInsights/bonfire/master/cicd
