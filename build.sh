@@ -30,5 +30,5 @@ ocp_rules_version=$(grep "^CCX_RULES_OCP_TAG=\".*\"$" update_rules_content.sh | 
 # Update ccx-rules-ocp
 ./update_rules_content.sh "$@"
 
-go build -ldflags="-X 'main.BuildTime=$buildtime' -X 'main.BuildVersion=$version' -X 'main.BuildBranch=$branch' -X 'main.BuildCommit=$commit' -X 'main.UtilsVersion=$utils_version' -X 'main.OCPRulesVersion=$ocp_rules_version'"
+go build "$@" -ldflags="-X 'main.BuildTime=$buildtime' -X 'main.BuildVersion=$version' -X 'main.BuildBranch=$branch' -X 'main.BuildCommit=$commit' -X 'main.UtilsVersion=$utils_version' -X 'main.OCPRulesVersion=$ocp_rules_version'"
 exit $?
