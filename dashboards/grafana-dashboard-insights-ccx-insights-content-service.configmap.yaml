@@ -839,6 +839,6 @@ data:
       },
       "timezone": "",
       "title": "CCX Insights Content Service",
-      "uid": null,
+      "uid": "ccx-insights-content-service",
       "version": 0
     }
