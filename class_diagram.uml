@@ -1,0 +1,183 @@
+@startuml
+namespace conf {
+    class ConfigStruct << (S,Aquamarine) >> {
+        + Server server.Configuration
+        + Groups groups.Configuration
+        + Content <font color=blue>struct</font>{string}
+        + Metrics MetricsConf
+
+    }
+    class MetricsConf << (S,Aquamarine) >> {
+        + Namespace string
+
+    }
+}
+
+
+namespace content {
+    class ErrorKeyMetadata << (S,Aquamarine) >> {
+        + Condition string
+        + Description string
+        + Impact string
+        + Likelihood int
+        + PublishDate string
+        + Status string
+        + Tags []string
+
+    }
+    class GlobalRuleConfig << (S,Aquamarine) >> {
+        + Impact <font color=blue>map</font>[string]int
+
+    }
+    class MissingMandatoryFile << (S,Aquamarine) >> {
+        + FileName string
+
+        + Error() string
+
+    }
+    class RuleContent << (S,Aquamarine) >> {
+        - hasReason bool
+
+        + Summary string
+        + Reason string
+        + Resolution string
+        + MoreInfo string
+        + Plugin RulePluginInfo
+        + ErrorKeys <font color=blue>map</font>[string]RuleErrorKeyContent
+
+    }
+    class RuleContentDirectory << (S,Aquamarine) >> {
+        + Config GlobalRuleConfig
+        + Rules <font color=blue>map</font>[string]RuleContent
+
+    }
+    class RuleErrorKeyContent << (S,Aquamarine) >> {
+        - hasReason bool
+
+        + Generic string
+        + Metadata ErrorKeyMetadata
+        + Reason string
+
+    }
+    class RulePluginInfo << (S,Aquamarine) >> {
+        + Name string
+        + NodeID string
+        + ProductCode string
+        + PythonModule string
+
+    }
+}
+
+
+namespace groups {
+    class Configuration << (S,Aquamarine) >> {
+        + ConfigPath string
+
+    }
+    class Group << (S,Aquamarine) >> {
+        + Name string
+        + Description string
+        + Tags []string
+
+    }
+}
+
+
+namespace helpers {
+    class helpers.APIRequest << (T, #FF7700) >>  {
+    }
+    class helpers.APIResponse << (T, #FF7700) >>  {
+    }
+    class "helpers.APIRequest" as helpersAPIRequest {
+        'This class was created so that we can correctly have an alias pointing to this name. Since it contains dots that can break namespaces
+    }
+    class "helpers.APIResponse" as helpersAPIResponse {
+        'This class was created so that we can correctly have an alias pointing to this name. Since it contains dots that can break namespaces
+    }
+}
+
+
+namespace main {
+    class main.ExitCode << (T, #FF7700) >>  {
+    }
+    class main.groupConfigMap << (T, #FF7700) >>  {
+    }
+    class "<font color=blue>map</font>[string]groups.Group" as fontcolorbluemapfontstringgroupsGroup {
+        'This class was created so that we can correctly have an alias pointing to this name. Since it contains dots that can break namespaces
+    }
+}
+
+
+namespace server {
+    class AuthenticationError << (S,Aquamarine) >> {
+        - errString string
+
+    }
+    class Configuration << (S,Aquamarine) >> {
+        + Address string
+        + APIPrefix string
+        + APISpecFile string
+        + Debug bool
+        + UseHTTPS bool
+
+    }
+    class HTTPServer << (S,Aquamarine) >> {
+        + Config Configuration
+        + Groups <font color=blue>map</font>[string]groups.Group
+        + Content content.RuleContentDirectory
+        + Serv *http.Server
+
+        - addEndpointsToRouter(router *mux.Router) 
+        - mainEndpoint(writer http.ResponseWriter, _ *http.Request) 
+        - serveAPISpecFile(writer http.ResponseWriter, request *http.Request) 
+        - listOfGroups(writer http.ResponseWriter, request *http.Request) 
+        - getStaticContent(writer http.ResponseWriter, request *http.Request) 
+
+        + Start() error
+        + Stop(ctx context.Context) error
+        + Initialize() http.Handler
+
+    }
+}
+
+
+namespace tests {
+    class Group << (S,Aquamarine) >> {
+        + Description string
+        + Title string
+        + Tags []string
+
+    }
+    class GroupsResponse << (S,Aquamarine) >> {
+        + Groups []Group
+        + Status string
+
+    }
+    class StatusOnlyResponse << (S,Aquamarine) >> {
+        + Status string
+
+    }
+}
+
+
+namespace types {
+    class types.ClusterName << (T, #FF7700) >>  {
+    }
+    class types.OrgID << (T, #FF7700) >>  {
+    }
+    class types.Timestamp << (T, #FF7700) >>  {
+    }
+    class types.UserID << (T, #FF7700) >>  {
+    }
+}
+
+
+"__builtin__.int" #.. "main.ExitCode"
+"__builtin__.string" #.. "types.ClusterName"
+"__builtin__.string" #.. "types.Timestamp"
+"__builtin__.string" #.. "types.UserID"
+"__builtin__.uint32" #.. "types.OrgID"
+"helpers.helpersAPIRequest" #.. "helpers.APIRequest"
+"helpers.helpersAPIResponse" #.. "helpers.APIResponse"
+"main.fontcolorbluemapfontstringgroupsGroup" #.. "main.groupConfigMap"
+@enduml

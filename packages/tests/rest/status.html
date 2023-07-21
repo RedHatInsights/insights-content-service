@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2023 Red Hat, Inc
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<html>
+<head>
+<title>status.go</title>
+<meta charset="utf-8"/>
+<style type="text/css">body {
+    background: rgb(225, 225, 225);
+    margin: 0px;
+    padding: 0px;
+}
+
+#docgo p {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+}
+
+#docgo div {
+    display: inline;
+}
+
+#docgo #background {
+    position: fixed;
+    top: 0; left: 525px; right: 0; bottom: 0;
+    background: rgb(47, 47, 47);
+    border-left: 1px solid #e5e5ee;
+    z-index: -1;
+}
+
+#docgo .keyword {
+    color: rgb(250, 200, 100);
+}
+
+#docgo .literal {
+    color: rgb(140, 190, 100);
+}
+
+#docgo .ident {
+    color: white;
+}
+
+#docgo .operator {
+    color: white;
+}
+
+#docgo .comment {
+}
+
+#docgo h1, h2, h3, h4, h5 {
+    text-align: left;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+}
+
+#docgo h1 {
+    margin-top: 40px;
+}
+
+#docgo .doc {
+    vertical-align: top;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+    font-size: 15px;
+    line-height: 22px;
+    color: black;
+    min-width: 450px;
+    max-width: 450px;
+    padding-top: 10px;
+    padding-right: 25px;
+    padding-bottom: 1px;
+    padding-left: 50px;
+    overflow-x: hidden;
+}
+
+#docgo .code {
+    min-width: 650px;
+    max-width: 650px;
+    padding-left: 25px;
+    padding-right: 15px;
+    border-left: 1px;
+    overflow-x: hidden;
+    vertical-align: top;
+}
+
+#docgo .code pre code  {
+    font-size: 12px;
+    line-height: 18px;
+    font-family: Menlo, Monaco, Consolas, "Lucida Console", monospace;
+    color: rgb(120, 120, 120);
+}
+</style>
+</head>
+<body>
+<div id="docgo">
+  <div id="background"></div>
+  <table>
+    <thead><tr><th class="doc"><h1>status.go</h1></th><th class="code"></th></tr></thead>
+    <tbody>
+      
+      <tr class="section">
+	<td class="doc"></td>
+	<td class="code"><pre><code><div class="comment">/*
+Copyright © 2021, 2022 Red Hat, Inc.
+
+Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/</div>
+
+<div class="keyword">package</div> <div class="ident">tests</div><div class="operator"></div>
+
+<div class="keyword">import</div> <div class="operator">(</div>
+	<div class="literal">&#34;encoding/json&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;errors&#34;</div><div class="operator"></div>
+
+	<div class="ident">types</div> <div class="literal">&#34;github.com/RedHatInsights/insights-results-types&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;github.com/verdverm/frisby&#34;</div><div class="operator"></div>
+<div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>URL to endpoint being tested there</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">const</div> <div class="ident">statusURL</div> <div class="operator">=</div> <div class="ident">apiURL</div> <div class="operator">&#43;</div> <div class="literal">&#34;status&#34;</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>StatusResponse represents response containing map of rules</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">type</div> <div class="ident">StatusResponse</div> <div class="keyword">struct</div> <div class="operator">{</div>
+	<div class="ident">RuleContentStatusMap</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">types</div><div class="operator">.</div><div class="ident">RuleContentStatus</div> <div class="literal">`json:&#34;rules&#34;`</div><div class="operator"></div>
+	<div class="ident">Status</div>               <div class="ident">string</div>                             <div class="literal">`json:&#34;status&#34;`</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>checkStatusResponseContent check the actual content received from the server</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkStatusResponseContent</div><div class="operator">(</div><div class="ident">payload</div> <div class="operator">[</div><div class="operator">]</div><div class="ident">byte</div><div class="operator">)</div> <div class="ident">error</div> <div class="operator">{</div>
+	<div class="ident">response</div> <div class="operator">:=</div> <div class="ident">StatusResponse</div><div class="operator">{</div><div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>check if the 'status' response has proper format</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">err</div> <div class="operator">:=</div> <div class="ident">json</div><div class="operator">.</div><div class="ident">Unmarshal</div><div class="operator">(</div><div class="ident">payload</div><div class="operator">,</div> <div class="operator">&amp;</div><div class="ident">response</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>deserialization failed</p>
+</td>
+	<td class="code"><pre><code>		<div class="keyword">return</div> <div class="ident">err</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+	<div class="keyword">if</div> <div class="ident">response</div><div class="operator">.</div><div class="ident">Status</div> <div class="operator">!=</div> <div class="literal">&#34;ok&#34;</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>unexpected status detected</p>
+</td>
+	<td class="code"><pre><code>		<div class="keyword">return</div> <div class="ident">errors</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="literal">&#34;ok status expected&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+	<div class="keyword">for</div> <div class="ident">name</div><div class="operator">,</div> <div class="ident">value</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">response</div><div class="operator">.</div><div class="ident">RuleContentStatusMap</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>rudimentary check for rule name</p>
+</td>
+	<td class="code"><pre><code>		<div class="keyword">if</div> <div class="ident">name</div> <div class="operator">==</div> <div class="literal">&#34;&#34;</div> <div class="operator">{</div>
+			<div class="keyword">return</div> <div class="ident">errors</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="literal">&#34;wrong rule name&#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="operator">}</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>RuleType should be either &quot;internal&quot; or &quot;external&quot;, nothing else</p>
+</td>
+	<td class="code"><pre><code>		<div class="keyword">if</div> <div class="ident">value</div><div class="operator">.</div><div class="ident">RuleType</div> <div class="operator">!=</div> <div class="literal">&#34;internal&#34;</div> <div class="operator">&amp;&amp;</div> <div class="ident">value</div><div class="operator">.</div><div class="ident">RuleType</div> <div class="operator">!=</div> <div class="literal">&#34;external&#34;</div> <div class="operator">{</div>
+			<div class="keyword">return</div> <div class="ident">errors</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="literal">&#34;wrong ruleType field&#34;</div><div class="operator">)</div><div class="operator"></div>
+		<div class="operator">}</div><div class="operator"></div>
+		<div class="keyword">if</div> <div class="ident">value</div><div class="operator">.</div><div class="ident">Loaded</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>loaded rules should have 'error' field empty</p>
+</td>
+	<td class="code"><pre><code>			<div class="keyword">if</div> <div class="ident">value</div><div class="operator">.</div><div class="ident">Error</div> <div class="operator">!=</div> <div class="literal">&#34;&#34;</div> <div class="operator">{</div>
+				<div class="keyword">return</div> <div class="ident">errors</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="literal">&#34;error field is not empty for loaded rule&#34;</div><div class="operator">)</div><div class="operator"></div>
+			<div class="operator">}</div><div class="operator"></div>
+		<div class="operator">}</div> <div class="keyword">else</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>not loaded rules should have 'error' with error message</p>
+</td>
+	<td class="code"><pre><code>			<div class="keyword">if</div> <div class="ident">value</div><div class="operator">.</div><div class="ident">Error</div> <div class="operator">==</div> <div class="literal">&#34;&#34;</div> <div class="operator">{</div>
+				<div class="keyword">return</div> <div class="ident">errors</div><div class="operator">.</div><div class="ident">New</div><div class="operator">(</div><div class="literal">&#34;error field is empty for not loaded rule&#34;</div><div class="operator">)</div><div class="operator"></div>
+			<div class="operator">}</div><div class="operator"></div>
+		<div class="operator">}</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>everything seems to be ok</p>
+</td>
+	<td class="code"><pre><code>	<div class="keyword">return</div> <div class="ident">nil</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>checkStatusEndpoint checks whether 'status' endpoint is handled correctly</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkStatusEndpoint</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">f</div> <div class="operator">:=</div> <div class="ident">frisby</div><div class="operator">.</div><div class="ident">Create</div><div class="operator">(</div><div class="literal">&#34;Check the &#39;status&#39; endpoint&#34;</div><div class="operator">)</div><div class="operator">.</div><div class="ident">Get</div><div class="operator">(</div><div class="ident">groupsURL</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">f</div><div class="operator">.</div><div class="ident">Send</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">f</div><div class="operator">.</div><div class="ident">ExpectStatus</div><div class="operator">(</div><div class="literal">200</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">f</div><div class="operator">.</div><div class="ident">ExpectHeader</div><div class="operator">(</div><div class="ident">contentTypeHeader</div><div class="operator">,</div> <div class="literal">&#34;application/json; charset=utf-8&#34;</div><div class="operator">)</div><div class="operator"></div>
+	<div class="ident">f</div><div class="operator">.</div><div class="ident">PrintReport</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>try to read payload</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">text</div><div class="operator">,</div> <div class="ident">err</div> <div class="operator">:=</div> <div class="ident">f</div><div class="operator">.</div><div class="ident">Resp</div><div class="operator">.</div><div class="ident">Content</div><div class="operator">(</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">f</div><div class="operator">.</div><div class="ident">AddError</div><div class="operator">(</div><div class="ident">err</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+		<div class="keyword">return</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>payload seems to part of response - let's check its content</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">err</div> <div class="operator">=</div> <div class="ident">checkStatusResponseContent</div><div class="operator">(</div><div class="ident">text</div><div class="operator">)</div><div class="operator"></div>
+	<div class="keyword">if</div> <div class="ident">err</div> <div class="operator">!=</div> <div class="ident">nil</div> <div class="operator">{</div>
+		<div class="ident">f</div><div class="operator">.</div><div class="ident">AddError</div><div class="operator">(</div><div class="ident">err</div><div class="operator">.</div><div class="ident">Error</div><div class="operator">(</div><div class="operator">)</div><div class="operator">)</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>checkWrongMethodsForStatusEndpoint check whether other HTTP methods are
+rejected correctly for the REST API 'status' endpoint</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">checkWrongMethodsForStatusEndpoint</div><div class="operator">(</div><div class="operator">)</div> <div class="operator">{</div>
+	<div class="ident">checkGetEndpointByOtherMethods</div><div class="operator">(</div><div class="ident">statusURL</div><div class="operator">,</div> <div class="ident">false</div><div class="operator">)</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

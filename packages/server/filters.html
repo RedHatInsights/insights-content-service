@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2023 Red Hat, Inc
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<html>
+<head>
+<title>filters.go</title>
+<meta charset="utf-8"/>
+<style type="text/css">body {
+    background: rgb(225, 225, 225);
+    margin: 0px;
+    padding: 0px;
+}
+
+#docgo p {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+}
+
+#docgo div {
+    display: inline;
+}
+
+#docgo #background {
+    position: fixed;
+    top: 0; left: 525px; right: 0; bottom: 0;
+    background: rgb(47, 47, 47);
+    border-left: 1px solid #e5e5ee;
+    z-index: -1;
+}
+
+#docgo .keyword {
+    color: rgb(250, 200, 100);
+}
+
+#docgo .literal {
+    color: rgb(140, 190, 100);
+}
+
+#docgo .ident {
+    color: white;
+}
+
+#docgo .operator {
+    color: white;
+}
+
+#docgo .comment {
+}
+
+#docgo h1, h2, h3, h4, h5 {
+    text-align: left;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+}
+
+#docgo h1 {
+    margin-top: 40px;
+}
+
+#docgo .doc {
+    vertical-align: top;
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+    font-size: 15px;
+    line-height: 22px;
+    color: black;
+    min-width: 450px;
+    max-width: 450px;
+    padding-top: 10px;
+    padding-right: 25px;
+    padding-bottom: 1px;
+    padding-left: 50px;
+    overflow-x: hidden;
+}
+
+#docgo .code {
+    min-width: 650px;
+    max-width: 650px;
+    padding-left: 25px;
+    padding-right: 15px;
+    border-left: 1px;
+    overflow-x: hidden;
+    vertical-align: top;
+}
+
+#docgo .code pre code  {
+    font-size: 12px;
+    line-height: 18px;
+    font-family: Menlo, Monaco, Consolas, "Lucida Console", monospace;
+    color: rgb(120, 120, 120);
+}
+</style>
+</head>
+<body>
+<div id="docgo">
+  <div id="background"></div>
+  <table>
+    <thead><tr><th class="doc"><h1>filters.go</h1></th><th class="code"></th></tr></thead>
+    <tbody>
+      
+      <tr class="section">
+	<td class="doc"></td>
+	<td class="code"><pre><code><div class="comment">/*
+Copyright © 2021 Red Hat, Inc.
+
+Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/</div>
+
+<div class="keyword">package</div> <div class="ident">server</div><div class="operator"></div>
+
+<div class="keyword">import</div> <div class="operator">(</div>
+	<div class="literal">&#34;strings&#34;</div><div class="operator"></div>
+
+	<div class="literal">&#34;github.com/RedHatInsights/insights-operator-utils/collections&#34;</div><div class="operator"></div>
+	<div class="ident">types</div> <div class="literal">&#34;github.com/RedHatInsights/insights-results-types&#34;</div><div class="operator"></div>
+	<div class="literal">&#34;github.com/rs/zerolog/log&#34;</div><div class="operator"></div>
+<div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>filterStatusMap function apply various filters to map with all rule content
+states</p>
+</td>
+	<td class="code"><pre><code><div class="keyword">func</div> <div class="ident">filterStatusMap</div><div class="operator">(</div><div class="ident">states</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">types</div><div class="operator">.</div><div class="ident">RuleContentStatus</div><div class="operator">,</div> <div class="ident">query</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="operator">[</div><div class="operator">]</div><div class="ident">string</div><div class="operator">)</div> <div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">types</div><div class="operator">.</div><div class="ident">RuleContentStatus</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>retrieve all possible filters</p>
+</td>
+	<td class="code"><pre><code>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>we are just interested about the presence of these two parameters,
+not their values</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">_</div><div class="operator">,</div> <div class="ident">externalRuleFilter</div> <div class="operator">:=</div> <div class="ident">query</div><div class="operator">[</div><div class="literal">&#34;external&#34;</div><div class="operator">]</div><div class="operator"></div>
+	<div class="ident">_</div><div class="operator">,</div> <div class="ident">internalRuleFilter</div> <div class="operator">:=</div> <div class="ident">query</div><div class="operator">[</div><div class="literal">&#34;internal&#34;</div><div class="operator">]</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>this parameter can be specified multiple times to allow client to
+select multiple rules</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">ruleNames</div><div class="operator">,</div> <div class="ident">ruleNameFilter</div> <div class="operator">:=</div> <div class="ident">query</div><div class="operator">[</div><div class="literal">&#34;rule&#34;</div><div class="operator">]</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>rule names can be specified multiple times, but for logging we need
+just one slice of names</p>
+</td>
+	<td class="code"><pre><code>	<div class="ident">ruleNamesStr</div> <div class="operator">:=</div> <div class="ident">strings</div><div class="operator">.</div><div class="ident">Join</div><div class="operator">(</div><div class="ident">ruleNames</div><div class="operator">,</div> <div class="literal">&#34;,&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+	<div class="ident">log</div><div class="operator">.</div><div class="ident">Info</div><div class="operator">(</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Bool</div><div class="operator">(</div><div class="literal">&#34;external rules filter&#34;</div><div class="operator">,</div> <div class="ident">externalRuleFilter</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Bool</div><div class="operator">(</div><div class="literal">&#34;internal rules filter&#34;</div><div class="operator">,</div> <div class="ident">internalRuleFilter</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Bool</div><div class="operator">(</div><div class="literal">&#34;rule name filter&#34;</div><div class="operator">,</div> <div class="ident">ruleNameFilter</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Str</div><div class="operator">(</div><div class="literal">&#34;rule names&#34;</div><div class="operator">,</div> <div class="ident">ruleNamesStr</div><div class="operator">)</div><div class="operator">.</div>
+		<div class="ident">Msg</div><div class="operator">(</div><div class="literal">&#34;RuleContentStates endpoint&#34;</div><div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>should we perform filtering?</p>
+</td>
+	<td class="code"><pre><code>	<div class="keyword">if</div> <div class="ident">externalRuleFilter</div> <div class="operator">||</div> <div class="ident">internalRuleFilter</div> <div class="operator">||</div> <div class="ident">ruleNameFilter</div> <div class="operator">{</div>
+		<div class="ident">result</div> <div class="operator">:=</div> <div class="ident">make</div><div class="operator">(</div><div class="keyword">map</div><div class="operator">[</div><div class="ident">string</div><div class="operator">]</div><div class="ident">types</div><div class="operator">.</div><div class="ident">RuleContentStatus</div><div class="operator">)</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>iterate over all states</p>
+</td>
+	<td class="code"><pre><code>		<div class="keyword">for</div> <div class="ident">name</div><div class="operator">,</div> <div class="ident">value</div> <div class="operator">:=</div> <div class="keyword">range</div> <div class="ident">states</div> <div class="operator">{</div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>filter external rules if such filter is defined</p>
+</td>
+	<td class="code"><pre><code>			<div class="keyword">if</div> <div class="ident">externalRuleFilter</div> <div class="operator">&amp;&amp;</div> <div class="ident">value</div><div class="operator">.</div><div class="ident">RuleType</div> <div class="operator">==</div> <div class="literal">&#34;external&#34;</div> <div class="operator">{</div>
+				<div class="ident">result</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">value</div><div class="operator"></div>
+			<div class="operator">}</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>filter internal rules if such filter is defined</p>
+</td>
+	<td class="code"><pre><code>			<div class="keyword">if</div> <div class="ident">internalRuleFilter</div> <div class="operator">&amp;&amp;</div> <div class="ident">value</div><div class="operator">.</div><div class="ident">RuleType</div> <div class="operator">==</div> <div class="literal">&#34;internal&#34;</div> <div class="operator">{</div>
+				<div class="ident">result</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">value</div><div class="operator"></div>
+			<div class="operator">}</div><div class="operator"></div>
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>filter by rule name if such filter is defined</p>
+</td>
+	<td class="code"><pre><code>			<div class="keyword">if</div> <div class="ident">ruleNameFilter</div> <div class="operator">&amp;&amp;</div> <div class="ident">collections</div><div class="operator">.</div><div class="ident">StringInSlice</div><div class="operator">(</div><div class="ident">name</div><div class="operator">,</div> <div class="ident">ruleNames</div><div class="operator">)</div> <div class="operator">{</div>
+				<div class="ident">result</div><div class="operator">[</div><div class="ident">name</div><div class="operator">]</div> <div class="operator">=</div> <div class="ident">value</div><div class="operator"></div>
+			<div class="operator">}</div><div class="operator"></div>
+		<div class="operator">}</div><div class="operator"></div>
+		<div class="keyword">return</div> <div class="ident">result</div><div class="operator"></div>
+	<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+      <tr class="section">
+	<td class="doc"><p>no filtering needed -&gt; return the original map</p>
+</td>
+	<td class="code"><pre><code>	<div class="keyword">return</div> <div class="ident">states</div><div class="operator"></div>
+<div class="operator">}</div><div class="operator"></div>
+
+</code></pre></td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

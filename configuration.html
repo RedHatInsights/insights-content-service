@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/insights-content-service/assets/css/just-the-docs-default.css">
+
+  
+
+  
+
+  <script src="/insights-content-service/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Configuration | Insights Content Service</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Configuration" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Content Service for Openshift insights remmediations" />
+<meta property="og:description" content="Content Service for Openshift insights remmediations" />
+<link rel="canonical" href="https://redhatinsights.github.io/insights-content-service/configuration.html" />
+<meta property="og:url" content="https://redhatinsights.github.io/insights-content-service/configuration.html" />
+<meta property="og:site_name" content="Insights Content Service" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Configuration" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Content Service for Openshift insights remmediations","headline":"Configuration","url":"https://redhatinsights.github.io/insights-content-service/configuration.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  <div class="side-bar">
+  <div class="site-header" role="banner">
+    <a href="/insights-content-service/" class="site-title lh-tight">
+  Insights Content Service
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Toggle menu" aria-pressed="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </a>
+  </div>
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+    
+    
+      <ul class="nav-list"><li class="nav-list-item"><a href="/insights-content-service/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/insights-content-service/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><a href="/insights-content-service/sequence_diagram.html" class="nav-list-link">Sequence diagram for Content Service</a></li><li class="nav-list-item"><a href="/insights-content-service/role.html" class="nav-list-link">Role of the service in the external data pipeline</a></li><li class="nav-list-item"><a href="/insights-content-service/rest_api.html" class="nav-list-link">REST API</a></li><li class="nav-list-item active"><a href="/insights-content-service/configuration.html" class="nav-list-link active">Configuration</a></li><li class="nav-list-item"><a href="/insights-content-service/prometheus.html" class="nav-list-link">Prometheus API</a></li><li class="nav-list-item"><a href="/insights-content-service/content_checker.html" class="nav-list-link">Rule content checker</a></li><li class="nav-list-item"><a href="/insights-content-service/testing.html" class="nav-list-link">Testing</a></li><li class="nav-list-item"><a href="/insights-content-service/ci.html" class="nav-list-link">CI</a></li><li class="nav-list-item"><a href="/insights-content-service/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/insights-content-service/references.html" class="nav-list-link">References</a></li></ul>
+
+    
+  </nav>
+
+  
+  
+    <footer class="site-footer">
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    </footer>
+  
+</div>
+
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    <div></div>
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/RedHatInsights/insights-content-service" class="site-button"
+          
+        >
+          Github repository
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div id="main-content-wrap" class="main-content-wrap">
+      
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 class="no_toc" id="configuration">
+  
+  
+    <a href="#configuration" class="anchor-heading" aria-labelledby="configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Configuration
+  
+  
+</h1>
+    
+<h2 class="no_toc text-delta" id="table-of-contents">
+  
+  
+    <a href="#table-of-contents" class="anchor-heading" aria-labelledby="table-of-contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Table of contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#server-configuration" id="markdown-toc-server-configuration">Server configuration</a></li>
+  <li><a href="#groups-configuration" id="markdown-toc-groups-configuration">Groups configuration</a></li>
+  <li><a href="#static-content-configuration" id="markdown-toc-static-content-configuration">Static content configuration</a></li>
+  <li><a href="#metrics-configuration" id="markdown-toc-metrics-configuration">Metrics configuration</a></li>
+  <li><a href="#logging-configuration" id="markdown-toc-logging-configuration">Logging configuration</a></li>
+</ol>
+
+<p>Content service expects a toml configuration file. Default one is <code class="language-plaintext highlighter-rouge">config.toml</code>
+in working directory, but it can be overwritten by
+<code class="language-plaintext highlighter-rouge">INSIGHTS_CONTENT_SERVICE_CONFIG_FILE</code> env var.</p>
+
+<p>Also each key in config can be overwritten by corresponding env var. For example
+if you have config like</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[server]</span>
+<span class="py">address</span> <span class="p">=</span> <span class="s">":8080"</span>
+<span class="py">api_prefix</span> <span class="p">=</span> <span class="s">"/api/v1/"</span>
+<span class="py">api_spec_file</span> <span class="p">=</span> <span class="s">"openapi.json"</span>
+</code></pre></div></div>
+
+<p>and environment variables</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">INSIGHTS_CONTENT_SERVICE__SERVER__ADDRESS</span><span class="o">=</span><span class="s2">":443"</span>
+<span class="nv">INSIGHTS_CONTENT_SERVICE__SERVER__API_PREFIX</span><span class="o">=</span><span class="s2">"/api/v2/"</span>
+</code></pre></div></div>
+
+<p>the actual server port will be 443 instead of 8080 and the API base endpoint
+will be <code class="language-plaintext highlighter-rouge">/api/v2/</code> instead of <code class="language-plaintext highlighter-rouge">/api/v1/</code>.</p>
+
+<p>It’s very useful for deploying docker containers and keeping some of the
+configuration outside the main configuration, like passwords and secret tokens.</p>
+<h2 id="server-configuration">
+  
+  
+    <a href="#server-configuration" class="anchor-heading" aria-labelledby="server-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Server configuration
+  
+  
+</h2>
+    
+
+<p>The HTTP server configuration is in section <code class="language-plaintext highlighter-rouge">[server]</code> in the
+configuration file.</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[server]</span>
+<span class="py">address</span> <span class="p">=</span> <span class="s">":8080"</span>
+<span class="py">api_prefix</span> <span class="p">=</span> <span class="s">"/api/v1/"</span>
+<span class="py">api_spec_file</span> <span class="p">=</span> <span class="s">"openapi.json"</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">address</code> is the host and port which server should listen to</li>
+  <li><code class="language-plaintext highlighter-rouge">api_prefix</code> is the prefix for the REST API path</li>
+  <li><code class="language-plaintext highlighter-rouge">api_spec_file</code> is the location of a required OpenAPI specification file</li>
+</ul>
+<h2 id="groups-configuration">
+  
+  
+    <a href="#groups-configuration" class="anchor-heading" aria-labelledby="groups-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Groups configuration
+  
+  
+</h2>
+    
+
+<p>The groups are defined in a YAML configuration file. You can find an example in
+<a href="https://github.com/RedHatInsights/insights-content-service/blob/master/groups_config.yaml">groups_config.yaml</a>.</p>
+
+<p>In order to define which groups configuration file is loaded by the service, you
+should use the <code class="language-plaintext highlighter-rouge">[groups]</code> section in the configuration file:</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[groups]</span>
+<span class="py">path</span> <span class="p">=</span> <span class="s">"groups_config.yaml"</span>
+</code></pre></div></div>
+
+<p>Where <code class="language-plaintext highlighter-rouge">path</code> is the absolute or relative path to the groups configuration file.</p>
+<h2 id="static-content-configuration">
+  
+  
+    <a href="#static-content-configuration" class="anchor-heading" aria-labelledby="static-content-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Static content configuration
+  
+  
+</h2>
+    
+
+<p>This service parses the rules static content at startup. For that reason,
+configuring the directory where the rules content is deployed is mandatory
+within the configuration.</p>
+
+<p>To define the path where the service will look up for rules content, you should
+define the following:</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[content]</span>
+<span class="py">path</span> <span class="p">=</span> <span class="s">"rules-content"</span>
+</code></pre></div></div>
+
+<p>Where <code class="language-plaintext highlighter-rouge">path</code> can be the absolute or relative path to the rules content directory.</p>
+<h2 id="metrics-configuration">
+  
+  
+    <a href="#metrics-configuration" class="anchor-heading" aria-labelledby="metrics-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Metrics configuration
+  
+  
+</h2>
+    
+
+<p>Metrics configuration is in section <code class="language-plaintext highlighter-rouge">[metrics]</code> in config file</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[metrics]</span>
+<span class="py">namespace</span> <span class="p">=</span> <span class="s">"mynamespace"</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">namespace</code> if defined, it is used as <code class="language-plaintext highlighter-rouge">Namespace</code> argument when creating all
+the Prometheus metrics exposed by this service.</li>
+</ul>
+<h2 id="logging-configuration">
+  
+  
+    <a href="#logging-configuration" class="anchor-heading" aria-labelledby="logging-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Logging configuration
+  
+  
+</h2>
+    
+
+<p>Logging configuration is in section <code class="language-plaintext highlighter-rouge">[logging]</code> in config file</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[logging]</span>
+<span class="py">debug</span> <span class="p">=</span> <span class="kc">false</span>
+<span class="py">log_level</span> <span class="p">=</span> <span class="s">"info"</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">debug</code> if set to <code class="language-plaintext highlighter-rouge">true</code>, it will make the logs shown in console to be printed
+in a human readable format instead of JSON.</li>
+  <li><code class="language-plaintext highlighter-rouge">log_level</code> should be one of the following values: <code class="language-plaintext highlighter-rouge">debug</code>, <code class="language-plaintext highlighter-rouge">info</code>, <code class="language-plaintext highlighter-rouge">warn</code>,
+<code class="language-plaintext highlighter-rouge">warning</code>, <code class="language-plaintext highlighter-rouge">error</code> or <code class="language-plaintext highlighter-rouge">fatal</code>.</li>
+</ul>
+
+          
+
+          
+        </main>
+        
+
+  <hr>
+  <footer>
+    
+
+    <p class="text-small text-grey-dk-100 mb-0">Copyright &copy; 2020 Red Hat, Inc.</a></p>
+
+    
+  </footer>
+
+
+      </div>
+    </div>
+    
+  </div>
+
+  
+</body>
+</html>
+
