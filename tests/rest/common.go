@@ -37,6 +37,19 @@ const (
 	ContentTypeText = "text/plain; charset=utf-8"
 )
 
+// test names, messages and logs-related constants
+const (
+	httpPostMethod    = "POST"
+	httpPutMethod     = "PUT"
+	httpDeleteMethod  = "DELETE"
+	httpHeadMethod    = "HEAD"
+	httpPatchMethod   = "PATCH"
+	httpOptionsMethod = "OPTIONS"
+
+	// reused test names
+	checkWrongEndpointTest = "Check the end point %s with wrong method: %s"
+)
+
 // StatusOnlyResponse represents response containing just a status
 type StatusOnlyResponse struct {
 	Status string `json:"status"`
@@ -63,24 +76,24 @@ func sendAndExpectStatus(f *frisby.Frisby, expectedStatus int) {
 
 // checkGetEndpointByOtherMethods checks whether a 'GET' endpoint respond correctly if other HTTP methods are used
 func checkGetEndpointByOtherMethods(endpoint string, includingOptions bool) {
-	f := frisby.Create("Check the end point " + endpoint + " with wrong method: POST").Post(endpoint)
+	f := frisby.Create(fmt.Sprintf(checkWrongEndpointTest, endpoint, httpPostMethod)).Post(endpoint)
 	sendAndExpectStatus(f, 405)
 
-	f = frisby.Create("Check the entry point " + endpoint + " with wrong method: PUT").Put(endpoint)
+	f = frisby.Create(fmt.Sprintf(checkWrongEndpointTest, endpoint, httpPutMethod)).Put(endpoint)
 	sendAndExpectStatus(f, 405)
 
-	f = frisby.Create("Check the entry point " + endpoint + " with wrong method: DELETE").Delete(endpoint)
+	f = frisby.Create(fmt.Sprintf(checkWrongEndpointTest, endpoint, httpDeleteMethod)).Delete(endpoint)
 	sendAndExpectStatus(f, 405)
 
-	f = frisby.Create("Check the entry point " + endpoint + " with wrong method: PATCH").Patch(endpoint)
+	f = frisby.Create(fmt.Sprintf(checkWrongEndpointTest, endpoint, httpPatchMethod)).Patch(endpoint)
 	sendAndExpectStatus(f, 405)
 
-	f = frisby.Create("Check the entry point " + endpoint + " with wrong method: HEAD").Head(endpoint)
+	f = frisby.Create(fmt.Sprintf(checkWrongEndpointTest, endpoint, httpHeadMethod)).Head(endpoint)
 	sendAndExpectStatus(f, 405)
 
 	// some endpoints accepts OPTIONS method together with GET one, so this check is fully optional
 	if includingOptions {
-		f = frisby.Create("Check the entry point " + endpoint + " with wrong method: OPTIONS").Options(endpoint)
+		f = frisby.Create(fmt.Sprintf(checkWrongEndpointTest, endpoint, httpOptionsMethod)).Options(endpoint)
 		sendAndExpectStatus(f, 405)
 	}
 }
