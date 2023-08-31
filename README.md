@@ -42,7 +42,7 @@ Sources are located in [docs](https://github.com/RedHatInsights/insights-content
 ```
 Usage:
 
-    ./content-service [command]
+    ./insights-content-service [command]
 
 The commands are:
 
