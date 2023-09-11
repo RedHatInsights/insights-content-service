@@ -1,5 +1,5 @@
 /*
-Copyright © 2020, 2021, 2022 Red Hat, Inc.
+Copyright © 2020, 2021, 2022, 2023 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ func New(config Configuration, groupsMap map[string]groups.Group,
 	}
 }
 
-// Start starts server
+// Start method starts server
 func (server *HTTPServer) Start() error {
 	address := server.Config.Address
 	log.Info().Msgf("Starting HTTP server at '%s'", address)
@@ -81,12 +81,12 @@ func (server *HTTPServer) Start() error {
 	return nil
 }
 
-// Stop stops server's execution
+// Stop method stops server's execution
 func (server *HTTPServer) Stop(ctx context.Context) error {
 	return server.Serv.Shutdown(ctx)
 }
 
-// Initialize perform the server initialization
+// Initialize method performs the server initialization
 func (server *HTTPServer) Initialize() http.Handler {
 	log.Info().Msgf("Initializing HTTP server at '%s'", server.Config.Address)
 

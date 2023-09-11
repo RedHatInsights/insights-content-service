@@ -38,7 +38,7 @@ func (server *HTTPServer) mainEndpoint(writer http.ResponseWriter, _ *http.Reque
 	}
 }
 
-// listOfGroups returns the list of defined groups
+// listOfGroups handler returns the list of defined groups
 func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http.Request) {
 	if server.groupsList == nil {
 		server.groupsList = make([]groups.Group, 0, len(server.Groups))
@@ -56,7 +56,7 @@ func (server *HTTPServer) listOfGroups(writer http.ResponseWriter, request *http
 	}
 }
 
-// infoMap returns map of additional information about this service
+// infoMap handler returns map of additional information about this service
 func (server *HTTPServer) infoMap(writer http.ResponseWriter, request *http.Request) {
 	if server.InfoParams == nil {
 		err := errors.New("InfoParams is empty")
@@ -73,7 +73,7 @@ func (server *HTTPServer) infoMap(writer http.ResponseWriter, request *http.Requ
 	}
 }
 
-// ruleContentStates returns status of all rules that have been read and parsed
+// ruleContentStates handler returns status of all rules that have been read and parsed
 func (server *HTTPServer) ruleContentStates(writer http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query()
 	if query == nil {
@@ -101,7 +101,7 @@ func (server *HTTPServer) ruleContentStates(writer http.ResponseWriter, request 
 	}
 }
 
-// getStaticContent returns all the parsed rules' content
+// getStaticContent handler returns all the parsed rules' content
 func (server *HTTPServer) getStaticContent(writer http.ResponseWriter, request *http.Request) {
 	if server.encodedContent == nil {
 		buffer := new(bytes.Buffer)
