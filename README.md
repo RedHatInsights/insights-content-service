@@ -19,6 +19,7 @@ Content service for Insights rules groups, tags, and content.
 * [Usage](#usage)
 * [Makefile targets](#makefile-targets)
 * [BDD tests](#bdd-tests)
+* [Definition of Done for new features and fixes](#definition-of-done-for-new-features-and-fixes)
 * [Contribution](#contribution)
 * [Package manifest](#package-manifest)
 
@@ -98,6 +99,12 @@ In order to run these tests, the following steps need to be made:
 
 List of all test scenarios prepared for this service is available at
 <https://redhatinsights.github.io/insights-behavioral-spec/feature_list.html#insights-content-service>
+
+
+## Definition of Done for new features and fixes
+
+Please look at [DoD.md](DoD.md) document for definition of done for new features and fixes.
+
 
 
 ## Contribution
