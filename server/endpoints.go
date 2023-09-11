@@ -1,5 +1,5 @@
 /*
-Copyright © 2020, 2021 Red Hat, Inc.
+Copyright © 2020, 2021, 2022, 2023 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+// Paths for all REST API endpoints served by this service
 const (
 	// MainEndpoint defines suffix of the root endpoint
 	MainEndpoint = ""
@@ -32,7 +33,7 @@ const (
 	GroupsEndpoint = "groups"
 	// AllContentEndpoint defines suffix for all the content
 	AllContentEndpoint = "content"
-	// MetricsEndpoint returns prometheus metrics
+	// MetricsEndpoint returns Prometheus metrics
 	MetricsEndpoint = "metrics"
 	// StatusEndpoint returns status of all rules that have been read and
 	// parsed
@@ -42,6 +43,7 @@ const (
 	InfoEndpoint = "info"
 )
 
+// addEndpointsToRouter method registers handlers for all REST API endpoints
 func (server *HTTPServer) addEndpointsToRouter(router *mux.Router) {
 	apiPrefix := server.Config.APIPrefix
 	openAPIURL := apiPrefix + filepath.Base(server.Config.APISpecFile)
