@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Red Hat, Inc.
+Copyright © 2020, 2023 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -247,20 +247,22 @@ func parseErrorContents(ruleDirPath string) (map[string]RuleErrorKeyContent, err
 	errorContents := map[string]RuleErrorKeyContent{}
 
 	for _, e := range entries {
-		if e.IsDir() {
-			name := e.Name()
-
-			readContents, err := readFilesIntoFileContent(path.Join(ruleDirPath, name), ErrorKeyContentFiles)
-			if err != nil {
-				return errorContents, err
-			}
-
-			errContents, err := createErrorContents(readContents)
-			if err != nil {
-				return errorContents, err
-			}
-			errorContents[name] = *errContents
+		// skip sub-directories
+		if !e.IsDir() {
+			continue
 		}
+		name := e.Name()
+
+		readContents, err := readFilesIntoFileContent(path.Join(ruleDirPath, name), ErrorKeyContentFiles)
+		if err != nil {
+			return errorContents, err
+		}
+
+		errContents, err := createErrorContents(readContents)
+		if err != nil {
+			return errorContents, err
+		}
+		errorContents[name] = *errContents
 	}
 
 	return errorContents, nil
