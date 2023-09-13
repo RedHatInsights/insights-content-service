@@ -242,7 +242,7 @@ func printHelp() ExitCode {
 	return ExitStatusOK
 }
 
-func printConfig(config conf.ConfigStruct) ExitCode {
+func printConfig(config *conf.ConfigStruct) ExitCode {
 	configBytes, err := json.MarshalIndent(config, "", "    ")
 
 	if err != nil {
@@ -293,7 +293,7 @@ func handleCommand(command string) ExitCode {
 	case "help", "print-help":
 		return printHelp()
 	case "print-config":
-		return printConfig(conf.Config)
+		return printConfig(&conf.Config)
 	case "print-version-info":
 		return printVersionInfo()
 	case "print-groups":
