@@ -669,7 +669,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg by(experted_endpoint)(rate(api_endpoints_response_time_sum{namespace=\"$namespace\", service=\"ccx-insights-content-service-prometheus-exporter\"}[5m]) / rate(api_endpoints_response_time_count{namespace=\"$namespace\", service=\"ccx-insights-content-service-prometheus-exporter\"}[5m])) ",
+              "expr": "avg by(exported_endpoint)(rate(api_endpoints_response_time_sum{namespace=\"$namespace\", service=\"ccx-insights-content-service-prometheus-exporter\"}[5m]) / rate(api_endpoints_response_time_count{namespace=\"$namespace\", service=\"ccx-insights-content-service-prometheus-exporter\"}[5m])) ",
               "format": "time_series",
               "groupBy": [
                 {
@@ -688,7 +688,7 @@ data:
               "instant": false,
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "{{experted_endpoint}}",
+              "legendFormat": "{{exported_endpoint}}",
               "orderByTime": "ASC",
               "policy": "default",
               "refId": "A",
