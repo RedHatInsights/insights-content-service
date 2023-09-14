@@ -44,6 +44,7 @@ then
         mkdir -p "${CONTENT_DIR}/internal/"
         mkdir -p "${CONTENT_DIR}/ocs/"
         cp -R "${SCRIPT_DIR}/rules" "${CONTENT_DIR}/external/."
+        cp "${TEST_RULE_CONTENT_DIR}/config.yaml" "${CONTENT_DIR}/."
         exit 0
    fi
 fi
@@ -68,6 +69,8 @@ then
 fi
 
 rm -rf "${CLONE_TEMP_DIR}"
+
+cp "${TEST_RULE_CONTENT_DIR}/config.yaml" "${CONTENT_DIR}/external/rules/"
 
 if [ $# -ne 0 ]
 then
