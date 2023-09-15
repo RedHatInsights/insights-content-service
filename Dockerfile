@@ -35,8 +35,6 @@ COPY --from=builder /opt/app-root/src/groups_config.yaml /groups/groups_config.y
 
 # copy just the rule content instead of the whole ocp-rules repository
 COPY --from=builder /opt/app-root/src/rules-content /rules-content
-# copy tutorial/fake rule to external rules to be hit by all reports
-COPY rules/tutorial/content/ /rules-content/external/rules
 
 USER 1001
 
