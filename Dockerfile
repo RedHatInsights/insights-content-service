@@ -27,7 +27,7 @@ RUN curl -ksL https://certs.corp.redhat.com/certs/2015-IT-Root-CA.pem -o /etc/pk
     chmod a+x insights-content-service && \
     ./update_rules_content.sh
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
+FROM registry.access.redhat.com/ubi8/ubi-micro:latest
 
 COPY --from=builder /opt/app-root/src/insights-content-service .
 COPY --from=builder /opt/app-root/src/openapi.json /openapi/openapi.json
