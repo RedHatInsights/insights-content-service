@@ -36,6 +36,10 @@ COPY --from=builder /opt/app-root/src/groups_config.yaml /groups/groups_config.y
 # copy just the rule content instead of the whole ocp-rules repository
 COPY --from=builder /opt/app-root/src/rules-content /rules-content
 
+# copy the certificates from builder image
+COPY --from=builder /etc/ssl /etc/ssl
+COPY --from=builder /etc/pki /etc/pki
+
 USER 1001
 
 CMD ["/insights-content-service"]
