@@ -89,7 +89,7 @@ func checkGroupConfig() groupConfigMap {
 		// For each tag assigned to the group.
 		for _, tag := range group.Tags {
 			if _, exists := uniqueTags[tag]; exists {
-				log.Warn().Msgf("duplicate '%s' tag reference in group '%s'", tag, group.Name)
+				log.Warn().Str("tag", tag).Str("group", group.Name).Msg("duplicate tag reference in group")
 			} else {
 				uniqueTags[tag] = struct{}{}
 			}
@@ -121,7 +121,7 @@ func checkRuleContent(groupCfg groupConfigMap) {
 		checkRuleFileNotEmpty(ruleName, "summary.md", ruleContent.Summary)
 
 		if len(ruleContent.ErrorKeys) == 0 {
-			log.Warn().Msgf("rule '%s' contains no error code", ruleName)
+			log.Warn().Str("rule", ruleName).Msg("rule contains no error code")
 		}
 		// For every error code of the rule.
 		for errCode, errContent := range ruleContent.ErrorKeys {
@@ -210,6 +210,6 @@ func checkErrorCodeAttributeNotEmpty(ruleName, errorCode, attribName, value stri
 // Generic check for any name:value string pair.
 func checkStringNotEmpty(name, value string) {
 	if strings.TrimSpace(value) == "" {
-		log.Warn().Msgf("%s is empty", name)
+		log.Warn().Str("name", name).Msg("value is empty")
 	}
 }
