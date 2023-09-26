@@ -41,10 +41,10 @@ jobs:
         - docker
       before_script:
         - ./build.sh --test-rules-only
-        - cid=$(docker run -itd quay.io/cloudservices/insights-behavioral-spec:latest sh -c "sleep infinity")
-        - docker cp $PWD $cid:`docker exec $cid bash -c 'echo "$HOME"'`
+        - wget -O docker-compose.yml https://raw.githubusercontent.com/RedHatInsights/insights-behavioral-spec/main/docker-compose.yml
+        - wget -O bdd_runner.sh https://raw.githubusercontent.com/RedHatInsights/insights-behavioral-spec/main/run_in_docker.sh && chmod +x bdd_runner.sh
       script:
-        - docker exec -it $cid /bin/bash -c 'env && make insights-content-service-tests'
+        - ./bdd_runner.sh insights-content-service-tests .
     - stage: integration tests
       script:
         - make integration_tests
