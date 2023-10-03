@@ -8,7 +8,7 @@ require (
 	github.com/RedHatInsights/insights-results-types v1.3.23
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gorilla/mux v1.8.0
-	github.com/prometheus/client_golang v1.16.0
+	github.com/prometheus/client_golang v1.17.0
 	github.com/redhatinsights/app-common-go v1.6.7
 	github.com/rs/zerolog v1.31.0
 	github.com/spf13/viper v1.16.0
