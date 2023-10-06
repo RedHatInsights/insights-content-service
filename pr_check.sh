@@ -26,7 +26,6 @@ IMAGE="quay.io/cloudservices/ccx-insights-content-service"
 COMPONENTS="ccx-data-pipeline ccx-insights-results insights-content-service insights-results-smart-proxy ocp-advisor-frontend ccx-mock-ams" # space-separated list of components to laod
 COMPONENTS_W_RESOURCES="insights-content-service"  # component to keep
 CACHE_FROM_LATEST_IMAGE="true"
-DEPLOY_FRONTENDS="true"   # enable for front-end/UI tests
 
 export IQE_PLUGINS="ccx"
 # Run all pipeline and ui tests
@@ -36,7 +35,7 @@ export IQE_REQUIREMENTS_PRIORITY=""
 export IQE_TEST_IMPORTANCE=""
 export IQE_CJI_TIMEOUT="30m"
 export IQE_SELENIUM="false"
-export IQE_ENV="ephemeral"
+export IQE_ENV="ephemeral_no_rbac"
 
 
 changes_including_ocp_rules_version() {
