@@ -19,7 +19,7 @@ limitations under the License.
 //
 // These test should be started by using one of following commands in order to be configured properly:
 //
-//   ./test.sh
+//	./test.sh
 package main
 
 import (
