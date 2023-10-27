@@ -42,39 +42,40 @@ type GroupsResponse struct {
 
 /*
 checkGroupsResponseContent check if the response for 'groups' endpoint has the following format:
-{
-    "groups": [
-        {
-            "description": "High utilization, proposed tuned profiles, storage issues",
-            "tags": [
-                "performance"
-            ],
-            "title": "Performance"
-        },
-        {
-            "description": "Operator degraded, missing functionality due to misconfiguration or resource constraints.",
-            "tags": [
-                "service_availability"
-            ],
-            "title": "Service Availability"
-        },
-        {
-            "description": "Issues related to certificates, user management, security groups, specific port usage, storage permissions, usage of kubeadmin account, exposed keys etc.",
-            "tags": [
-                "security"
-            ],
-            "title": "Security"
-        },
-        {
-            "description": "Load balancer issues, machine api and autoscaler issues, failover issues, nodes down, cluster api/cluster provider issues.",
-            "tags": [
-                "fault_tolerance"
-            ],
-            "title": "Fault Tolerance"
-        }
-    ],
-    "status": "ok"
-}
+
+	{
+	    "groups": [
+	        {
+	            "description": "High utilization, proposed tuned profiles, storage issues",
+	            "tags": [
+	                "performance"
+	            ],
+	            "title": "Performance"
+	        },
+	        {
+	            "description": "Operator degraded, missing functionality due to misconfiguration or resource constraints.",
+	            "tags": [
+	                "service_availability"
+	            ],
+	            "title": "Service Availability"
+	        },
+	        {
+	            "description": "Issues related to certificates, user management, security groups, specific port usage, storage permissions, usage of kubeadmin account, exposed keys etc.",
+	            "tags": [
+	                "security"
+	            ],
+	            "title": "Security"
+	        },
+	        {
+	            "description": "Load balancer issues, machine api and autoscaler issues, failover issues, nodes down, cluster api/cluster provider issues.",
+	            "tags": [
+	                "fault_tolerance"
+	            ],
+	            "title": "Fault Tolerance"
+	        }
+	    ],
+	    "status": "ok"
+	}
 */
 func checkGroupsResponseContent(payload []byte) error {
 	response := GroupsResponse{}
