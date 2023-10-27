@@ -26,6 +26,7 @@ IMAGE="quay.io/cloudservices/ccx-insights-content-service"
 COMPONENTS="ccx-data-pipeline ccx-insights-results insights-content-service insights-results-smart-proxy ccx-mock-ams" # space-separated list of components to laod
 COMPONENTS_W_RESOURCES="insights-content-service"  # component to keep
 CACHE_FROM_LATEST_IMAGE="true"
+CJI_NAME="ccx"
 
 export IQE_PLUGINS="ccx"
 # Run all pipeline and ui tests
