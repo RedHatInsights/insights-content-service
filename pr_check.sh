@@ -23,10 +23,10 @@ APP_NAME="ccx-data-pipeline"  #  name of app-sre "application" folder this compo
 REF_ENV="insights-production"
 COMPONENT_NAME="insights-content-service"  # name of app-sre "resourceTemplate" in deploy.yaml for this component
 IMAGE="quay.io/cloudservices/ccx-insights-content-service"
-COMPONENTS="ccx-data-pipeline ccx-insights-results insights-content-service insights-results-smart-proxy ocp-advisor-frontend ccx-mock-ams" # space-separated list of components to laod
+COMPONENTS="ccx-data-pipeline ccx-insights-results insights-content-service insights-results-smart-proxy ccx-mock-ams" # space-separated list of components to laod
 COMPONENTS_W_RESOURCES="insights-content-service"  # component to keep
 CACHE_FROM_LATEST_IMAGE="true"
-DEPLOY_FRONTENDS="true"   # enable for front-end/UI tests
+DEPLOY_FRONTENDS="false"
 
 export IQE_PLUGINS="ccx"
 # Run all pipeline and ui tests
@@ -37,7 +37,7 @@ export IQE_TEST_IMPORTANCE=""
 export IQE_CJI_TIMEOUT="30m"
 export IQE_SELENIUM="false"
 export IQE_ENV="ephemeral"
-
+export IQE_ENV_VARS="DYNACONF_USER_PROVIDER__rbac_enabled=false"
 
 changes_including_ocp_rules_version() {
     git log -1 HEAD . | grep "Bumped ccx-rules-ocp version"
