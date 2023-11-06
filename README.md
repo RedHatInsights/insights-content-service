@@ -14,7 +14,7 @@ Content service for Insights rules groups, tags, and content.
 
 <!-- vim-markdown-toc GFM -->
 
-* [Description](#description)
+* [De scription](#description)
 * [Documentation](#documentation)
 * [Usage](#usage)
 * [Makefile targets](#makefile-targets)
