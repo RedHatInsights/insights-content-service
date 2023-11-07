@@ -14,12 +14,14 @@ jobs:
     name: BDD for Go ${{ matrix.go-version}}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
       - name: Build project
-        run: make build
+        run: ./build.sh --test-rules-only
       - name: Retrieve Docker compose file
         run: wget -O docker-compose.yml https://raw.githubusercontent.com/RedHatInsights/insights-behavioral-spec/main/docker-compose.yml
       - name: Retrieve BDD runner
