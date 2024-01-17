@@ -25,7 +25,7 @@ function clean_up() {
 trap clean_up EXIT
 
 # Updated with every new ccx-rules-opc release.
-CCX_RULES_OCP_TAG="2024.01.03"
+CCX_RULES_OCP_TAG="2024.01.17"
 
 RULES_REPO="https://gitlab.cee.redhat.com/ccx/ccx-rules-ocp.git"
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
