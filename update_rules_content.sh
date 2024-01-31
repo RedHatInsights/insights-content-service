@@ -83,3 +83,5 @@ fi
 
 echo "${CONTENT_DIR} updated with latest rules"
 exit 0
+
+
