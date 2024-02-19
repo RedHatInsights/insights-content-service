@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM registry.access.redhat.com/ubi8/go-toolset:1.18.9-8.1675807488 AS builder
+FROM registry.access.redhat.com/ubi8/go-toolset:1.18.9 AS builder
 
 COPY . .
 
@@ -27,7 +27,7 @@ RUN curl -ksL https://certs.corp.redhat.com/certs/2015-IT-Root-CA.pem -o /etc/pk
     chmod a+x insights-content-service && \
     ./update_rules_content.sh
 
-FROM registry.access.redhat.com/ubi8/ubi-micro:latest
+FROM registry.access.redhat.com/ubi9/ubi-micro:latest
 
 COPY --from=builder /opt/app-root/src/insights-content-service .
 COPY --from=builder /opt/app-root/src/openapi.json /openapi/openapi.json
