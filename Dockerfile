@@ -23,6 +23,7 @@ RUN curl -ksL https://certs.corp.redhat.com/certs/2015-IT-Root-CA.pem -o /etc/pk
     curl -ksL https://certs.corp.redhat.com/certs/2022-IT-Root-CA.pem -o /etc/pki/ca-trust/source/anchors/2022-IT-Root-CA.pem && \
     update-ca-trust && \
     umask 0022 && \
+    git config --global --add safe.directory /opt/app-root/src && \
     make build && \
     chmod a+x insights-content-service && \
     ./update_rules_content.sh
