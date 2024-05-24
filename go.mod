@@ -3,7 +3,7 @@ module github.com/RedHatInsights/insights-content-service
 go 1.20
 
 require (
-	github.com/BurntSushi/toml v1.3.2
+	github.com/BurntSushi/toml v1.4.0
 	github.com/RedHatInsights/insights-operator-utils v1.25.3
 	github.com/RedHatInsights/insights-results-types v1.3.23
 	github.com/go-yaml/yaml v2.1.0+incompatible
