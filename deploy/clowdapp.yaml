@@ -81,6 +81,16 @@ objects:
                   name: cloudwatch
                   key: aws_secret_access_key
                   optional: true
+            - name: INSIGHTS_CONTENT_SERVICE__LOGGING_TO_SENTRY_ENABLED
+              value: ${SENTRY_ENABLED}
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  key: dsn
+                  name: insights-content-service-dsn
+                  optional: true
+            - name: SENTRY_ENVIRONMENT
+              value: ${ENV_NAME}
           image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
           livenessProbe:
@@ -175,3 +185,5 @@ parameters:
 - name: REPLICAS
   description: The number of replicas to use in the deployment
   value: "1"
+- name: SENTRY_ENABLED
+  value: "false"
