@@ -82,7 +82,7 @@ var (
 func startService() ExitCode {
 	serverCfg := conf.GetServerConfiguration()
 	groupsCfg := conf.GetGroupsConfiguration()
-
+	log.Error().Msg("Test Error for glitchtip")
 	parsedGroups, err := groups.ParseGroupConfigFile(groupsCfg.ConfigPath)
 	if err != nil {
 		log.Error().Err(err).Msg("Groups init error")
