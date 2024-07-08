@@ -89,6 +89,8 @@ objects:
                   key: dsn
                   name: insights-content-service-dsn
                   optional: true
+            - name: SENTRY_ENVIRONMENT
+              value: ${ENV_NAME}
           image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
           livenessProbe:
