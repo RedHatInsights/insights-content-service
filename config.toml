@@ -14,3 +14,4 @@ namespace = "insights_content_service"
 
 [logging]
 debug = false
+logging_to_sentry_enabled = false
