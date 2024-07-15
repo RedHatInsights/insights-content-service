@@ -267,6 +267,7 @@ func main() {
 		conf.GetSentryLoggingConfiguration(),
 		conf.GetKafkaZerologConfiguration(),
 	)
+	log.Error().Msg("DSN" + conf.GetSentryLoggingConfiguration().SentryDSN)
 	if err != nil {
 		panic(err)
 	}
