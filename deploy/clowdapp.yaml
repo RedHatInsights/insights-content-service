@@ -87,7 +87,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   key: dsn
-                  name: insights-content-service-dsn
+                  name: ccx-aggregator-exporter-dsn
                   optional: true
             - name: INSIGHTS_CONTENT_SERVICE__SENTRY_ENVIRONMENT
               value: ${ENV_NAME}
