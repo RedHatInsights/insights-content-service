@@ -267,10 +267,11 @@ func main() {
 		conf.GetSentryLoggingConfiguration(),
 		conf.GetKafkaZerologConfiguration(),
 	)
+
 	if err != nil {
 		panic(err)
 	}
-
+	log.Error().Msg("Test Error for glitchtip")
 	command := "start-service"
 
 	if len(os.Args) >= 2 {

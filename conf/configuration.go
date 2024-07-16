@@ -64,11 +64,11 @@ type ConfigStruct struct {
 	Content struct {
 		ContentPath string `mapstructure:"path" toml:"path"`
 	} `mapstructure:"content" toml:"content"`
-	Metrics           MetricsConf                       `mapstructure:"metrics" toml:"metrics"`
-	Logging           logger.LoggingConfiguration       `mapstructure:"logging" toml:"logging"`
-	CloudWatch        logger.CloudWatchConfiguration    `mapstructure:"cloudwatch" toml:"cloudwatch"`
-	SentryLoggingConf logger.SentryLoggingConfiguration `mapstructure:"sentry" toml:"sentry"`
-	KafkaZerologConf  logger.KafkaZerologConfiguration  `mapstructure:"kafka_zerolog" toml:"kafka_zerolog"`
+	Metrics          MetricsConf                       `mapstructure:"metrics" toml:"metrics"`
+	Logging          logger.LoggingConfiguration       `mapstructure:"logging" toml:"logging"`
+	CloudWatch       logger.CloudWatchConfiguration    `mapstructure:"cloudwatch" toml:"cloudwatch"`
+	Sentry           logger.SentryLoggingConfiguration `mapstructure:"sentry" toml:"sentry"`
+	KafkaZerologConf logger.KafkaZerologConfiguration  `mapstructure:"kafka_zerolog" toml:"kafka_zerolog"`
 }
 
 // Config has exactly the same structure as *.toml file
@@ -189,7 +189,7 @@ func GetCloudWatchConfiguration() logger.CloudWatchConfiguration {
 
 // GetSentryLoggingConfiguration returns the sentry log configuration
 func GetSentryLoggingConfiguration() logger.SentryLoggingConfiguration {
-	return Config.SentryLoggingConf
+	return Config.Sentry
 }
 
 // GetKafkaZerologConfiguration returns the kafkazero log configuration
