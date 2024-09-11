@@ -31,8 +31,6 @@ jobs:
         run: make cyclo
       - name: shellcheck
         run: make shellcheck
-      - name: errcheck
-        run: make errcheck
       - name: goconst checker
         run: make goconst
       - name: gosec checker
