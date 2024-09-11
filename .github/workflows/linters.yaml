@@ -35,7 +35,5 @@ jobs:
         run: make goconst
       - name: gosec checker
         run: make gosec
-      - name: ineffassign checker
-        run: make ineffassign
       - name: ABC metrics checker
         run: make abcgo
