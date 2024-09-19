@@ -1,5 +1,5 @@
-# Set as automatically merge all the pull requests created by dependabot[bot]
-name: Dependabot auto-merge
+# Set as automatically merge all the pull requests created by dependabot[bot], red-hat-konflux[bot], InsightsDroid.
+name: Bots auto-merge
 on: pull_request
 
 # This section adds write permissions to the secrets.GITHUB_TOKEN. Default is just read
@@ -8,9 +8,12 @@ permissions:
   pull-requests: write
 
 jobs:
-  dependabot:
+  bot-automerge:
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    if: |
+      github.actor == 'dependabot[bot]' ||
+      github.actor == 'red-hat-konflux[bot]' ||
+      github.actor == 'InsightsDroid'
     steps:
       - name: Dependabot metadata
         id: metadata
