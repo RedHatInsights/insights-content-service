@@ -22,11 +22,6 @@ jobs:
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{ github.token }}
-      - name: InsightsDroid approves the PR
-        run: gh pr review --approve "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.INSIGHTSDROID_TOKEN}}
       - name: Enable auto-merge for PR
         run: gh pr merge --auto --merge "$PR_URL"
         env:
