@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/RedHatInsights/insights-operator-utils v1.25.12
-	github.com/RedHatInsights/insights-results-types v1.23.4
+	github.com/RedHatInsights/insights-results-types v1.23.5
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gorilla/mux v1.8.1
 	github.com/prometheus/client_golang v1.20.5
