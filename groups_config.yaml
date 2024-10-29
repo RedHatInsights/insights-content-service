@@ -32,3 +32,8 @@ performance:
   description: High utilization, proposed tuned profiles, storage issues
   tags:
     - performance
+best_practices:
+  name: Best Practices
+  description: This category provides recommended practices for infrastructure in OpenShift Container Platform.
+  tags:
+    - best_practices
