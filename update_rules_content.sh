@@ -27,7 +27,7 @@ trap clean_up EXIT
 # Updated with every new ccx-rules-opc release.
 CCX_RULES_OCP_TAG="2024.11.19"
 
-RULES_REPO="https://gitlab.cee.redhat.com/ccx/ccx-rules-ocp.git"
+RULES_REPO="https://gitlab.cee.redhat.com/wabuahma/runtime-ocp-rules.git"
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 CONTENT_DIR="${SCRIPT_DIR}/rules-content"
 TEST_RULE_CONTENT_DIR="${SCRIPT_DIR}/rules/test/content"
@@ -50,7 +50,7 @@ then
 fi
 
 echo "Attempting to clone repository into ${CLONE_TEMP_DIR}"
-if ! git clone --depth=1 --branch "${CCX_RULES_OCP_TAG}" "${RULES_REPO}" "${CLONE_TEMP_DIR}"
+if ! git clone --depth=1 "${RULES_REPO}" "${CLONE_TEMP_DIR}"
 then
     echo "Couldn't clone rules repository"
     exit $?
@@ -67,6 +67,9 @@ then
     echo "Couldn't move rules content from cloned repository"
     exit $?
 fi
+
+# needed because runtimes rules have only external
+mkdir -p "${CONTENT_DIR}/internal/"
 
 rm -rf "${CLONE_TEMP_DIR}"
 
