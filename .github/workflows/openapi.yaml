@@ -1,0 +1,15 @@
+name: OpenAPI checks
+
+on:
+  push:
+    branches: ["master", "main"]
+  pull_request:
+
+jobs:
+  openapi-checks:
+    runs-on: ubuntu-latest
+    name: OpenAPI checks
+    steps:
+      - uses: actions/checkout@v4
+      - name: check openapi specs
+        run: make openapi-check

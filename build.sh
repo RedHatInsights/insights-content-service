@@ -16,7 +16,7 @@
 set -exv
 
 # retrieve the latest tag set in repository
-version=$(git describe --tags --abbrev=0)
+version=$(git describe --always --tags --abbrev=0)
 
 buildtime=$(date)
 branch=$(git rev-parse --abbrev-ref HEAD)

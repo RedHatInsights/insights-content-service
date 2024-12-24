@@ -33,6 +33,10 @@ import (
 	"github.com/RedHatInsights/insights-content-service/groups"
 )
 
+const (
+	addressAttribute = "address"
+)
+
 // HTTPServer in an implementation of Server interface
 type HTTPServer struct {
 	Config     Configuration
@@ -62,7 +66,7 @@ func New(config Configuration, groupsMap map[string]groups.Group,
 // Start method starts server
 func (server *HTTPServer) Start() error {
 	address := server.Config.Address
-	log.Info().Msgf("Starting HTTP server at '%s'", address)
+	log.Info().Str(addressAttribute, address).Msg("Starting HTTP server")
 	router := server.Initialize()
 	server.Serv = &http.Server{
 		Addr:              address,
@@ -88,13 +92,13 @@ func (server *HTTPServer) Stop(ctx context.Context) error {
 
 // Initialize method performs the server initialization
 func (server *HTTPServer) Initialize() http.Handler {
-	log.Info().Msgf("Initializing HTTP server at '%s'", server.Config.Address)
+	log.Info().Str(addressAttribute, server.Config.Address).Msg("Initializing HTTP server at")
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.Use(httputils.LogRequest)
 
 	server.addEndpointsToRouter(router)
-	log.Info().Msgf("Server has been initiliazed")
+	log.Info().Msg("Server has been initiliazed")
 
 	return router
 }
